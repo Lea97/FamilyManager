@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 switch (view.getId()){
                     case R.layout.login_page:
-                        startActivity(new Intent(this, SignInActivity.class));
+                        startActivity(new Intent(getApplicationContext(), SignInActivity.class));
                         break;
                 }
             }
