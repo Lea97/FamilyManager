@@ -85,22 +85,34 @@
 
     <Button
         android:id="@+id/loginButton"
-        android:layout_width="130dp"
+        android:layout_width="180dp"
         android:layout_height="48dp"
         android:text="Registrieren"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.534"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.831" />
+
+    <Button
+        android:id="@+id/toLoginButton"
+        android:layout_width="178dp"
+        android:layout_height="54dp"
+        android:text="Bereits registriert. Zum LogIn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.527"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.879" />
+        app:layout_constraintVertical_bias="0.965" />
 
     <TextView
         android:id="@+id/LoginCaption"
         android:layout_width="42dp"
         android:layout_height="19dp"
         android:layout_marginTop="42dp"
-        android:text="SingIn"
+        android:text="SingUp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
