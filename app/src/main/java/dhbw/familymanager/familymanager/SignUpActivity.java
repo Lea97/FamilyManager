@@ -17,9 +17,9 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class SignUpActivity extends AppCompatActivity implements View.OnClickListener{
 
-    EditText textFieldEmail;
-    EditText textFieldPassword;
-    EditText textFieldRepeatPassword;
+    private EditText textFieldEmail;
+    private EditText textFieldPassword;
+    private EditText textFieldRepeatPassword;
     private FirebaseAuth mAuth;
 
     @Override
@@ -36,12 +36,16 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.loginButton).setOnClickListener(this);
 
         mAuth = FirebaseAuth.getInstance();
+        if(mAuth==null){
+            System.out.println("FIREBASE NOT WORKING");
+        }
     }
 
     private void registerUser() {
         String email = textFieldEmail.getText().toString().trim();
-        String password = textFieldPassword.getText().toString().trim();
-        String repeatPassword = textFieldRepeatPassword.getText().toString().trim();
+        String password = textFieldPassword.getText().toString();
+        String repeatPassword = textFieldRepeatPassword.getText().toString();
+
 
 
         if(email.isEmpty()){
@@ -76,20 +80,41 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             return;
         }
 
-
-        mAuth.createUserWithEmailAndPassword(email, password)
+        mAuth.createUserWithEmailAndPassword(email,password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-
-                            Toast.makeText(getApplicationContext(), "User Registered Successful", Toast.LENGTH_SHORT).show();
+                        if(task.isSuccessful()){
+                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                            mAuth.getCurrentUser().sendEmailVerification();
+                            finish();
                         }
-                        if(task.isCanceled()){
-                            Toast.makeText(getApplicationContext(), "User could not Registered", Toast.LENGTH_SHORT).show();
+                        else{
+                            Toast.makeText(getApplicationContext(),"E-mail or password is wrong",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+
+
+
+        //mAuth.createUserWithEmailAndPassword(email, password)
+          //      .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            //        @Override
+        //public void onComplete(@NonNull Task<AuthResult> task) {
+        //              if (task.isSuccessful()) {
+        //                  System.out.println("Success tralala");
+//
+        //                          Toast.makeText(getApplicationContext(), "User Registered Successful", Toast.LENGTH_SHORT).show();
+        //                  FirebaseUser user=mAuth.getCurrentUser();
+        //                  user.sendEmailVerification();
+
+
+        //              }
+        //              if(task.isCanceled()){
+        //                  Toast.makeText(getApplicationContext(), "User could not Registered", Toast.LENGTH_SHORT).show();
+        //              }
+        //          }
+        //      });
     }
 
     @Override
