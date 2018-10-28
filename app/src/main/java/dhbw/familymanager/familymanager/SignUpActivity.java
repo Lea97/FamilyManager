@@ -43,8 +43,8 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
 
     private void registerUser() {
         String email = textFieldEmail.getText().toString().trim();
-        String password = textFieldPassword.getText().toString();
-        String repeatPassword = textFieldRepeatPassword.getText().toString();
+        String password = textFieldPassword.getText().toString().trim();
+        String repeatPassword = textFieldRepeatPassword.getText().toString().trim();
 
 
 
