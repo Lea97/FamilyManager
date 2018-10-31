@@ -86,7 +86,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                            mAuth.getCurrentUser().sendEmailVerification();
+                           // mAuth.getCurrentUser().sendEmailVerification();
                             finish();
                         }
                         else{
