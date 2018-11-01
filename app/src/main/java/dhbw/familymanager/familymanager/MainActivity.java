@@ -50,7 +50,29 @@ public class MainActivity extends AppCompatActivity
                     RC_SIGN_IN);
 
         } else {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
             System.out.println("HalloHallo");
+            Map<String, Object> city = new HashMap<>();
+            city.put("name", "Los Angeles");
+            city.put("state", "CA");
+            city.put("country", "USA");
+
+            db.collection("cities").document("LA")
+                    .set(city)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            System.out.println("Successfully writen");
+                           //Log.d("iijau", "DocumentSnapshot successfully written!");
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            //Log.w("blabla", "Error writing document", e);
+                            System.out.println("Failure blabla");
+                        }
+                    });
         }
 
     }
