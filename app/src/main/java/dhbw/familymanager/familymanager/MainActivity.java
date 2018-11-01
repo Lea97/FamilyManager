@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            System.out.println("Successfully writen");
+                            System.out.println("Successfully written");
                            //Log.d("iijau", "DocumentSnapshot successfully written!");
                         }
                     })
