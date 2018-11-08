@@ -17,9 +17,12 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import dhbw.familymanager.familymanager.model.User;
 
 
 public class MainActivity extends AppCompatActivity
@@ -88,6 +91,10 @@ public class MainActivity extends AppCompatActivity
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                User userModel = new User("testNutzer", new Date(01,01,01), "test@test.de", "0123456789");
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                db.collection("users").document("userID").set(userModel);
                 // ...
             } else {
                 // Sign in failed. If response is null the user canceled the
