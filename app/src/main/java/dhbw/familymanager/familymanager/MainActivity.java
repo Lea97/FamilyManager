@@ -91,10 +91,13 @@ public class MainActivity extends AppCompatActivity
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String uid=user.getUid();
+                String email=user.getEmail();
 
-                User userModel = new User("testNutzer", new Date(01,01,01), "test@test.de", "0123456789");
+                User userModel = new User("", new Date(01,01,01), email, "");
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("users").document("userID").set(userModel);
+                db.collection("users").document(uid).set(userModel);
+
                 // ...
             } else {
                 // Sign in failed. If response is null the user canceled the
