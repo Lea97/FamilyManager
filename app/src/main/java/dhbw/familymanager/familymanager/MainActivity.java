@@ -5,6 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 
 import com.firebase.ui.auth.AuthUI;
@@ -25,7 +27,7 @@ import java.util.Map;
 import dhbw.familymanager.familymanager.model.User;
 
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {
     private static final int RC_SIGN_IN = 4711;
     private FirebaseAuth mAuth;
@@ -35,7 +37,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mAuth=FirebaseAuth.getInstance();
+        findViewById(R.id.profilButton).setOnClickListener(this);
     }
+
 
     @Override
     public void onStart() {
@@ -106,13 +110,21 @@ public class MainActivity extends AppCompatActivity
                 // ...
             }
         }
-    }}
+    }
 
         //super.onCreate(savedInstanceState);
         //setContentView(R.layout.login_page);
         //findViewById(R.id.registrationButton).setOnClickListener(this);
        // }
 
+    public void onClick(View view) {
+        switch (view.getId()) {
+        case R.id.profilButton:
+            startActivity(new Intent(MainActivity.this, ProfilActivity.class));
+        break;
+        }
+    }
+}
 
     //public void onClick(View view) {
       //  switch (view.getId()) {
