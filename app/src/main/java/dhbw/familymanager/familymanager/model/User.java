@@ -1,7 +1,10 @@
 package dhbw.familymanager.familymanager.model;
 
+import com.google.firebase.firestore.IgnoreExtraProperties;
+
 import java.util.Date;
 
+@IgnoreExtraProperties
 public class User {
 
     private String name;
@@ -9,7 +12,8 @@ public class User {
     private String email;
     private String phonennumber;
 
-    public User() {}
+    public User() {
+    }
 
     public User(String name, Date bithday, String email, String phonennumber) {
         this.name = name;
