@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -14,16 +15,15 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import dhbw.familymanager.familymanager.R;
-import dhbw.familymanager.familymanager.model.User;
 
-public class ProfilActivity extends AppCompatActivity {
+public class ProfilActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profil);
+        findViewById(R.id.changeProfilButton).setOnClickListener(this);
         setValues();
     }
 
@@ -31,9 +31,6 @@ public class ProfilActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         String uid=user.getUid();
-        //Task<DocumentSnapshot> dbuser = db.collection("users").document(uid).get();
-
-       // User userInfo = new User();
 
         DocumentReference docRef = db.collection("users").document(uid);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -43,6 +40,8 @@ public class ProfilActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                        fillFormular(document);
+
                     } else {
                         Log.d("TAG", "No such document");
                     }
@@ -51,15 +50,49 @@ public class ProfilActivity extends AppCompatActivity {
                 }
             }
         });
+    }
 
+    private void fillFormular(DocumentSnapshot document) {
+        String userName = (String) document.get("name");
+        final TextView nameTextfield = (TextView) findViewById(R.id.nameTextfield);
+        nameTextfield.setText(userName);
 
-        //db.collection("users").document(uid).get().isCanceled(e => {});
-        //User userDate = (User) dbuser;
+        String userMail = (String) document.get("email");
+        final TextView mailTextfield = (TextView) findViewById(R.id.emailTextfield);
+        mailTextfield.setText(userMail);
 
+        String userbirth = (String) document.get("birthday");
+        final TextView birthTextfield = (TextView) findViewById(R.id.birthTextfield);
+        birthTextfield.setText(userbirth);
 
-        //final TextView nameTextfield = (TextView) findViewById(R.id.nameTextfield);
-        //nameTextfield.setText("");
-        //final TextView emailTextfield = (TextView) findViewById(R.id.emailTextfield);
-        //nameTextfield.setText(email);
+        String userNumber = (String) document.get("phonenumber");
+        final TextView numberTextfield = (TextView) findViewById(R.id.numberTextfield);
+        numberTextfield.setText(userNumber);
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.changeProfilButton:
+                setContentView(R.layout.edit_profil);
+                setValues();
+                break;
+            case R.id.cancel_button:
+                setContentView(R.layout.profil);
+                setValues();
+                break;
+            case R.id.saveButton:
+                saveProfilChanges();
+                setContentView(R.layout.profil);
+                setValues();
+                break;
+        }
+    }
+
+    private void saveProfilChanges() {
+        //User userModel = new User("", new Date(01,01,01), email, "");
+        //FirebaseFirestore db = FirebaseFirestore.getInstance();
+        //db.collection("users").document(uid).set(userModel);
     }
 }
