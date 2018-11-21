@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="dhbw.familymanager.familymanager">
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 
@@ -10,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
 
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,6 +30,22 @@
         </activity>
         <activity
             android:name=".ProfilActivity"
+            android:label="Profil"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="dhbw.familymanager.familymanager.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Tasks"
+            android:label="Profil"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="dhbw.familymanager.familymanager.MainActivity" />
+        </activity>
+        <activity
+            android:name=".CalendarActivity"
             android:label="Profil"
             android:parentActivityName=".MainActivity" >
             <meta-data

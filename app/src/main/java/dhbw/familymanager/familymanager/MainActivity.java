@@ -34,6 +34,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         mAuth=FirebaseAuth.getInstance();
         findViewById(R.id.profilButton).setOnClickListener(this);
+        findViewById(R.id.listButton).setOnClickListener(this);
+        findViewById(R.id.calendarButton).setOnClickListener(this);
+
+
     }
 
 
@@ -118,6 +122,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         case R.id.profilButton:
             startActivity(new Intent(MainActivity.this, ProfilActivity.class));
         break;
+        case R.id.listButton:
+                startActivity(new Intent(MainActivity.this, Tasks.class));
+                break;
+            case R.id.calendarButton:
+                startActivity(new Intent(MainActivity.this, CalendarActivity.class));
+                break;
         }
     }
 }
