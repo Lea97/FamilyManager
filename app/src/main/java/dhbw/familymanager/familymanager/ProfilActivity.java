@@ -18,6 +18,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ProfilActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private String userId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +32,9 @@ public class ProfilActivity extends AppCompatActivity implements View.OnClickLis
     private void setValues() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String uid=user.getUid();
+        userId = user.getUid();
 
-        DocumentReference docRef = db.collection("users").document(uid);
+        DocumentReference docRef = db.collection("users").document(userId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -98,6 +100,13 @@ public class ProfilActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void saveProfilChanges() {
+        final TextView birthTextfield = (TextView) findViewById(R.id.birthTextfield);
+        final TextView nameTextield = (TextView) findViewById(R.id.nameTextfield);
+        final TextView emailTextfield = (TextView) findViewById(R.id.emailTextfield);
+        final TextView numberTextfield = (TextView) findViewById(R.id.numberTextfield);
+        //User userModel = new User((String)nameTextield.getText().toString(), (Date) birthTextfield.getText(), (String) emailTextfield.getText(), (String) numberTextfield.getText());
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").document(userId).update("name", nameTextield.getText().toString(),"phonenumber", numberTextfield.getText().toString(), "email", emailTextfield.getText().toString());
 
     }
 }
