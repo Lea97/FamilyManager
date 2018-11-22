@@ -69,6 +69,9 @@ public class ProfilActivity extends AppCompatActivity implements View.OnClickLis
         final TextView numberTextfield = (TextView) findViewById(R.id.numberTextfield);
         numberTextfield.setText(userNumber);
 
+        //User userModel = new User("", new Date(01,01,01), email, "");
+        //FirebaseFirestore db = FirebaseFirestore.getInstance();
+        //db.collection("users").document(uid).set(userModel);
     }
 
     @Override
@@ -76,23 +79,25 @@ public class ProfilActivity extends AppCompatActivity implements View.OnClickLis
         switch (view.getId()) {
             case R.id.changeProfilButton:
                 setContentView(R.layout.edit_profil);
+                findViewById(R.id.saveButton).setOnClickListener(this);
+                findViewById(R.id.cancelButton).setOnClickListener(this);
                 setValues();
                 break;
-            case R.id.cancel_button:
+            case R.id.cancelButton:
                 setContentView(R.layout.profil);
+                findViewById(R.id.changeProfilButton).setOnClickListener(this);
                 setValues();
                 break;
             case R.id.saveButton:
                 saveProfilChanges();
                 setContentView(R.layout.profil);
+                findViewById(R.id.changeProfilButton).setOnClickListener(this);
                 setValues();
                 break;
         }
     }
 
     private void saveProfilChanges() {
-        //User userModel = new User("", new Date(01,01,01), email, "");
-        //FirebaseFirestore db = FirebaseFirestore.getInstance();
-        //db.collection("users").document(uid).set(userModel);
+
     }
 }
