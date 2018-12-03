@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="dhbw.familymanager.familymanager">
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.WRITE_CALENDAR"></uses-permission>
+    <uses-permission android:name="android.permission.READ_CALENDAR"></uses-permission>
 
     <application
         android:allowBackup="true"

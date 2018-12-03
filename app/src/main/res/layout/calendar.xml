@@ -1,6 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+
+    <CalendarView
+        android:layout_width="wrap_content"
+        android:layout_height="320dp"
+        android:background="@drawable/calendar"
+        tools:layout_editor_absoluteX="2dp"
+        tools:layout_editor_absoluteY="78dp">
+
+    </CalendarView>
+
+    <TextView
+        android:id="@+id/calenderText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="118dp"
+        tools:layout_editor_absoluteY="32dp" />
+
+    <Button
+        android:id="@+id/addEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Event hinzufügen"
+        tools:layout_editor_absoluteX="118dp"
+        tools:layout_editor_absoluteY="446dp" />s
 
 </android.support.constraint.ConstraintLayout>
