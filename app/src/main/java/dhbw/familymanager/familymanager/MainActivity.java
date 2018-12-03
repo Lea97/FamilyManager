@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(MainActivity.this, ProfilActivity.class));
         break;
         case R.id.listButton:
-                startActivity(new Intent(MainActivity.this, Tasks.class));
+                startActivity(new Intent(MainActivity.this, Lists.class));
                 break;
             case R.id.calendarButton:
                 startActivity(new Intent(MainActivity.this, CalendarActivity.class));
