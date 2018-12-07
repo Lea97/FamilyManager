@@ -36,6 +36,9 @@ public class CalendarActivity extends AppCompatActivity {
             return events;
         }
     };
+   // WeekView.OnClickListener onEventClickListener=new WeekView.OnClickListener(){
+
+   // };
 
 
     @Override
@@ -64,6 +67,8 @@ public class CalendarActivity extends AppCompatActivity {
 // The week view has infinite scrolling horizontally. We have to provide the events of a
 // month every time the month changes on the week view.
         mWeekView.setMonthChangeListener(mMonthChangeListener);
+
+        //mWeekView.setOnEventClickListener(onEventClickListener);
 
 
     }
