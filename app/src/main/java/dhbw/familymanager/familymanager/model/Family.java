@@ -8,15 +8,15 @@ import java.util.List;
 public class Family {
 
     private String familyName;
-    private List<User> users;
+    private List<String> members;
 
 
     public Family() {
     }
 
-    public Family(String familyName, List<User> users) {
+    public Family(String familyName, List<String> members) {
         this.familyName = familyName;
-        this.users = users;
+        this.members = members;
     }
 
     public String getFamilyName() {
@@ -27,11 +27,11 @@ public class Family {
         this.familyName = familyName;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public List<String> getUsers() {
+        return members;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setUsers(List<String> users) {
+        this.members = members;
     }
 }

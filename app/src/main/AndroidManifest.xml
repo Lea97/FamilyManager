@@ -40,7 +40,7 @@
         </activity>
         <activity
             android:name=".Lists"
-            android:label="Profil"
+            android:label="Lists"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -48,7 +48,15 @@
         </activity>
         <activity
             android:name=".CalendarActivity"
-            android:label="Profil"
+            android:label="Calender"
+            android:parentActivityName=".MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="dhbw.familymanager.familymanager.MainActivity" />
+        </activity>
+        <activity
+            android:name=".AddFamilyActivity"
+            android:label="AddFamily"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
