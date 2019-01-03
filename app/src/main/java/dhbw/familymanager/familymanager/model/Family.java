@@ -4,7 +4,7 @@ import com.google.firebase.firestore.IgnoreExtraProperties;
 
 import java.util.List;
 
-@IgnoreExtraProperties
+//@IgnoreExtraProperties
 public class Family {
 
     private String familyName;
@@ -27,11 +27,11 @@ public class Family {
         this.familyName = familyName;
     }
 
-    public List<String> getUsers() {
+    public List<String> getMembers() {
         return members;
     }
 
-    public void setUsers(List<String> users) {
+    public void setMembers(List<String> users) {
         this.members = members;
     }
 }

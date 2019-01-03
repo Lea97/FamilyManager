@@ -1,8 +1,10 @@
 package dhbw.familymanager.familymanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,7 +32,16 @@ public class AddFamilyActivity extends AppCompatActivity implements View.OnClick
         List<String> members = new ArrayList<>();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         members.add(mAuth.getCurrentUser().getEmail());
-        Family family = new Family("testFamily", members);
+
+        final TextView familyNameTextfield =  findViewById(R.id.familyNameTextfield);
+        final TextView familyMembers =  findViewById(R.id.familyMemberTextfield);
+
+        String[] allMembers = familyMembers.getText().toString().split(",");
+        for (String member: allMembers) {
+            members.add(member.trim());
+        }
+
+        Family family = new Family(familyNameTextfield.getText().toString(), members);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("families").document().set(family);
     }
@@ -43,6 +54,7 @@ public class AddFamilyActivity extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.createFamilyButton:
                 createFamily();
+                setContentView(R.layout.activity_main);
                 break;
 
         }

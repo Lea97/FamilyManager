@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //TODO
 
         Spinner dropdown = findViewById(R.id.familySpinner);
-        
+
         items = new ArrayList<String>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String mail = mAuth.getCurrentUser().getEmail();
