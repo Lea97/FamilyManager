@@ -9,7 +9,5 @@
     <string name="events_today">Today</string>
     <string name="events_week">Wochenansicht</string>
     <string name="events_month">Monatsansicht</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    
 </resources>
