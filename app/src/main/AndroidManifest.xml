@@ -55,6 +55,14 @@
                 android:value="dhbw.familymanager.familymanager.MainActivity" />
         </activity>
         <activity
+            android:name=".AddEventActivity"
+            android:label="Neuer Termin"
+            android:parentActivityName=".CalendarActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="dhbw.familymanager.familymanager.MainActivity" />
+        </activity>
+        <activity
             android:name=".AddFamilyActivity"
             android:label="AddFamily"
             android:parentActivityName=".MainActivity" >

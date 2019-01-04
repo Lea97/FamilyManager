@@ -1,9 +1,12 @@
 package dhbw.familymanager.familymanager;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.alamkanak.weekview.DateTimeInterpreter;
 import com.alamkanak.weekview.MonthLoader;
@@ -17,6 +20,7 @@ import java.util.List;
 
 public class CalendarActivity extends AppCompatActivity {
     private WeekView mWeekView;
+    private FloatingActionButton addEventButton;
 
     MonthLoader.MonthChangeListener mMonthChangeListener = new MonthLoader.MonthChangeListener() {
         @Override
@@ -29,13 +33,12 @@ public class CalendarActivity extends AppCompatActivity {
             if (newMonth == now.get(Calendar.MONTH)) {
                 WeekViewEvent e = new WeekViewEvent(4711, "Tralala", "Hopala", now, nowplusone);
                 events.add(e);
+
             }
             return events;
         }
     };
-   // WeekView.OnClickListener onEventClickListener=new WeekView.OnClickListener(){
 
-   // };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -49,6 +52,7 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar);
+
 
         // Get a reference for the week view in the layout.
         mWeekView = findViewById(R.id.weekView);
@@ -67,17 +71,29 @@ public class CalendarActivity extends AppCompatActivity {
         mWeekView.showContextMenu();
 
 
+        addEventButton=findViewById(R.id.addEventButton);
 
 // The week view has infinite scrolling horizontally. We have to provide the events of a
 // month every time the month changes on the week view.
         mWeekView.setMonthChangeListener(mMonthChangeListener);
+        addEventButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(CalendarActivity.this, AddEventActivity.class));
+
+            }
+        });
+
+
+        }
+
 
         //mWeekView.setOnEventClickListener(onEventClickListener);
 
 
     }
 
-}
+
 
 
 
