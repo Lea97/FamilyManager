@@ -1,12 +1,9 @@
 package dhbw.familymanager.familymanager;
 
-import android.graphics.RectF;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.alamkanak.weekview.DateTimeInterpreter;
 import com.alamkanak.weekview.MonthLoader;
@@ -39,6 +36,13 @@ public class CalendarActivity extends AppCompatActivity {
    // WeekView.OnClickListener onEventClickListener=new WeekView.OnClickListener(){
 
    // };
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.calendar_menu, menu);
+        return true;
+    }
+
 
 
     @Override
