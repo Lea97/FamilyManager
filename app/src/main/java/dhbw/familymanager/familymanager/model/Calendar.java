@@ -1,5 +1,11 @@
 package dhbw.familymanager.familymanager.model;
 
+import android.app.usage.UsageEvents;
+import android.arch.lifecycle.Lifecycle;
+import android.util.EventLog;
+
+import com.google.firebase.events.Event;
+
 import java.util.List;
 
 public class Calendar {

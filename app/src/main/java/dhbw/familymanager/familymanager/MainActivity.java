@@ -4,22 +4,33 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import dhbw.familymanager.familymanager.model.Family;
 import dhbw.familymanager.familymanager.model.User;
 
 
@@ -27,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 {
     private static final int RC_SIGN_IN = 4711;
     private FirebaseAuth mAuth;
+    ArrayList<String> items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +48,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.profilButton).setOnClickListener(this);
         findViewById(R.id.listButton).setOnClickListener(this);
         findViewById(R.id.calendarButton).setOnClickListener(this);
-
-
+        findViewById(R.id.addFamilyButton).setOnClickListener(this);
+        setFamilies();
     }
 
 
@@ -121,22 +133,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
         case R.id.profilButton:
             startActivity(new Intent(MainActivity.this, ProfilActivity.class));
-        break;
+            break;
         case R.id.listButton:
-                startActivity(new Intent(MainActivity.this, Lists.class));
-                break;
-            case R.id.calendarButton:
-                startActivity(new Intent(MainActivity.this, CalendarActivity.class));
-                break;
+            startActivity(new Intent(MainActivity.this, Lists.class));
+            break;
+        case R.id.calendarButton:
+            startActivity(new Intent(MainActivity.this, CalendarActivity.class));
+            break;
+        case R.id.addFamilyButton:
+            startActivity(new Intent(MainActivity.this, AddFamilyActivity.class));
+            break;
         }
     }
-}
 
-    //public void onClick(View view) {
-      //  switch (view.getId()) {
-        //    case R.id.registrationButton:
-          //      startActivity(new Intent(MainActivity.this, SignUpActivity.class));
-            //    break;
-        //}
-    //}
-//}
+    private void setFamilies(){
+
+    //TODO
+
+        Spinner dropdown = findViewById(R.id.familySpinner);
+
+        items = new ArrayList<String>();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String mail = mAuth.getCurrentUser().getEmail();
+        if(mail!= null) {
+            Query query = db.collection("families").whereEqualTo("members", mail);
+
+            query.get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot documentSnapshots) {
+
+                            List<DocumentSnapshot> documents = documentSnapshots.getDocuments();
+
+                            for (DocumentSnapshot document : documents) {
+                                Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                                items.add(document.get("name").toString());
+                            }
+                        }
+                    });
+        }
+        else{
+            items.add("No Family");
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        dropdown.setAdapter(adapter);
+    }
+}
