@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firestore.v1beta1.WriteResult;
 
 import java.util.ArrayList;
@@ -54,9 +55,8 @@ public class EventRepository {
 
 
     public void storeEvent(Event event) {
-        instance=EventRepository.getInstance(RepositoryMode.PRODUCTIVE);
 
-        Task<DocumentReference> task = db.collection(instance.collectionPath).add(event);
+        Task<DocumentReference> task = db.collection(collectionPath).add(event);
         task.addOnFailureListener(new OnFailureListener() {
                                       @Override
                                       public void onFailure(@NonNull Exception e) {
@@ -74,10 +74,19 @@ public class EventRepository {
         }
     }
 
-    public List<Event> readAllEvents() {
-        List<Event> events = new ArrayList<>();
 
-        return events;
+
+    public List<Event> readAllEvents() {
+
+        Task<QuerySnapshot> task  = db.collection(collectionPath).get();
+
+        try {
+            QuerySnapshot querySnapshot = Tasks.await(task);
+            return querySnapshot.toObjects(Event.class);
+        } catch (Exception e) {
+            throw new DatabaseCommunicationException("Event reading failed", e);
+        }
+
     }
 
 }

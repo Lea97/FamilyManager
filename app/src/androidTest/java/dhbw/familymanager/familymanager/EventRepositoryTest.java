@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Random;
 
 import dhbw.familymanager.familymanager.controller.EventRepository;
@@ -20,6 +21,8 @@ import dhbw.familymanager.familymanager.model.Calendar;
 import dhbw.familymanager.familymanager.model.Event;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -62,6 +65,31 @@ public class EventRepositoryTest {
         codeUnderTest.storeEvent(getExampleEvent());
         // expect no exception
     }
+
+
+    @Test
+    public void storeAndReadEvent() {
+        codeUnderTest.storeEvent(getExampleEvent());
+        List<Event> events = codeUnderTest.readAllEvents();
+
+        assertNotNull (events);
+        assertTrue (events.size()>0);
+
+
+        Event lastEventInCollection = events.get(events.size()-1);
+
+        assertEquals(lastEventInCollection.getTitle(), getExampleEvent().getTitle());
+        assertEquals(lastEventInCollection.getStart(), getExampleEvent().getStart());
+        assertEquals(lastEventInCollection.getEnd(), getExampleEvent().getEnd());
+        assertEquals(lastEventInCollection.getId(), getExampleEvent().getId());
+        assertEquals(lastEventInCollection.getMembers(), getExampleEvent().getMembers());
+
+
+    }
+
+    
+
+
 
 
 }
