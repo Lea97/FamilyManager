@@ -1,0 +1,67 @@
+package dhbw.familymanager.familymanager;
+
+import android.content.Context;
+import android.support.test.InstrumentationRegistry;
+import android.support.test.runner.AndroidJUnit4;
+
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Random;
+
+import dhbw.familymanager.familymanager.controller.EventRepository;
+import dhbw.familymanager.familymanager.model.Calendar;
+import dhbw.familymanager.familymanager.model.Event;
+
+import static org.junit.Assert.assertEquals;
+
+/**
+ * Instrumented test, which will execute on an Android device.
+ *
+ * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
+ */
+@RunWith(AndroidJUnit4.class)
+public class EventRepositoryTest {
+
+    EventRepository codeUnderTest;
+
+    @Before
+    public void setup() {
+        //FirebaseFirestore.getInstance().
+        FirebaseApp.initializeApp(InstrumentationRegistry.getTargetContext());
+        codeUnderTest = EventRepository.getInstance(EventRepository.RepositoryMode.TEST);
+
+    }
+
+    Event getExampleEvent() {
+        Event event = new Event();
+        event.setId(1628787648);
+        event.setTitle("TestEventTitle");
+        event.setMembers(null);
+        event.setStart(new Date(2018, 1, 1, 14, 50, 0));
+        event.setEnd(new Date(2018, 1, 1, 14, 55, 0));
+        return event;
+    }
+
+
+    @Test
+    public void useAppContext() {
+        // Context of the app under test.
+        Context appContext = InstrumentationRegistry.getTargetContext();
+        assertEquals("dhbw.familymanager.familymanager", appContext.getPackageName());
+    }
+
+    @Test
+    public void storeEvent() {
+        codeUnderTest.storeEvent(getExampleEvent());
+        // expect no exception
+    }
+
+
+}
