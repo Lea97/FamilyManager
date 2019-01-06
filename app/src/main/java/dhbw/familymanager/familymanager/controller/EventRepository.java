@@ -34,6 +34,11 @@ public class EventRepository {
     String collectionPath;
 
 
+    public static EventRepository getInstance() {
+        return getInstance(RepositoryMode.PRODUCTIVE);
+    }
+
+
     public static EventRepository getInstance(RepositoryMode mode) {
         if (instance == null) {
             String collectionPath;
@@ -75,10 +80,9 @@ public class EventRepository {
     }
 
 
-
     public List<Event> readAllEvents() {
 
-        Task<QuerySnapshot> task  = db.collection(collectionPath).get();
+        Task<QuerySnapshot> task = db.collection(collectionPath).get();
 
         try {
             QuerySnapshot querySnapshot = Tasks.await(task);

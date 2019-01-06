@@ -1,5 +1,6 @@
 package dhbw.familymanager.familymanager;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,41 +21,41 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import dhbw.familymanager.familymanager.controller.EventRepository;
+import dhbw.familymanager.familymanager.model.Event;
+
 public class CalendarActivity extends AppCompatActivity {
     private WeekView mWeekView;
     private FloatingActionButton addEventButton;
     private Random random = new Random();
 
-    private List<WeekViewEvent> events = createEvents();
+    private List<WeekViewEvent> events = new ArrayList<>();
 
-    private List<WeekViewEvent> createEvents() {
+    private List<WeekViewEvent> readEvents() {
+
+        EventRepository repo = EventRepository.getInstance();
+
+        // TODO: read user-specific events
+        List<Event> events = repo.readAllEvents();
         List<WeekViewEvent> result = new ArrayList<>();
-        Calendar now = new GregorianCalendar();
-        Calendar current = (Calendar) now.clone();
-        current.add(Calendar.DAY_OF_YEAR, -1);
-        current.set(Calendar.HOUR_OF_DAY, 0);
-        current.set(Calendar.MINUTE, 0);
 
+        for (Event e : events) {
+            WeekViewEvent weekViewEvent = new WeekViewEvent();
 
-        for (int i = 1; i <= 12; i++) {
-            String title = "Termin " + i;
-            WeekViewEvent e = createEvent(current, title);
-            result.add(e);
-            current.add(Calendar.HOUR_OF_DAY, 5);
+            Calendar calStart = Calendar.getInstance();
+            Calendar calEnd = Calendar.getInstance();
+
+            calStart.setTime(e.getStart());
+            calEnd.setTime(e.getEnd());
+
+            weekViewEvent.setId(e.getId());
+            weekViewEvent.setName(e.getTitle());
+            weekViewEvent.setStartTime(calStart);
+            weekViewEvent.setEndTime(calEnd);
+
+            result.add(weekViewEvent);
         }
-
         return result;
-    }
-
-    private WeekViewEvent createEvent(Calendar startTime, String title) {
-
-        Calendar startTimeCopy = (Calendar) startTime.clone();
-        Calendar endTime = (Calendar) startTime.clone();
-        endTime.add(Calendar.HOUR, 1);
-        List<WeekViewEvent> events = new ArrayList<>();
-        WeekViewEvent e = new WeekViewEvent(random.nextLong(), title, "Test location", startTimeCopy, endTime);
-        return e;
-
     }
 
 
@@ -63,11 +64,11 @@ public class CalendarActivity extends AppCompatActivity {
         public List<WeekViewEvent> onMonthChange(int newYear, final int newMonth) {
             ArrayList<WeekViewEvent> result = new ArrayList<>();
             for (WeekViewEvent e : events) {
-                if (e.getStartTime().get(Calendar.MONTH) + 1 == newMonth && e.getStartTime().get(Calendar.YEAR)+1==newYear)
-                {
+                if (e.getStartTime().get(Calendar.MONTH) + 1 == newMonth && e.getStartTime().get(Calendar.YEAR) == newYear) {
                     result.add(e);
                 }
             }
+            System.out.println("Delivering " + result.size() + "events for " + newYear + " month " + newMonth + " out of " + events.size());
             return result;
         }
     };
@@ -85,6 +86,7 @@ public class CalendarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar);
 
+        startEventReading();
 
         // Get a reference for the week view in the layout.
         mWeekView = findViewById(R.id.weekView);
@@ -117,6 +119,36 @@ public class CalendarActivity extends AppCompatActivity {
 
             }
         });
+
+
+    }
+
+    private void startEventReading() {
+        final Activity thisActivity = this;
+
+        new Thread(new Runnable() {
+            public void run() {
+                System.out.println("Reading events");
+                events = readEvents();
+                System.out.println("Events read: " + events.size());
+
+
+
+               thisActivity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        System.out.println("Refreshing calendar");
+                        // because there is no method to refresh calendar
+                      //  mWeekView.goToDate(new GregorianCalendar(2000, 5, 5));
+                       // mWeekView.goToDate(new GregorianCalendar());
+
+                        mWeekView.notifyDatasetChanged();
+                        mWeekView.goToDate(new GregorianCalendar());
+
+                    }
+                });
+
+            }
+        }).start();
 
 
     }

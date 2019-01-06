@@ -66,6 +66,10 @@ public class EventRepositoryTest {
         // expect no exception
     }
 
+    public void storeTestEvents(){
+
+    }
+
 
     @Test
     public void storeAndReadEvent() {
@@ -87,7 +91,7 @@ public class EventRepositoryTest {
 
     }
 
-    
+
 
 
 
