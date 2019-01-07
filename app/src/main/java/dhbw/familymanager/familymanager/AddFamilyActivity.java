@@ -28,7 +28,6 @@ public class AddFamilyActivity extends AppCompatActivity implements View.OnClick
 
     private void createFamily()
     {
-        // TODO
         List<String> members = new ArrayList<>();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         members.add(mAuth.getCurrentUser().getEmail());

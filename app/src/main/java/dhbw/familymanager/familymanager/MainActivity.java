@@ -38,7 +38,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 {
     private static final int RC_SIGN_IN = 4711;
     private FirebaseAuth mAuth;
-    ArrayList<String> items;
+    private Spinner dropdown;
+    private ArrayList<String> items;
+    private ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,10 +126,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-        //super.onCreate(savedInstanceState);
-        //setContentView(R.layout.login_page);
-        //findViewById(R.id.registrationButton).setOnClickListener(this);
-       // }
 
     public void onClick(View view) {
         switch (view.getId()) {
@@ -148,35 +146,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setFamilies(){
 
-    //TODO
-
-        Spinner dropdown = findViewById(R.id.familySpinner);
+        final Spinner dropdown = findViewById(R.id.familySpinner);
 
         items = new ArrayList<String>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String mail = mAuth.getCurrentUser().getEmail();
         if(mail!= null) {
-            Query query = db.collection("families").whereEqualTo("members", mail);
+            Query query = db.collection("families").whereArrayContains("members", mail);
 
             query.get()
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
-                        public void onSuccess(QuerySnapshot documentSnapshots) {
+                        public void onSuccess(QuerySnapshot querySnapshot) {
 
-                            List<DocumentSnapshot> documents = documentSnapshots.getDocuments();
+                            List<DocumentSnapshot> documents = querySnapshot.getDocuments();
 
                             for (DocumentSnapshot document : documents) {
                                 Log.d("TAG", "DocumentSnapshot data: " + document.getData());
-                                items.add(document.get("name").toString());
+                                adapter.add(document.get("familyName").toString());
+                            }
+                            if (items.isEmpty()){
+                                adapter.add("No Family exist");
                             }
                         }
                     });
         }
-        else{
-            items.add("No Family");
-        }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
     }
 }
