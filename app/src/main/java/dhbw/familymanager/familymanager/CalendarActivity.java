@@ -29,9 +29,7 @@ public class CalendarActivity extends AppCompatActivity {
     private FloatingActionButton addEventButton;
     private Random random = new Random();
     private int calendarType;
-    private final int DAY_VIEW=1;
-    private final int WEEK_VIEW=3;
-    private final int THREE_DAYS=2;
+
 
 
 
@@ -94,10 +92,10 @@ public class CalendarActivity extends AppCompatActivity {
             case R.id.today:
                 mWeekView.setNumberOfVisibleDays(1);
                 break;
-            case R.id.events_week:
+            case R.id.events_three:
                 mWeekView.setNumberOfVisibleDays(3);
                 break;
-            case R.id.events_month:
+            case R.id.events_week:
                 mWeekView.setNumberOfVisibleDays(7);
                 break;
         }
@@ -112,13 +110,14 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar);
-        calendarType=THREE_DAYS;
+
 
         startEventReading();
 
         // Get a reference for the week view in the layout.
         mWeekView = findViewById(R.id.weekView);
         mWeekView.goToDate(new GregorianCalendar());
+        mWeekView.setNumberOfVisibleDays(3);
         mWeekView.setDateTimeInterpreter(new DateTimeInterpreter() {
             @Override
             public String interpretDate(Calendar date) {

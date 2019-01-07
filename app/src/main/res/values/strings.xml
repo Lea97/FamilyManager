@@ -6,8 +6,8 @@
     <!-- Twitter consumer key and secret -->
     <string name="twitter_consumer_key" translatable="false">YOUR_CONSUMER_KEY</string>
     <string name="twitter_consumer_secret" translatable="false">YOUR_CONSUMER_SECRET</string>
-    <string name="events_today">Today</string>
-    <string name="events_week">Wochenansicht</string>
-    <string name="events_month">Monatsansicht</string>
+    <string name="events_today">Heute</string>
+    <string name="events_three_days"> 3 Tage</string>
+    <string name="events_week">Woche</string>
 
 </resources>
