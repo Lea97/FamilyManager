@@ -28,6 +28,12 @@ public class CalendarActivity extends AppCompatActivity {
     private WeekView mWeekView;
     private FloatingActionButton addEventButton;
     private Random random = new Random();
+    private int calendarType;
+    private final int DAY_VIEW=1;
+    private final int WEEK_VIEW=3;
+    private final int THREE_DAYS=2;
+
+
 
     private List<WeekViewEvent> events = new ArrayList<>();
 
@@ -77,7 +83,28 @@ public class CalendarActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.calendar_menu, menu);
+
+
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.today:
+                mWeekView.setNumberOfVisibleDays(1);
+                break;
+            case R.id.events_week:
+                mWeekView.setNumberOfVisibleDays(3);
+                break;
+            case R.id.events_month:
+                mWeekView.setNumberOfVisibleDays(7);
+                break;
+        }
+        mWeekView.notifyDatasetChanged();
+        mWeekView.goToDate(new GregorianCalendar());
+        return true;
+
     }
 
 
@@ -85,6 +112,7 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.calendar);
+        calendarType=THREE_DAYS;
 
         startEventReading();
 
