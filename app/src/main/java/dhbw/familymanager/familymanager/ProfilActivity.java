@@ -18,8 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class ProfilActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private String userId;
-
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +31,9 @@ public class ProfilActivity extends AppCompatActivity implements View.OnClickLis
 
     private void setValues() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        userId = user.getUid();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        //FirebaseAuth.getInstance().getCurrentUser().updateEmail("test@web.de");
+        String userId = user.getUid();
 
         DocumentReference docRef = db.collection("users").document(userId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -105,9 +105,8 @@ public class ProfilActivity extends AppCompatActivity implements View.OnClickLis
         final TextView nameTextield = (TextView) findViewById(R.id.nameTextfield);
         final TextView emailTextfield = (TextView) findViewById(R.id.emailTextfield);
         final TextView numberTextfield = (TextView) findViewById(R.id.numberTextfield);
-        //User userModel = new User((String)nameTextield.getText().toString(), (Date) birthTextfield.getText(), (String) emailTextfield.getText(), (String) numberTextfield.getText());
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users").document(userId).update("name", nameTextield.getText().toString(),"phonenumber", numberTextfield.getText().toString(), "email", emailTextfield.getText().toString());
-
+        db.collection("users").document(user.getUid()).update("name", nameTextield.getText().toString(),"phonenumber", numberTextfield.getText().toString(), "email", emailTextfield.getText().toString());
+       // user.updateEmail(emailTextfield.getText().toString());
     }
 }
