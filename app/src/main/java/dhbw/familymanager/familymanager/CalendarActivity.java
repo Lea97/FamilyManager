@@ -41,6 +41,7 @@ public class CalendarActivity extends AppCompatActivity {
 
         // TODO: read user-specific events
         List<Event> events = repo.readAllEvents();
+        List<Event> userSpecificEvents=repo.readEventsForUser();
         List<WeekViewEvent> result = new ArrayList<>();
 
         for (Event e : events) {
@@ -51,7 +52,6 @@ public class CalendarActivity extends AppCompatActivity {
 
             calStart.setTime(e.getStart());
             calEnd.setTime(e.getEnd());
-
             weekViewEvent.setId(e.getId());
             weekViewEvent.setName(e.getTitle());
             weekViewEvent.setStartTime(calStart);

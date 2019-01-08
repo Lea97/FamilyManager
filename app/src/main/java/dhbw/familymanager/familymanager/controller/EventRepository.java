@@ -7,6 +7,8 @@ import com.alamkanak.weekview.WeekViewEvent;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -18,6 +20,8 @@ import java.util.List;
 import dhbw.familymanager.familymanager.model.Event;
 
 public class EventRepository {
+
+
 
     public enum RepositoryMode {
         PRODUCTIVE, TEST;
@@ -60,6 +64,11 @@ public class EventRepository {
 
 
     public void storeEvent(Event event) {
+        FirebaseAuth auth=FirebaseAuth.getInstance();
+        String UID=auth.getCurrentUser().getUid();
+
+
+
 
         Task<DocumentReference> task = db.collection(collectionPath).add(event);
         task.addOnFailureListener(new OnFailureListener() {
@@ -78,6 +87,21 @@ public class EventRepository {
             throw new DatabaseCommunicationException("Event writing failed", e);
         }
     }
+
+    public List<Event> readEventsForUser() {
+
+        Task<QuerySnapshot> task = db.collection(collectionPath).get();
+
+        try {
+            QuerySnapshot querySnapshot = Tasks.await(task);
+            return querySnapshot.toObjects(Event.class);
+        } catch (Exception e) {
+            throw new DatabaseCommunicationException("Event reading failed", e);
+        }
+
+    }
+
+//}
 
 
     public List<Event> readAllEvents() {
