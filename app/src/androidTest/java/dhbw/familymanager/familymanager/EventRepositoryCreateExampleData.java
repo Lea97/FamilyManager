@@ -6,6 +6,7 @@ import android.support.test.runner.AndroidJUnit4;
 
 import com.alamkanak.weekview.WeekViewEvent;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -75,8 +76,10 @@ public class EventRepositoryCreateExampleData {
             current.add(Calendar.MINUTE, 55);
             e.setEnd(current.getTime());
             e.setTitle("Termin " + i);
-            e.setId(random.nextLong());
+           // e.setId(random.nextLong());
+            e.setId(Long.parseLong(FirebaseAuth.getInstance().getCurrentUser().getUid()));
             repository.storeEvent(e);
+
 
             current.add(Calendar.HOUR_OF_DAY, 5);
         }

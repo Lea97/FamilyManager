@@ -65,7 +65,7 @@ public class EventRepository {
 
     public void storeEvent(Event event) {
         FirebaseAuth auth=FirebaseAuth.getInstance();
-        String UID=auth.getCurrentUser().getUid();
+        String uid=auth.getCurrentUser().getUid();
 
 
 
@@ -89,8 +89,12 @@ public class EventRepository {
     }
 
     public List<Event> readEventsForUser() {
+        FirebaseAuth auth=FirebaseAuth.getInstance();
+        String current=auth.getCurrentUser().getUid();
 
-        Task<QuerySnapshot> task = db.collection(collectionPath).get();
+        Task<QuerySnapshot> task = db.collection(collectionPath).whereEqualTo("uid",current).get();
+       
+
 
         try {
             QuerySnapshot querySnapshot = Tasks.await(task);
