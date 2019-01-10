@@ -8,7 +8,7 @@ import java.util.Date;
 public class User {
 
     private String name;
-    private Date bithday;
+    private Date birthday;
     private String email;
     private String phonennumber;
 
@@ -16,9 +16,9 @@ public class User {
     public User() {
     }
 
-    public User(String name, Date bithday, String email, String phonennumber) {
+    public User(String name, Date birthday, String email, String phonennumber) {
         this.name = name;
-        this.bithday = bithday;
+        this.birthday = birthday;
         this.email = email;
         this.phonennumber = phonennumber;
     }
@@ -31,12 +31,12 @@ public class User {
         this.name = name;
     }
 
-    public Date getBithday() {
-        return bithday;
+    public Date getBirthday() {
+        return birthday;
     }
 
-    public void setBithday(Date bithday) {
-        this.bithday = bithday;
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 
     public String getEmail() {

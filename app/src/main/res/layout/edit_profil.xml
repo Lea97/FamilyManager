@@ -123,11 +123,11 @@
         android:layout_height="wrap_content"
         android:text="Save Changes"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.295"
+        app:layout_constraintHorizontal_bias="0.304"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.799" />
+        app:layout_constraintVertical_bias="0.889" />
 
 
     <Button
@@ -136,25 +136,37 @@
         android:layout_height="wrap_content"
         android:text="Cancel"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.756"
+        app:layout_constraintHorizontal_bias="0.757"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.799" />
+        app:layout_constraintVertical_bias="0.889" />
 
-    <EditText
-        android:id="@+id/birthTextfield"
-        android:layout_width="146dp"
-        android:layout_height="42dp"
-        android:ems="10"
-        android:inputType=""
-        android:textSize="14sp"
+    <Button
+        android:id="@+id/picDate"
+        android:layout_width="148dp"
+        android:layout_height="44dp"
+        android:onClick="datePicker"
+        android:text="Pic Date"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.91"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.653" />
+
+    <TextView
+        android:id="@+id/showDate"
+        android:layout_width="143dp"
+        android:layout_height="34dp"
+        android:layout_below="@+id/picDate"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.894"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.577" />
+        app:layout_constraintVertical_bias="0.568" />
 
 
 </android.support.constraint.ConstraintLayout>

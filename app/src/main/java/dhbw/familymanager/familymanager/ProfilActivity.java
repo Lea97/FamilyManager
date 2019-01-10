@@ -1,22 +1,32 @@
 package dhbw.familymanager.familymanager;
 
+import android.app.DatePickerDialog;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.Console;
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
-public class ProfilActivity extends AppCompatActivity implements View.OnClickListener {
+
+public class ProfilActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
     private FirebaseUser user;
 
@@ -64,9 +74,15 @@ public class ProfilActivity extends AppCompatActivity implements View.OnClickLis
         final TextView mailTextfield = (TextView) findViewById(R.id.emailTextfield);
         mailTextfield.setText(userMail);
 
-        String userbirth = (String) document.get("birthday");
+        Timestamp userbirth = (Timestamp) document.get("birthday");
         final TextView birthTextfield = (TextView) findViewById(R.id.birthTextfield);
-        birthTextfield.setText(userbirth);
+        if (userbirth != null)
+        {
+            Log.d("DAAAAAAAAAAAAAAAAAAATE", userbirth.toString());
+            //birthTextfield.setText(userbirth.toDate().getDay()+ "." + userbirth.toDate().getMonth() +"."+ userbirth.toDate().getYear());
+            //birthTextfield.setText(userbirth.toString());
+        }
+        Log.d("DAAAAAAAAAAAAAAAAAAATE", "NUUUUUUUUUUUUUUUUUUUUUll");
 
         String userNumber = (String) document.get("phonenumber");
         final TextView numberTextfield = (TextView) findViewById(R.id.numberTextfield);
@@ -101,12 +117,32 @@ public class ProfilActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void saveProfilChanges() {
-        final TextView birthTextfield = (TextView) findViewById(R.id.birthTextfield);
+        //final TextView birthTextfield = (TextView) findViewById(R.id.birthTextfield);
+        final TextView date = (TextView) findViewById(R.id.showDate);
         final TextView nameTextield = (TextView) findViewById(R.id.nameTextfield);
         final TextView emailTextfield = (TextView) findViewById(R.id.emailTextfield);
         final TextView numberTextfield = (TextView) findViewById(R.id.numberTextfield);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("users").document(user.getUid()).update("name", nameTextield.getText().toString(),"phonenumber", numberTextfield.getText().toString(), "email", emailTextfield.getText().toString());
+        // "birthday",(Date) date.getText(),
        // user.updateEmail(emailTextfield.getText().toString());
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int day) {
+        Calendar cal = new GregorianCalendar(year, month, day);
+        this.setDate(cal);
+    }
+
+    private void setDate(final Calendar calendar) {
+        final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
+        ((TextView) findViewById(R.id.showDate)).setText(dateFormat.format(calendar.getTime()));
+    }
+
+    public void datePicker(View view){
+
+        DatePickerFragment fragment = new DatePickerFragment();
+       // fragment.show(getSupportFragmentManager(), &quot;date&quot;);
+        fragment.show(getFragmentManager(), "datePicker");
     }
 }
