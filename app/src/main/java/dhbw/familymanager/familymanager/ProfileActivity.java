@@ -1,7 +1,6 @@
 package dhbw.familymanager.familymanager;
 
 import android.app.DatePickerDialog;
-import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -19,24 +18,25 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.Console;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 
-public class ProfilActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
+public class ProfileActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
     private FirebaseUser user;
+    private Boolean editmode;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.profil);
         setValues();
+        setContentView(R.layout.profil);
+        editmode = false;
         findViewById(R.id.changeProfilButton).setOnClickListener(this);
-
     }
 
     private void setValues() {
@@ -75,22 +75,22 @@ public class ProfilActivity extends AppCompatActivity implements View.OnClickLis
         mailTextfield.setText(userMail);
 
         Timestamp userbirth = (Timestamp) document.get("birthday");
-        final TextView birthTextfield = (TextView) findViewById(R.id.birthTextfield);
+        final TextView birthTextfield = (TextView) findViewById(R.id.showDate);
         if (userbirth != null)
         {
-            Log.d("DAAAAAAAAAAAAAAAAAAATE", userbirth.toString());
-            //birthTextfield.setText(userbirth.toDate().getDay()+ "." + userbirth.toDate().getMonth() +"."+ userbirth.toDate().getYear());
-            //birthTextfield.setText(userbirth.toString());
+            final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
+            if (editmode == false)
+            {
+                ((TextView) findViewById(R.id.birthTextfield)).setText(dateFormat.format(userbirth.toDate()));
+            }
+            else
+            {
+                ((TextView) findViewById(R.id.showDate)).setText(dateFormat.format(userbirth.toDate()));
+            }
         }
-        Log.d("DAAAAAAAAAAAAAAAAAAATE", "NUUUUUUUUUUUUUUUUUUUUUll");
-
         String userNumber = (String) document.get("phonenumber");
         final TextView numberTextfield = (TextView) findViewById(R.id.numberTextfield);
         numberTextfield.setText(userNumber);
-
-        //User userModel = new User("", new Date(01,01,01), email, "");
-        //FirebaseFirestore db = FirebaseFirestore.getInstance();
-        //db.collection("users").document(uid).set(userModel);
     }
 
     @Override
@@ -98,18 +98,21 @@ public class ProfilActivity extends AppCompatActivity implements View.OnClickLis
         switch (view.getId()) {
             case R.id.changeProfilButton:
                 setContentView(R.layout.edit_profil);
+                editmode = true;
                 findViewById(R.id.saveButton).setOnClickListener(this);
                 findViewById(R.id.cancelButton).setOnClickListener(this);
                 setValues();
                 break;
             case R.id.cancelButton:
                 setContentView(R.layout.profil);
+                editmode = false;
                 findViewById(R.id.changeProfilButton).setOnClickListener(this);
                 setValues();
                 break;
             case R.id.saveButton:
                 saveProfilChanges();
                 setContentView(R.layout.profil);
+                editmode = false;
                 findViewById(R.id.changeProfilButton).setOnClickListener(this);
                 setValues();
                 break;
@@ -117,14 +120,17 @@ public class ProfilActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void saveProfilChanges() {
-        //final TextView birthTextfield = (TextView) findViewById(R.id.birthTextfield);
-        final TextView date = (TextView) findViewById(R.id.showDate);
+        final TextView dateField = (TextView) findViewById(R.id.showDate);
         final TextView nameTextield = (TextView) findViewById(R.id.nameTextfield);
         final TextView emailTextfield = (TextView) findViewById(R.id.emailTextfield);
         final TextView numberTextfield = (TextView) findViewById(R.id.numberTextfield);
+
+        final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
+        Date date = new Date(dateField.getText().toString());
+        Timestamp birthday = new Timestamp(date);
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("users").document(user.getUid()).update("name", nameTextield.getText().toString(),"phonenumber", numberTextfield.getText().toString(), "email", emailTextfield.getText().toString());
-        // "birthday",(Date) date.getText(),
+        db.collection("users").document(user.getUid()).update("birthday", birthday,"name", nameTextield.getText().toString(),"phonenumber", numberTextfield.getText().toString(), "email", emailTextfield.getText().toString());
        // user.updateEmail(emailTextfield.getText().toString());
     }
 
@@ -142,7 +148,6 @@ public class ProfilActivity extends AppCompatActivity implements View.OnClickLis
     public void datePicker(View view){
 
         DatePickerFragment fragment = new DatePickerFragment();
-       // fragment.show(getSupportFragmentManager(), &quot;date&quot;);
         fragment.show(getFragmentManager(), "datePicker");
     }
 }
