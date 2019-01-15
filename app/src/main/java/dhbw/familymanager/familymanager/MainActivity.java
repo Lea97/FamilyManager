@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 {
     private static final int RC_SIGN_IN = 4711;
     private FirebaseAuth mAuth;
-    private Spinner dropdown;
     private ArrayList<String> items;
     private ArrayAdapter<String> adapter;
 

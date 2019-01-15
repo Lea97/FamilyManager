@@ -1,12 +1,14 @@
 package dhbw.familymanager.familymanager;
 
 import android.app.DatePickerDialog;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,6 +19,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -28,6 +32,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private FirebaseUser user;
     private Boolean editmode;
+    private ImageView mImageView;
 
 
     @Override
@@ -35,8 +40,19 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setValues();
         setContentView(R.layout.profil);
+        showPicture();
         editmode = false;
         findViewById(R.id.changeProfilButton).setOnClickListener(this);
+    }
+
+    private void showPicture() {
+        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        StorageReference storageRef = firebaseStorage.getReference("/profile_picture.jpg");
+
+        mImageView = (ImageView) findViewById(R.id.imageView);
+        //mImageView.setImageResource(R.drawable.profile_picture2);
+        //mImageView.setImageBitmap(BitmapFactory.decodeFile(storageRef.getPath()));
+        //Log.d("BILD", "res/profilePicture.jpg");
     }
 
     private void setValues() {
