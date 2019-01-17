@@ -1,7 +1,7 @@
 package dhbw.familymanager.familymanager;
 
 import android.app.DatePickerDialog;
-import android.graphics.BitmapFactory;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +11,7 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
@@ -45,14 +46,21 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         findViewById(R.id.changeProfilButton).setOnClickListener(this);
     }
 
-    private void showPicture() {
-        FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        StorageReference storageRef = firebaseStorage.getReference("/profile_picture.jpg");
 
-        mImageView = (ImageView) findViewById(R.id.imageView);
+    private void showPicture() {
+        //FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
+        //StorageReference storageRef = firebaseStorage.getReference("profile_picture.jpg");
+
+        //StorageReference storageReference = firebaseStorage.getReferenceFromUrl("gs://familymanager-7cbd8.appspot.com/profile_picture.png");
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference("gitlab.PNG");
+
+        ImageView imageView = findViewById(R.id.imageView);
+
+        Glide.with(this /* context */).load(storageReference).into(imageView);
+
+        //mImageView = (ImageView) findViewById(R.id.imageView);
         //mImageView.setImageResource(R.drawable.profile_picture2);
         //mImageView.setImageBitmap(BitmapFactory.decodeFile(storageRef.getPath()));
-        //Log.d("BILD", "res/profilePicture.jpg");
     }
 
     private void setValues() {
@@ -166,4 +174,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         DatePickerFragment fragment = new DatePickerFragment();
         fragment.show(getFragmentManager(), "datePicker");
     }
+
+   // public static int getDrawable(Context context, String ImageName) {
+   //     return context.getResources().getIdentifier(ImageName, "drawable", context.getPackageName());
+   // }
+
 }
