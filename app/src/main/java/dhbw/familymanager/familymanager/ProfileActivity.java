@@ -41,14 +41,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setValues();
         setContentView(R.layout.profil);
-        showPicture();
         editmode = false;
         findViewById(R.id.changeProfilButton).setOnClickListener(this);
     }
 
 
-    private void showPicture() {
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference("profile_picture.png");
+    private void showPicture(String picturePath) {
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference(picturePath);
         ImageView imageView = findViewById(R.id.imageView);
         Glide.with(this /* context */).load(storageReference).into(imageView);
     }
@@ -80,6 +79,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void fillFormular(DocumentSnapshot document) {
+        String picturePath = (String) document.get("picturePath");
+        showPicture(picturePath);
+
         String userName = (String) document.get("name");
         final TextView nameTextfield = (TextView) findViewById(R.id.nameTextfield);
         nameTextfield.setText(userName);
@@ -116,14 +118,12 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 findViewById(R.id.saveButton).setOnClickListener(this);
                 findViewById(R.id.cancelButton).setOnClickListener(this);
                 setValues();
-                showPicture();
                 break;
             case R.id.cancelButton:
                 setContentView(R.layout.profil);
                 editmode = false;
                 findViewById(R.id.changeProfilButton).setOnClickListener(this);
                 setValues();
-                showPicture();
                 break;
             case R.id.saveButton:
                 saveProfilChanges();
@@ -131,7 +131,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 editmode = false;
                 findViewById(R.id.changeProfilButton).setOnClickListener(this);
                 setValues();
-                showPicture();
                 break;
         }
     }
@@ -167,9 +166,5 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         DatePickerFragment fragment = new DatePickerFragment();
         fragment.show(getFragmentManager(), "datePicker");
     }
-
-   // public static int getDrawable(Context context, String ImageName) {
-   //     return context.getResources().getIdentifier(ImageName, "drawable", context.getPackageName());
-   // }
 
 }

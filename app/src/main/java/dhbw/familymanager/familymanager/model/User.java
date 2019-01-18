@@ -11,16 +11,18 @@ public class User {
     private Date birthday;
     private String email;
     private String phonennumber;
+    private String picturePath;
 
 
     public User() {
     }
 
-    public User(String name, Date birthday, String email, String phonennumber) {
+    public User(String name, Date birthday, String email, String phonennumber, String picturePath) {
         this.name = name;
         this.birthday = birthday;
         this.email = email;
         this.phonennumber = phonennumber;
+        this.picturePath = picturePath;
     }
 
     public String getName() {
@@ -53,6 +55,14 @@ public class User {
 
     public void setPhonennumber(String phonennumber) {
         this.phonennumber = phonennumber;
+    }
+
+    public String getPicturePath() {
+        return picturePath;
+    }
+
+    public void setPicturePath(String picturePath) {
+        this.picturePath = picturePath;
     }
 
 }

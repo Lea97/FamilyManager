@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String uid=user.getUid();
                 String email=user.getEmail();
 
-                User userModel = new User("", new Date(01,00,01), email, "");
+                User userModel = new User("", new Date(01,00,01), email, "", "ProfilPictures/profile_picture.png");
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 db.collection("users").document(uid).set(userModel);
 
