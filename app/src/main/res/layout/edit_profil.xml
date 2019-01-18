@@ -9,7 +9,6 @@
         android:id="@+id/imageView"
         android:layout_width="102dp"
         android:layout_height="101dp"
-        android:src="@drawable/profile_picture"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.109"
         app:layout_constraintLeft_toLeftOf="parent"

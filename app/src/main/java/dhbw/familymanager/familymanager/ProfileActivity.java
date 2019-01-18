@@ -48,19 +48,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
 
     private void showPicture() {
-        //FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-        //StorageReference storageRef = firebaseStorage.getReference("profile_picture.jpg");
-
-        //StorageReference storageReference = firebaseStorage.getReferenceFromUrl("gs://familymanager-7cbd8.appspot.com/profile_picture.png");
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference("gitlab.PNG");
-
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference("profile_picture.png");
         ImageView imageView = findViewById(R.id.imageView);
-
         Glide.with(this /* context */).load(storageReference).into(imageView);
-
-        //mImageView = (ImageView) findViewById(R.id.imageView);
-        //mImageView.setImageResource(R.drawable.profile_picture2);
-        //mImageView.setImageBitmap(BitmapFactory.decodeFile(storageRef.getPath()));
     }
 
     private void setValues() {
@@ -126,12 +116,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 findViewById(R.id.saveButton).setOnClickListener(this);
                 findViewById(R.id.cancelButton).setOnClickListener(this);
                 setValues();
+                showPicture();
                 break;
             case R.id.cancelButton:
                 setContentView(R.layout.profil);
                 editmode = false;
                 findViewById(R.id.changeProfilButton).setOnClickListener(this);
                 setValues();
+                showPicture();
                 break;
             case R.id.saveButton:
                 saveProfilChanges();
@@ -139,6 +131,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 editmode = false;
                 findViewById(R.id.changeProfilButton).setOnClickListener(this);
                 setValues();
+                showPicture();
                 break;
         }
     }
