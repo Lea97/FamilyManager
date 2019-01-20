@@ -39,7 +39,7 @@ public class EventRepository {
 
 
     public static EventRepository getInstance() {
-        return getInstance(RepositoryMode.PRODUCTIVE);
+        return getInstance(RepositoryMode.TEST);
     }
 
 
@@ -91,9 +91,9 @@ public class EventRepository {
     public List<Event> readEventsForUser() {
         FirebaseAuth auth=FirebaseAuth.getInstance();
         String current=auth.getCurrentUser().getUid();
+        Task<QuerySnapshot> task = db.collection(collectionPath).get();
 
-        Task<QuerySnapshot> task = db.collection(collectionPath).whereEqualTo("uid",current).get();
-       
+
 
 
         try {

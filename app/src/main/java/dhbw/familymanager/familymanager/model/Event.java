@@ -7,7 +7,7 @@ import java.util.List;
 public class Event {
     private long id;
     private String title;
-    private List<User> members;
+    private String familyId;
     private Date start;
     private Date end;
 
@@ -23,17 +23,16 @@ public class Event {
     public String getTitle() {
         return title;
     }
+    public String getFamilyId(){
+        return familyId;
+    }
 
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public List<User> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<User> members) {
-        this.members = members;
+    public void setFamilyId(String familyId){
+        this.familyId=familyId;
     }
 
 

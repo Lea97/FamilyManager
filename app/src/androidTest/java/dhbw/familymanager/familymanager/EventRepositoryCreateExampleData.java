@@ -43,7 +43,7 @@ public class EventRepositoryCreateExampleData {
     public void setup() {
 
         FirebaseApp.initializeApp(InstrumentationRegistry.getTargetContext());
-        repository = EventRepository.getInstance(EventRepository.RepositoryMode.PRODUCTIVE);
+        repository = EventRepository.getInstance(EventRepository.RepositoryMode.TEST);
         random = new Random();
 
     }
@@ -52,14 +52,14 @@ public class EventRepositoryCreateExampleData {
         Event event = new Event();
         event.setId(1628787648);
         event.setTitle("TestEventTitle");
-        event.setMembers(null);
+        event.setFamilyId("12345");
         event.setStart(new Date(2018, 1, 1, 14, 50, 0));
         event.setEnd(new Date(2018, 1, 1, 14, 55, 0));
         return event;
     }
 
 
-    @Ignore("Only switch on when you want to generate event data!")
+   @Ignore("Only switch on when you want to generate event data!")
     @Test
     public void createDataInProductiveEventStorage() {
         Calendar now = new GregorianCalendar();
@@ -69,15 +69,16 @@ public class EventRepositoryCreateExampleData {
         current.set(Calendar.MINUTE, 0);
 
 
-        for (int i = 1; i <= 450; i++) {
+        for (int i = 1; i <= 25; i++) {
+
             System.out.println("Creating event " + i);
             Event e = new Event();
             e.setStart(current.getTime());
             current.add(Calendar.MINUTE, 55);
             e.setEnd(current.getTime());
             e.setTitle("Termin " + i);
-           // e.setId(random.nextLong());
-            e.setId(Long.parseLong(FirebaseAuth.getInstance().getCurrentUser().getUid()));
+            e.setId(random.nextLong());
+            e.setFamilyId("123123");
             repository.storeEvent(e);
 
 

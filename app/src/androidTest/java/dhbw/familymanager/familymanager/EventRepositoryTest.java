@@ -5,6 +5,7 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.junit.Before;
@@ -46,7 +47,7 @@ public class EventRepositoryTest {
         Event event = new Event();
         event.setId(1628787648);
         event.setTitle("TestEventTitle");
-        event.setMembers(null);
+        event.setFamilyId("12345");
         event.setStart(new Date(2018, 1, 1, 14, 50, 0));
         event.setEnd(new Date(2018, 1, 1, 14, 55, 0));
         return event;
@@ -74,8 +75,8 @@ public class EventRepositoryTest {
     @Test
     public void storeAndReadEvent() {
         codeUnderTest.storeEvent(getExampleEvent());
-        //List<Event> events = codeUnderTest.readAllEvents();
-        List<Event>events=codeUnderTest.readEventsForUser();
+        List<Event> events = codeUnderTest.readAllEvents();
+        //List<Event>events=codeUnderTest.readEventsForUser();
 
         assertNotNull (events);
         assertTrue (events.size()>0);
@@ -87,7 +88,7 @@ public class EventRepositoryTest {
         assertEquals(lastEventInCollection.getStart(), getExampleEvent().getStart());
         assertEquals(lastEventInCollection.getEnd(), getExampleEvent().getEnd());
         assertEquals(lastEventInCollection.getId(), getExampleEvent().getId());
-        assertEquals(lastEventInCollection.getMembers(), getExampleEvent().getMembers());
+        assertEquals(lastEventInCollection.getFamilyId(), getExampleEvent().getFamilyId());
 
 
     }
