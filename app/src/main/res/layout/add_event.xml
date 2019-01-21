@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/familyNameTextfield2"
+        android:id="@+id/eventTitle"
         android:layout_width="225dp"
         android:layout_height="37dp"
         android:text=""

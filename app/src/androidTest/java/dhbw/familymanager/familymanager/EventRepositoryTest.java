@@ -5,20 +5,15 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Random;
 
 import dhbw.familymanager.familymanager.controller.EventRepository;
-import dhbw.familymanager.familymanager.model.Calendar;
 import dhbw.familymanager.familymanager.model.Event;
 
 import static org.junit.Assert.assertEquals;

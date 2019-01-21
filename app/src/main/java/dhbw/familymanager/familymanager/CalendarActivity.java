@@ -39,24 +39,25 @@ public class CalendarActivity extends AppCompatActivity {
 
         EventRepository repo = EventRepository.getInstance();
 
+
         // TODO: read user-specific events
-        List<Event> events = repo.readAllEvents();
-        //List<Event> userSpecificEvents=repo.readEventsForUser();
+        //List<Event> events = repo.readAllEvents();
+        List<Event> userSpecificEvents=repo.readEventsForUser();
         List<WeekViewEvent> result = new ArrayList<>();
 
-        for (Event e : events) {
-       //for (Event e:userSpecificEvents){
+       // for (Event e : events) {
+       for (Event e:userSpecificEvents){
             WeekViewEvent weekViewEvent = new WeekViewEvent();
 
-            Calendar calStart = Calendar.getInstance();
-            Calendar calEnd = Calendar.getInstance();
+            //Calendar calStart = Calendar.getInstance();
+            //Calendar calEnd = Calendar.getInstance();
 
-            calStart.setTime(e.getStart());
-            calEnd.setTime(e.getEnd());
+            //calStart.setTime(e.getStart());
+            //calEnd.setTime(e.getEnd());
             weekViewEvent.setId(e.getId());
             weekViewEvent.setName(e.getTitle());
-            weekViewEvent.setStartTime(calStart);
-            weekViewEvent.setEndTime(calEnd);
+            //weekViewEvent.setStartTime(calStart);
+           // weekViewEvent.setEndTime(calEnd);
 
 
             result.add(weekViewEvent);

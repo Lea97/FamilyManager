@@ -39,7 +39,7 @@ public class EventRepository {
 
 
     public static EventRepository getInstance() {
-        return getInstance(RepositoryMode.TEST);
+        return getInstance(RepositoryMode.PRODUCTIVE);
     }
 
 
@@ -65,7 +65,7 @@ public class EventRepository {
 
     public void storeEvent(Event event) {
         FirebaseAuth auth=FirebaseAuth.getInstance();
-        String uid=auth.getCurrentUser().getUid();
+       String uid=auth.getCurrentUser().getUid();
 
 
 
