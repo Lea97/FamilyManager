@@ -43,7 +43,6 @@ import java.util.UUID;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
-    private Button btnChoose;
     private Uri filePath;
     private final int PICK_IMAGE_REQUEST = 71;
 
@@ -71,7 +70,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private void showFileChooser() {
 
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("*/*");
+        intent.setType("image/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
         try {
@@ -117,6 +116,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             progressDialog.dismiss();
                             Toast.makeText(ProfileActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                            setValues();
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -178,20 +178,20 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         final TextView mailTextfield = (TextView) findViewById(R.id.emailTextfield);
         mailTextfield.setText(userMail);
 
-        Timestamp userbirth = (Timestamp) document.get("birthday");
-        final TextView birthTextfield = (TextView) findViewById(R.id.showDate);
-        if (userbirth != null)
+        Timestamp userBirthday = (Timestamp) document.get("birthday");
+        final TextView birthTextView = (TextView) findViewById(R.id.showDate);
+        if (userBirthday != null)
         {
             final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
-            if (editmode == false)
+            if (!editmode)
             {
-                ((TextView) findViewById(R.id.birthTextfield)).setText(dateFormat.format(userbirth.toDate()));
+                ((TextView) findViewById(R.id.birthTextfield)).setText(dateFormat.format(userBirthday.toDate()));
             }
             else
             {
-                ((TextView) findViewById(R.id.showDate)).setText(dateFormat.format(userbirth.toDate()));
+                ((TextView) findViewById(R.id.showDate)).setText(dateFormat.format(userBirthday.toDate()));
 
-                btnChoose = (Button) findViewById(R.id.btnChoose);
+                Button btnChoose = (Button) findViewById(R.id.btnChoose);
                 mImageView = (ImageView) findViewById(R.id.imageView);
                 btnChoose.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -226,33 +226,32 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 setValues();
                 break;
             case R.id.saveButton:
-                saveProfilChanges();
+                saveProfileChanges();
                 setContentView(R.layout.profil);
                 editmode = false;
                 findViewById(R.id.changeProfilButton).setOnClickListener(this);
-                setValues();
                 break;
         }
     }
 
-    private void saveProfilChanges() {
+    private void saveProfileChanges() {
         uploadImage();
-        final TextView dateField = (TextView) findViewById(R.id.showDate);
-        final TextView nameTextield = (TextView) findViewById(R.id.nameTextfield);
-        final TextView emailTextfield = (TextView) findViewById(R.id.emailTextfield);
-        final TextView numberTextfield = (TextView) findViewById(R.id.numberTextfield);
+        final TextView dateTextView = (TextView) findViewById(R.id.showDate);
+        final TextView nameTextView = (TextView) findViewById(R.id.nameTextfield);
+        final TextView emailTextView = (TextView) findViewById(R.id.emailTextfield);
+        final TextView numberTextView = (TextView) findViewById(R.id.numberTextfield);
 
         final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
-        Date date = new Date(dateField.getText().toString());
+        Date date = new Date(dateTextView.getText().toString());
         Timestamp birthday = new Timestamp(date);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         if(filePath != null)
         {
-            db.collection("users").document(user.getUid()).update("picturePath",picturePath,"birthday", birthday,"name", nameTextield.getText().toString(),"phonenumber", numberTextfield.getText().toString(), "email", emailTextfield.getText().toString());
+            db.collection("users").document(user.getUid()).update("picturePath",picturePath,"birthday", birthday,"name", nameTextView.getText().toString(),"phonenumber", numberTextView.getText().toString(), "email", emailTextView.getText().toString());
         }
         else{
-            db.collection("users").document(user.getUid()).update("birthday", birthday,"name", nameTextield.getText().toString(),"phonenumber", numberTextfield.getText().toString(), "email", emailTextfield.getText().toString());
+            db.collection("users").document(user.getUid()).update("birthday", birthday,"name", nameTextView.getText().toString(),"phonenumber", numberTextView.getText().toString(), "email", emailTextView.getText().toString());
         }
        // user.updateEmail(emailTextfield.getText().toString());
     }
@@ -261,12 +260,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
         Calendar cal = new GregorianCalendar(year, month, day);
-        this.setDate(cal);
-    }
-
-    private void setDate(final Calendar calendar) {
         final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
-        ((TextView) findViewById(R.id.showDate)).setText(dateFormat.format(calendar.getTime()));
+        ((TextView) findViewById(R.id.showDate)).setText(dateFormat.format(cal.getTime()));
     }
 
     public void datePicker(View view){
