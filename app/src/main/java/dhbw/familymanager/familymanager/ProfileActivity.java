@@ -2,7 +2,6 @@ package dhbw.familymanager.familymanager;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -11,7 +10,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -260,7 +258,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
         Calendar cal = new GregorianCalendar(year, month, day);
@@ -273,8 +270,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void datePicker(View view){
-
         DatePickerFragment fragment = new DatePickerFragment();
+        fragment.setMaxDay();
         fragment.show(getFragmentManager(), "datePicker");
     }
 
