@@ -91,12 +91,12 @@ public class EventRepository {
     public List<Event> readEventsForUser() {
         FirebaseAuth auth=FirebaseAuth.getInstance();
         String current=auth.getCurrentUser().getUid();
-        Task<QuerySnapshot> task = db.collection(collectionPath).get();
 
 
 
 
         try {
+            Task<QuerySnapshot> task = db.collection(collectionPath).whereEqualTo("uid", current).get();
             QuerySnapshot querySnapshot = Tasks.await(task);
             return querySnapshot.toObjects(Event.class);
         } catch (Exception e) {

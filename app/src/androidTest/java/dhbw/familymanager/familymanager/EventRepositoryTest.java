@@ -70,11 +70,11 @@ public class EventRepositoryTest {
     @Test
     public void storeAndReadEvent() {
         codeUnderTest.storeEvent(getExampleEvent());
-        List<Event> events = codeUnderTest.readAllEvents();
-        //List<Event>events=codeUnderTest.readEventsForUser();
+        //List<Event> events = codeUnderTest.readAllEvents();
+        List<Event>events=codeUnderTest.readEventsForUser();
 
-        assertNotNull (events);
-        assertTrue (events.size()>0);
+        //assertNotNull (events);
+        //assertTrue (events.size()>0);
 
 
         Event lastEventInCollection = events.get(events.size()-1);
