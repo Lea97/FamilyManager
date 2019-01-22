@@ -1,16 +1,20 @@
 package dhbw.familymanager.familymanager;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.listButton).setOnClickListener(this);
         findViewById(R.id.calendarButton).setOnClickListener(this);
         findViewById(R.id.addFamilyButton).setOnClickListener(this);
+        findViewById(R.id.logoutButton).setOnClickListener(this);
     }
 
     @Override
@@ -110,35 +115,58 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         case R.id.addFamilyButton:
             startActivity(new Intent(MainActivity.this, AddFamilyActivity.class));
             break;
+        case R.id.logoutButton:
+            logout();
+            break;
         }
+    }
+
+    private void logout() {
+        AuthUI.getInstance().signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        Toast.makeText(MainActivity.this,
+                                "You have been signed out.",
+                                Toast.LENGTH_LONG)
+                                .show();
+                        // Close activity
+                        finish();
+                    }
+                });
     }
 
     private void setFamilies(){
         final Spinner dropdown = findViewById(R.id.familySpinner);
         items = new ArrayList<String>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String mail = mAuth.getCurrentUser().getEmail();
-        if(mail!= null) {
-            Query query = db.collection("families").whereArrayContains("members", mail);
 
-            query.get()
-                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot querySnapshot) {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null)
+        {
+            String mail = mAuth.getCurrentUser().getEmail();
+            if(mail!= null) {
+                Query query = db.collection("families").whereArrayContains("members", mail);
 
-                            List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+                query.get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot querySnapshot) {
 
-                            for (DocumentSnapshot document : documents) {
-                                Log.d("TAG", "DocumentSnapshot data: " + document.getData());
-                                adapter.add(document.get("familyName").toString());
+                                List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+
+                                for (DocumentSnapshot document : documents) {
+                                    Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                                    adapter.add(document.get("familyName").toString());
+                                }
+                                if (items.isEmpty()){
+                                    adapter.add("No Family exist");
+                                }
                             }
-                            if (items.isEmpty()){
-                                adapter.add("No Family exist");
-                            }
-                        }
-                    });
+                        });
+            }
+            adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+            dropdown.setAdapter(adapter);
         }
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
-        dropdown.setAdapter(adapter);
     }
 }
