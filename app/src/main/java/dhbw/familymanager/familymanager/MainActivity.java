@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.calendarButton).setOnClickListener(this);
         findViewById(R.id.addFamilyButton).setOnClickListener(this);
         findViewById(R.id.logoutButton).setOnClickListener(this);
+        findViewById(R.id.memberButton).setOnClickListener(this);
     }
 
     @Override
@@ -72,7 +73,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             .setAvailableProviders(providers)
                             .build(),
                     RC_SIGN_IN);
-
         }
     }
 
@@ -86,17 +86,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                String uid=user.getUid();
-                String email=user.getEmail();
-
-                User userModel = new User("", new Date(01,00,01), email, "", "ProfilPictures/profile_picture.png");
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("users").document(uid).set(userModel);
-
-            } else {
-                // Sign in failed. If response is null the user canceled the
-                // sign-in flow using the back button. Otherwise check
-                // response.getError().getErrorCode() and handle the error.
+                String uid = user.getUid();
+                Boolean exists =!db.collection("users").equals(uid);
+                if (!exists)
+                {
+                    String email=user.getEmail();
+                    User userModel = new User("", new Date(01,00,01), email, "", "ProfilPictures/profile_picture.png");
+                    db.collection("users").document(uid).set(userModel);
+                }
             }
         }
     }
@@ -117,6 +115,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             break;
         case R.id.logoutButton:
             logout();
+            break;
+        case R.id.memberButton:
+            startActivity(new Intent(MainActivity.this, ShowMemberActivity.class));
             break;
         }
     }

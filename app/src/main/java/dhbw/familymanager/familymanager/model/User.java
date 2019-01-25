@@ -10,18 +10,18 @@ public class User {
     private String name;
     private Date birthday;
     private String email;
-    private String phonennumber;
+    private String phonenumber;
     private String picturePath;
 
 
     public User() {
     }
 
-    public User(String name, Date birthday, String email, String phonennumber, String picturePath) {
+    public User(String name, Date birthday, String email, String phonenumber, String picturePath) {
         this.name = name;
         this.birthday = birthday;
         this.email = email;
-        this.phonennumber = phonennumber;
+        this.phonenumber = phonenumber;
         this.picturePath = picturePath;
     }
 
@@ -49,12 +49,12 @@ public class User {
         this.email = email;
     }
 
-    public String getPhonennumber() {
-        return phonennumber;
+    public String getPhonenumber() {
+        return phonenumber;
     }
 
-    public void setPhonennumber(String phonennumber) {
-        this.phonennumber = phonennumber;
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
     }
 
     public String getPicturePath() {

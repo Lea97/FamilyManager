@@ -230,6 +230,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 setContentView(R.layout.profil);
                 editmode = false;
                 findViewById(R.id.changeProfilButton).setOnClickListener(this);
+                setValues();
                 break;
         }
     }
