@@ -89,16 +89,16 @@ public class EventRepository {
     }
 
     public List<Event> readEventsForUser() {
-        FirebaseAuth auth=FirebaseAuth.getInstance();
-        String current=auth.getCurrentUser().getUid();
-
-
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        String current = auth.getCurrentUser().getUid();
 
 
         try {
-            Task<QuerySnapshot> task = db.collection(collectionPath).whereEqualTo("uid", current).get();
+            //Task<QuerySnapshot> task = db.collection(collectionPath).whereEqualTo("uid", current).get();
+            Task<QuerySnapshot> task = db.collection(collectionPath).get();
             QuerySnapshot querySnapshot = Tasks.await(task);
-            return querySnapshot.toObjects(Event.class);
+
+                return querySnapshot.toObjects(Event.class);
         } catch (Exception e) {
             throw new DatabaseCommunicationException("Event reading failed", e);
         }

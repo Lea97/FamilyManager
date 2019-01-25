@@ -33,7 +33,7 @@ public class CalendarActivity extends AppCompatActivity {
 
 
 
-    private List<WeekViewEvent> events = new ArrayList<>();
+    private List<WeekViewEvent> events = readEvents();
 
     private List<WeekViewEvent> readEvents() {
 
@@ -70,12 +70,12 @@ public class CalendarActivity extends AppCompatActivity {
         @Override
         public List<WeekViewEvent> onMonthChange(int newYear, final int newMonth) {
             ArrayList<WeekViewEvent> result = new ArrayList<>();
-            if(events!=null){
-            for (WeekViewEvent e : events) {
+
+            for (WeekViewEvent e : events ) {
                 if (e.getStartTime().get(Calendar.MONTH) + 1 == newMonth && e.getStartTime().get(Calendar.YEAR) == newYear) {
                     result.add(e);
                 }
-            }}
+            }
             System.out.println("Delivering " + result.size() + "events for " + newYear + " month " + newMonth + " out of " + events.size());
             return result;
         }
