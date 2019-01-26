@@ -49,11 +49,11 @@ public class AddFamilyActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.cancleAddFamilyButton:
-                setContentView(R.layout.activity_main);
+                this.finish();
                 break;
             case R.id.createFamilyButton:
                 createFamily();
-                setContentView(R.layout.activity_main);
+                this.finish();
                 break;
 
         }

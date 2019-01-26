@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int RC_SIGN_IN = 4711;
     private FirebaseAuth mAuth;
     private ArrayList<String> items;
+    private ArrayList<String> familieIds;
     private ArrayAdapter<String> adapter;
     private static String currentFamily;
 
@@ -142,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void setFamilies(){
         final Spinner dropdown = findViewById(R.id.familySpinner);
         items = new ArrayList<String>();
+        familieIds = new ArrayList<String>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -160,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                                 for (DocumentSnapshot document : documents) {
                                     Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                                    familieIds.add(document.getId());
                                     adapter.add(document.get("familyName").toString());
                                 }
                                 if (items.isEmpty()){
@@ -174,7 +177,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     String family = dropdown.getSelectedItem().toString();
-                    setFamily(family);
+                    int pos = dropdown.getSelectedItemPosition();
+                    setFamily(familieIds.get(pos));
                 }
 
                 @Override
