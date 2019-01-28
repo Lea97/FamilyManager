@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     String family = dropdown.getSelectedItem().toString();
                     int pos = dropdown.getSelectedItemPosition();
-                    setFamily(familieIds.get(pos));
+                   // setFamily(familieIds.get(pos));
                 }
 
                 @Override

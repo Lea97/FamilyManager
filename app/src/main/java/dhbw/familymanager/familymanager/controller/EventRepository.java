@@ -93,14 +93,23 @@ public class EventRepository {
         String current = auth.getCurrentUser().getUid();
 
 
+
         try {
-            //Task<QuerySnapshot> task = db.collection(collectionPath).whereEqualTo("uid", current).get();
-            Task<QuerySnapshot> task = db.collection(collectionPath).get();
+            Task<QuerySnapshot> task = db.collection(collectionPath).whereEqualTo("uid", current).get();
+            task.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
+            //Task<QuerySnapshot> task = db.collection(collectionPath).get();
+
             QuerySnapshot querySnapshot = Tasks.await(task);
 
                 return querySnapshot.toObjects(Event.class);
         } catch (Exception e) {
             throw new DatabaseCommunicationException("Event reading failed", e);
+
         }
 
     }

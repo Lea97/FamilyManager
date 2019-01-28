@@ -49,15 +49,15 @@ public class CalendarActivity extends AppCompatActivity {
        for (Event e:userSpecificEvents){
             WeekViewEvent weekViewEvent = new WeekViewEvent();
 
-            //Calendar calStart = Calendar.getInstance();
-            //Calendar calEnd = Calendar.getInstance();
+            Calendar calStart = Calendar.getInstance();
+            Calendar calEnd = Calendar.getInstance();
 
-            //calStart.setTime(e.getStart());
-            //calEnd.setTime(e.getEnd());
+            calStart.setTime(e.getStart());
+            calEnd.setTime(e.getEnd());
             weekViewEvent.setId(e.getId());
             weekViewEvent.setName(e.getTitle());
-            //weekViewEvent.setStartTime(calStart);
-           // weekViewEvent.setEndTime(calEnd);
+            weekViewEvent.setStartTime(calStart);
+            weekViewEvent.setEndTime(calEnd);
 
 
             result.add(weekViewEvent);
