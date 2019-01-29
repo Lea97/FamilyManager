@@ -1,35 +1,28 @@
 package dhbw.familymanager.familymanager.model;
 
 
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 public class Event {
+    private String uid;
     private long id;
+
+
     private String title;
     private String familyId;
     private Date start;
+   // private Calendar start;
     private Date end;
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
-    private String uid;
 
 
 
     public Event() {
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
-
     public String getTitle() {
         return title;
     }
@@ -44,6 +37,14 @@ public class Event {
     public void setFamilyId(String familyId){
         this.familyId=familyId;
     }
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
 
 
 
@@ -63,8 +64,8 @@ public class Event {
         this.end = end;
     }
 
-    public long getId() {
-        return id;
+    public String getUid() {
+        return uid;
     }
 
 }

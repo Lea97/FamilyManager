@@ -68,15 +68,6 @@ public class EventRepository {
 
 
         Task<DocumentReference> task = db.collection(collectionPath).add(event);
-        task.addOnFailureListener(new OnFailureListener() {
-                                      @Override
-                                      public void onFailure(@NonNull Exception e) {
-                                          e.printStackTrace();
-                                          throw new DatabaseCommunicationException("Event writing failed", e);
-
-                                      }
-                                  }
-        );
 
         try {
             Tasks.await(task);
@@ -94,6 +85,7 @@ public class EventRepository {
         try {
 
             Task<QuerySnapshot> task = db.collection(collectionPath).whereEqualTo("uid", current).get();
+           // Task<QuerySnapshot> task = db.collection(collectionPath).get();
             task.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
@@ -108,7 +100,7 @@ public class EventRepository {
 
                 return querySnapshot.toObjects(Event.class);
         } catch (Exception e) {
-           // throw new DatabaseCommunicationException("Event reading failed", e);
+            //throw new DatabaseCommunicationException("Event reading failed", e);
             Log.d("TAG", "Event reading failed: ");
 
         }

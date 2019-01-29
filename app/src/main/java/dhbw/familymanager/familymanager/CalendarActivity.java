@@ -16,9 +16,11 @@ import com.alamkanak.weekview.WeekViewEvent;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CancellationException;
 import java.util.stream.Collectors;
 
 import dhbw.familymanager.familymanager.controller.EventRepository;
@@ -35,33 +37,48 @@ public class CalendarActivity extends AppCompatActivity {
 
     private List<WeekViewEvent> events = readEvents();
 
+    private GregorianCalendar getCalendar(Date date) {
+        Calendar calendar=new GregorianCalendar();
+        calendar.setTime(date);
+        return null;
+
+    }
+
     private List<WeekViewEvent> readEvents() {
 
-        EventRepository repo = EventRepository.getInstance();
+        final EventRepository repo = EventRepository.getInstance();
 
 
         // TODO: read user-specific events
         //List<Event> events = repo.readAllEvents();
-        List<Event> userSpecificEvents=repo.readEventsForUser();
+
+
+        List<Event> userEvents=repo.readEventsForUser();
         List<WeekViewEvent> result = new ArrayList<>();
+        if(!userEvents.isEmpty()&&(userEvents!=null)){
 
        // for (Event e : events) {
-       for (Event e:userSpecificEvents){
+       for (Event e:userEvents){
             WeekViewEvent weekViewEvent = new WeekViewEvent();
 
             Calendar calStart = Calendar.getInstance();
-            Calendar calEnd = Calendar.getInstance();
+           Calendar calEnd = Calendar.getInstance();
 
-            calStart.setTime(e.getStart());
-            calEnd.setTime(e.getEnd());
+
+
+           calStart.setTime(e.getStart());
+           calEnd.setTime(e.getEnd());
+
+
             weekViewEvent.setId(e.getId());
             weekViewEvent.setName(e.getTitle());
             weekViewEvent.setStartTime(calStart);
             weekViewEvent.setEndTime(calEnd);
+            weekViewEvent.setStartTime(calStart);
 
 
             result.add(weekViewEvent);
-        }
+        }}
         return result;
     }
 
@@ -169,8 +186,8 @@ public class CalendarActivity extends AppCompatActivity {
                     public void run() {
                         System.out.println("Refreshing calendar");
                         // because there is no method to refresh calendar
-                      mWeekView.goToDate(new GregorianCalendar(2000, 5, 5));
-                       mWeekView.goToDate(new GregorianCalendar());
+                     // mWeekView.goToDate(new GregorianCalendar(2000, 5, 5));
+                     //  mWeekView.goToDate(new GregorianCalendar());
 
                         mWeekView.notifyDatasetChanged();
                         mWeekView.goToDate(new GregorianCalendar());
