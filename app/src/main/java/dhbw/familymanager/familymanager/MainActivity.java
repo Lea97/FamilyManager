@@ -80,6 +80,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    protected void onPostResume(){
+        super.onPostResume();
+        setFamilies();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
@@ -140,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
     }
 
-    private void setFamilies(){
+    public void setFamilies(){
         final Spinner dropdown = findViewById(R.id.familySpinner);
         items = new ArrayList<String>();
         familieIds = new ArrayList<String>();
@@ -178,7 +184,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     String family = dropdown.getSelectedItem().toString();
                     int pos = dropdown.getSelectedItemPosition();
-                   // setFamily(familieIds.get(pos));
+                    if(familieIds.size() != 0)
+                    {
+                        setFamily(familieIds.get(pos));
+                    }
                 }
 
                 @Override
