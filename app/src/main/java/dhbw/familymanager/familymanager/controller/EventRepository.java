@@ -1,18 +1,15 @@
 package dhbw.familymanager.familymanager.controller;
 
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
-import com.alamkanak.weekview.WeekViewEvent;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firestore.v1beta1.WriteResult;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,10 +92,12 @@ public class EventRepository {
 
 
         try {
+
             Task<QuerySnapshot> task = db.collection(collectionPath).whereEqualTo("uid", current).get();
             task.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
+
 
                 }
             });
@@ -106,12 +105,16 @@ public class EventRepository {
 
             QuerySnapshot querySnapshot = Tasks.await(task);
 
+
                 return querySnapshot.toObjects(Event.class);
         } catch (Exception e) {
-            throw new DatabaseCommunicationException("Event reading failed", e);
+           // throw new DatabaseCommunicationException("Event reading failed", e);
+            Log.d("TAG", "Event reading failed: ");
 
         }
 
+
+        return new ArrayList<Event>();
     }
 
 //}

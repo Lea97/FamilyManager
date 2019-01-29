@@ -169,8 +169,8 @@ public class CalendarActivity extends AppCompatActivity {
                     public void run() {
                         System.out.println("Refreshing calendar");
                         // because there is no method to refresh calendar
-                      //  mWeekView.goToDate(new GregorianCalendar(2000, 5, 5));
-                       // mWeekView.goToDate(new GregorianCalendar());
+                      mWeekView.goToDate(new GregorianCalendar(2000, 5, 5));
+                       mWeekView.goToDate(new GregorianCalendar());
 
                         mWeekView.notifyDatasetChanged();
                         mWeekView.goToDate(new GregorianCalendar());
