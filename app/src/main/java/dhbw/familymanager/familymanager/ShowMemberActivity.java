@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,6 +20,7 @@ public class ShowMemberActivity extends AppCompatActivity {
 
     FirebaseFirestore db;
     String family;
+    ArrayList<String> memberList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +29,15 @@ public class ShowMemberActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         family = MainActivity.getFamily();
 
+        memberList = new ArrayList<String>();
         getFamilyMembers();
+        setList();
+    }
+
+    private void setList() {
+        ArrayAdapter adapter = new ArrayAdapter<String>(this,android.R.layout.activity_list_item,memberList);
+        ListView listView = (ListView) findViewById(R.id.member_list);
+        listView.setAdapter(adapter);
     }
 
     private void getFamilyMembers() {
@@ -56,6 +67,7 @@ public class ShowMemberActivity extends AppCompatActivity {
 
         String memberlist = "";
         for (String member:members) {
+            this.memberList.add(member);
             memberlist = memberlist + member + ";";
         }
 
