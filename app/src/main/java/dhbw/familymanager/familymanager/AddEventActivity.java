@@ -2,6 +2,7 @@ package dhbw.familymanager.familymanager;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +26,7 @@ import java.util.Random;
 import dhbw.familymanager.familymanager.controller.EventRepository;
 import dhbw.familymanager.familymanager.model.Event;
 
-class AddEventActivity extends AppCompatActivity {
+class AddEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     private static final String TAG="CalendarActivity";
     private CalendarView calendar;
@@ -45,14 +46,35 @@ class AddEventActivity extends AppCompatActivity {
         setContentView(R.layout.add_event);
         repository = EventRepository.getInstance(EventRepository.RepositoryMode.PRODUCTIVE);
         title=findViewById(R.id.eventTitle);
-
-
-        calendar = (CalendarView) findViewById(R.id.calendarView);
-        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        Button start=findViewById(R.id.eventStart);
+        Button end=findViewById(R.id.end);
+        start.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+            public void onClick(View v) {
+                DatePickerFragment fragment = new DatePickerFragment();
+                fragment.show(getFragmentManager(), "datePicker");
 
-                eventStart = new GregorianCalendar(year, month, dayOfMonth);
+
+
+            }
+        });
+
+        end.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerFragment fragment = new DatePickerFragment();
+                fragment.show(getFragmentManager(), "datePicker");
+
+            }
+        });
+
+
+        //calendar = (CalendarView) findViewById(R.id.calendarView);
+//        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+           // @Override
+           // public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+
+             //   eventStart = new GregorianCalendar(year, month, dayOfMonth);
 
 
 
@@ -61,8 +83,8 @@ class AddEventActivity extends AppCompatActivity {
                 //eventDate = year + " /" + dayOfMonth + " /" + (month+1);
 
                 //Log.d(TAG, "Selected date: " + eventDate);
-            }
-        });
+           // }
+        //});
 
         saveEventBtn = findViewById(R.id.saveEvent);
        saveEventBtn.setOnClickListener(new View.OnClickListener() {
@@ -100,4 +122,11 @@ class AddEventActivity extends AppCompatActivity {
        });}
 
 
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar cal = new GregorianCalendar(year, month, dayOfMonth);
+        final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
+        //((TextView) findViewById(R.id.showDate)).setText(dateFormat.format(cal.getTime()));
+
+    }
 }
