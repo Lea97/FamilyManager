@@ -1,8 +1,10 @@
 package dhbw.familymanager.familymanager;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -13,10 +15,12 @@ import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.sql.Time;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -26,16 +30,18 @@ import java.util.Random;
 import dhbw.familymanager.familymanager.controller.EventRepository;
 import dhbw.familymanager.familymanager.model.Event;
 
-class AddEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+class AddEventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     private static final String TAG="CalendarActivity";
     private CalendarView calendar;
     private Button saveEventBtn;
-    private Calendar eventStart, end;
+    private Calendar eventStart, eventEnd;
     private EditText title;
     private EventRepository repository;
+    private boolean startEvent=false;
     private CalendarView calendarView;
     private DatePickerDialog datePickerDialog;
+   // private Date startDate, endDate;
 
 
 
@@ -56,6 +62,7 @@ class AddEventActivity extends AppCompatActivity implements DatePickerDialog.OnD
 
 
 
+
             }
         });
 
@@ -68,7 +75,8 @@ class AddEventActivity extends AppCompatActivity implements DatePickerDialog.OnD
             }
         });
 
-
+        eventStart=new GregorianCalendar();
+        eventEnd=new GregorianCalendar();
         //calendar = (CalendarView) findViewById(R.id.calendarView);
 //        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
            // @Override
@@ -92,7 +100,8 @@ class AddEventActivity extends AppCompatActivity implements DatePickerDialog.OnD
            public void onClick(View v) {
                final Event e = new Event();
                Random r=new Random();
-               GregorianCalendar start=new GregorianCalendar();
+
+              // GregorianCalendar start=new GregorianCalendar();
                //start.set(calendarView.getDate);
 
                e.setFamilyId("12345");
@@ -126,7 +135,44 @@ class AddEventActivity extends AppCompatActivity implements DatePickerDialog.OnD
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
         Calendar cal = new GregorianCalendar(year, month, dayOfMonth);
         final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
+        if(!startEvent) {
+            //if(eventStart.compareTo(Calendar.getInstance())>0)
+            eventStart.set(year, month, dayOfMonth);
+
+            TimePickerFragment timePickerFragment=new TimePickerFragment();
+            timePickerFragment.show(getFragmentManager(), "datePicker");
+
+
+        }
+        else{
+
+            eventEnd.set(year, month,dayOfMonth);
+            TimePickerFragment timePickerFragment=new TimePickerFragment();
+            timePickerFragment.show(getFragmentManager(), "datePicker");
+        }
+
+//        TimePicker mTimePicker = new TimePicker();
+        //datePickerDialog.show();
         //((TextView) findViewById(R.id.showDate)).setText(dateFormat.format(cal.getTime()));
+
+    }
+
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        if(!startEvent){
+
+        eventStart.set(Calendar.HOUR_OF_DAY,hourOfDay);
+        eventStart.set(Calendar.MINUTE,minute);
+
+        //eventStart.set(hourOfDay, minute);
+
+        startEvent = true;}
+        else{
+            eventEnd.set(Calendar.HOUR_OF_DAY,hourOfDay);
+            eventEnd.set(Calendar.MINUTE,minute);
+        }
+
 
     }
 }
