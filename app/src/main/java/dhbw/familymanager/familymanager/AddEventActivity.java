@@ -109,8 +109,9 @@ class AddEventActivity extends AppCompatActivity implements DatePickerDialog.OnD
               // e.setStart(eventStart);
 
                e.setStart(new Date(2019, 1, 1, 14, 50, 0));
-               e.setEnd(new Date(2019, 1, 1, 14, 55, 0));
-
+               //e.setEnd(new Date(2019, 1, 1, 14, 55, 0));
+               e.setStart(new Date(eventStart.get(Calendar.YEAR)-1900, eventStart.get(Calendar.MONTH), eventStart.get(Calendar.DAY_OF_MONTH), eventStart.get(Calendar.HOUR_OF_DAY), eventStart.get(Calendar.MINUTE), 0));
+               e.setEnd(new Date(eventEnd.get(Calendar.YEAR)-1900, eventEnd.get(Calendar.MONTH), eventEnd.get(Calendar.DAY_OF_MONTH), eventEnd.get(Calendar.HOUR_OF_DAY), eventEnd.get(Calendar.MINUTE), 0));
                e.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
                e.setTitle(title.getText().toString());
                e.setId(r.nextLong());
