@@ -77,37 +77,13 @@ class AddEventActivity extends AppCompatActivity implements DatePickerDialog.OnD
 
         eventStart=new GregorianCalendar();
         eventEnd=new GregorianCalendar();
-        //calendar = (CalendarView) findViewById(R.id.calendarView);
-//        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-           // @Override
-           // public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-
-             //   eventStart = new GregorianCalendar(year, month, dayOfMonth);
-
-
-
-
-
-                //eventDate = year + " /" + dayOfMonth + " /" + (month+1);
-
-                //Log.d(TAG, "Selected date: " + eventDate);
-           // }
-        //});
-
         saveEventBtn = findViewById(R.id.saveEvent);
        saveEventBtn.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
                final Event e = new Event();
                Random r=new Random();
-
-              // GregorianCalendar start=new GregorianCalendar();
-               //start.set(calendarView.getDate);
-
                e.setFamilyId("12345");
-               //e.setStart(DatePickerDi);
-              // e.setStart(eventStart);
-
                e.setStart(new Date(2019, 1, 1, 14, 50, 0));
                //e.setEnd(new Date(2019, 1, 1, 14, 55, 0));
                e.setStart(new Date(eventStart.get(Calendar.YEAR)-1900, eventStart.get(Calendar.MONTH), eventStart.get(Calendar.DAY_OF_MONTH), eventStart.get(Calendar.HOUR_OF_DAY), eventStart.get(Calendar.MINUTE), 0));
@@ -116,7 +92,7 @@ class AddEventActivity extends AppCompatActivity implements DatePickerDialog.OnD
                e.setTitle(title.getText().toString());
                e.setId(r.nextLong());
 
-               //e.setEnd(new Date(2018, 1, 1, 16, 55, 0));
+
 
                Thread t=new Thread(new Runnable() {
                    @Override
