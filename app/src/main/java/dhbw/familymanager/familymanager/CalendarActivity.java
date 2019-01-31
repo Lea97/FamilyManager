@@ -157,7 +157,7 @@ public class CalendarActivity extends AppCompatActivity {
 // The week view has infinite scrolling horizontally. We have to provide the events of a
 // month every time the month changes on the week view.
         mWeekView.setMonthChangeListener(mMonthChangeListener);
-        
+
 
 
         addEventButton.setOnClickListener(new View.OnClickListener() {

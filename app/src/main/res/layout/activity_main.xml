@@ -64,10 +64,12 @@
                     android:layout_height="match_parent"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:gravity="center|bottom"
+                    android:gravity="center"
                     android:paddingBottom="10dp"
                     android:singleLine="false"
-                    android:background="@drawable/profile"
+                    android:backgroundTint="@color/peach"
+                    android:text="Profil"
+                    android:textAlignment="center"
                     android:textSize="18sp" />
 
                 <ImageView
@@ -81,27 +83,25 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.5">
 
-                <ImageButton
+                <Button
                     android:id="@+id/calendarButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
                     android:gravity="center"
-                    android:paddingBottom="15dp"
-                    android:paddingLeft="25dp"
+                    android:paddingBottom="10dp"
                     android:singleLine="false"
-                    android:backgroundTint="@color/fui_transparent"
-                    android:textSize="18sp" />
+                    android:backgroundTint="@color/lightBlue"
+                    android:text="Kalender"
+                    android:textAlignment="center"
+                    android:textSize="18sp"  />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:gravity="center"
-                    android:src="@drawable/calendar"/>
+                    android:gravity="center" />
             </RelativeLayout>
         </TableRow>
 
@@ -118,16 +118,19 @@
 
                 <Button
                     android:id="@+id/map"
+
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
                     android:gravity="center"
                     android:paddingBottom="10dp"
-                    android:background="@drawable/maps"
+                    android:singleLine="false"
+                    android:backgroundTint="@color/pink"
+                    android:text="Karte"
+                    android:textAlignment="center"
                     android:textSize="18sp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"/>
+                    />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -144,14 +147,16 @@
                     android:id="@+id/chat"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
                     android:gravity="center"
                     android:paddingBottom="10dp"
-                    android:background="@drawable/chat"
+                    android:singleLine="false"
+                    android:backgroundTint="@color/peach"
+                    android:text="Chat"
+                    android:textAlignment="center"
                     android:textSize="18sp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"/>
+                    />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -175,12 +180,13 @@
                     android:id="@+id/memberButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginRight="30dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
                     android:gravity="center"
                     android:paddingBottom="10dp"
+                    android:singleLine="false"
+                    android:backgroundTint="@color/lightBlue"
+                    android:textAlignment="center"
                     android:text="Mitglieder"
                     android:background="@drawable/family"
                     android:textSize="18sp"
@@ -202,9 +208,14 @@
                     android:id="@+id/listButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
                     android:gravity="center"
                     android:paddingBottom="10dp"
-                    android:background="@drawable/lists"
+                    android:singleLine="false"
+                    android:backgroundTint="@color/colorAccent"
+                    android:text="Listen"
+                    android:textAlignment="center"
                     android:textSize="18sp" />
 
                 <ImageView
