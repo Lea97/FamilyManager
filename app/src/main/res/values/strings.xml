@@ -9,5 +9,7 @@
     <string name="events_today">Heute</string>
     <string name="events_three_days"> 3 Tage</string>
     <string name="events_week">Woche</string>
+    <string name="families">Familien</string>
+    <string name="lists">Listen</string>
 
 </resources>
