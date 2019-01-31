@@ -213,7 +213,7 @@
                     android:gravity="center"
                     android:paddingBottom="10dp"
                     android:singleLine="false"
-                    android:backgroundTint="@color/colorAccent"
+                    android:backgroundTint="@color/pink"
                     android:text="Listen"
                     android:textAlignment="center"
                     android:textSize="18sp" />
