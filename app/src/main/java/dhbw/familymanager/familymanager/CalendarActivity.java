@@ -60,7 +60,6 @@ public class CalendarActivity extends AppCompatActivity {
        // for (Event e : events) {
        for (Event e:userEvents){
             WeekViewEvent weekViewEvent = new WeekViewEvent();
-
             Calendar calStart = Calendar.getInstance();
            Calendar calEnd = Calendar.getInstance();
 
@@ -158,6 +157,7 @@ public class CalendarActivity extends AppCompatActivity {
 // The week view has infinite scrolling horizontally. We have to provide the events of a
 // month every time the month changes on the week view.
         mWeekView.setMonthChangeListener(mMonthChangeListener);
+        
 
 
         addEventButton.setOnClickListener(new View.OnClickListener() {
@@ -168,6 +168,10 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    private void deleteEvent(){
 
     }
 
