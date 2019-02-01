@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="?android:attr/listPreferredItemHeight"
-    android:gravity="center_vertical"
-    android:id="@+id/list_item_memberlist_textview" >
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-</TextView>
+    <TextView
+        android:id="@+id/memberTextView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="@dimen/browser_actions_context_menu_min_padding"
+        android:textColor="@color/browser_actions_text_color" />
+</LinearLayout>

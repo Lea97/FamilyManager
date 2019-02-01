@@ -1,17 +1,11 @@
 package dhbw.familymanager.familymanager;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -27,34 +21,23 @@ public class ShowMemberActivity extends AppCompatActivity {
     FirebaseFirestore db;
     String family;
     List<String> memberList;
+    ListView simpleList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.show_members);
-        db = FirebaseFirestore.getInstance();
-        family = MainActivity.getFamily();
-       // new Intent(ShowMemberFragment);
+        setContentView(R.layout.members_list_layout);
 
         memberList = new ArrayList<String>();
+        db = FirebaseFirestore.getInstance();
+        family = MainActivity.getFamily();
         getFamilyMembers();
     }
 
-    private void setList() {
-
-        ArrayAdapter<String> memeberlisteAdapter =
-                new ArrayAdapter<>(
-                        this, // Die aktuelle Umgebung (diese Activity)
-                        R.layout.list_item_memberlist, // ID der XML-Layout Datei
-                        R.id.list_item_memberlist_textview, // ID des TextViews
-                        memberList); // Beispieldaten in einer ArrayList
-
-       // ArrayAdapter adapter = new ArrayAdapter<String>(this,android.R.layout.activity_list_item,memberList);
-      //  ListView listView = (ListView) findViewById(R.id.member_list);
-       // listView.setAdapter(adapter);
-
-        ListView memberlisteListView = (ListView) findViewById(R.id.listview_members);
-        memberlisteListView.setAdapter(memeberlisteAdapter);
+    private void addListAdapter() {
+        simpleList = (ListView)findViewById(R.id.simpleListView);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, R.layout.list_item_memberlist, R.id.memberTextView, memberList);
+        simpleList.setAdapter(arrayAdapter);
     }
 
     private void getFamilyMembers() {
@@ -79,16 +62,11 @@ public class ShowMemberActivity extends AppCompatActivity {
     }
 
     private void setMembers(DocumentSnapshot document) {
-        TextView text = findViewById(R.id.membersOfFamily);
         ArrayList<String> members = (ArrayList<String>) document.get("members");
 
-        String memberlist = "";
         for (String member:members) {
             this.memberList.add(member);
-            memberlist = memberlist + member + ";";
         }
-
-        text.setText(memberlist);
-        setList();
+        addListAdapter();
     }
 }
