@@ -2,13 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:padding="@dimen/cardview_default_elevation"/>
 
     <TextView
-        android:id="@+id/memberTextView"
+        android:id="@+id/textViewMember"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:padding="@dimen/browser_actions_context_menu_min_padding"
-        android:textColor="@color/browser_actions_text_color" />
+        android:textColor="@color/cardview_dark_background" />
 </LinearLayout>
