@@ -31,7 +31,10 @@ public class ShowMemberActivity extends AppCompatActivity {
         memberList = new ArrayList<String>();
         db = FirebaseFirestore.getInstance();
         family = MainActivity.getFamily();
-        getFamilyMembers();
+        if(family != null)
+        {
+            getFamilyMembers();
+        }
     }
 
     private void addListAdapter() {
