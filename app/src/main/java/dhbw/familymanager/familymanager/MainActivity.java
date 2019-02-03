@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAuth=FirebaseAuth.getInstance();
 
         setContentView(R.layout.activity_main);
-        setFamilies();
 
         findViewById(R.id.profilButton).setOnClickListener(this);
         findViewById(R.id.listButton).setOnClickListener(this);
