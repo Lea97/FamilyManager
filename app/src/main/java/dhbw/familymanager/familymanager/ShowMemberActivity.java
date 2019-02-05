@@ -1,14 +1,18 @@
 package dhbw.familymanager.familymanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -18,13 +22,14 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import dhbw.familymanager.familymanager.Profile.ProfileActivity;
 import dhbw.familymanager.familymanager.model.User;
 
 public class ShowMemberActivity extends AppCompatActivity {
 
     FirebaseFirestore db;
     String family;
-    ListView simpleList;
+    ListView listView;
     List<User> users;
 
     @Override
@@ -42,10 +47,20 @@ public class ShowMemberActivity extends AppCompatActivity {
     }
 
     private void addListAdapter() {
-        simpleList = (ListView)findViewById(R.id.simpleListView);
+        listView = (ListView)findViewById(R.id.simpleListView);
         User[]usersArray = new User[users.size()];
         MembersAdapter membersAdapter = new MembersAdapter(getApplicationContext(), users.toArray(usersArray), this);
-        simpleList.setAdapter(membersAdapter);
+        listView.setAdapter(membersAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                User user = users.get(position);
+                Intent intent = new Intent(ShowMemberActivity.this, ProfileActivity.class);
+                intent.putExtra("userObject", user);
+                startActivity(intent);
+            }
+        });
     }
 
     private void getFamilyMembers() {
@@ -86,8 +101,8 @@ public class ShowMemberActivity extends AppCompatActivity {
                                 members.remove(userMail);
                                 User user = new User();
                                 user.setEmail(userMail);
-                                //user.setBirthday((Date) document.get("birthday"));
-                                //TODO
+                                Timestamp birth = (Timestamp)document.get("birthday");
+                                user.setBirthday(birth.toDate());
                                 user.setName((String) document.get("name"));
                                 user.setPhonenumber((String) document.get("phonenumber"));
                                 user.setPicturePath((String) document.get("picturePath"));
@@ -99,7 +114,7 @@ public class ShowMemberActivity extends AppCompatActivity {
                         for (String member : members) {
                             Log.d("MEMBER",member);
                             User user = new User();
-                            user.setEmail(member);
+                            user.setEmail(member + "  (only invited)");
                             user.setPicturePath("ProfilPictures/profile_picture.png");
                             users.add(user);
                         }
@@ -107,4 +122,5 @@ public class ShowMemberActivity extends AppCompatActivity {
                     }
                 });
         }
+
 }

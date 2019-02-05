@@ -39,12 +39,20 @@
                 android:value="dhbw.familymanager.familymanager.MainActivity" />
         </activity>
         <activity
-            android:name=".ProfileActivity"
+            android:name=".Profile.ProfileActivity"
             android:label="Profil"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="dhbw.familymanager.familymanager.MainActivity" />
+        </activity>
+        <activity
+            android:name=".Profile.EditProfileActivity"
+            android:label="Edit Profile"
+            android:parentActivityName=".Profile.ProfileActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="dhbw.familymanager.familymanager.Profile.ProfileActivity" />
         </activity>
         <activity
             android:name=".ShowMemberActivity"

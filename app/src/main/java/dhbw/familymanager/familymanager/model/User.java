@@ -2,10 +2,11 @@ package dhbw.familymanager.familymanager.model;
 
 import com.google.firebase.firestore.IgnoreExtraProperties;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @IgnoreExtraProperties
-public class User {
+public class User implements Serializable {
 
     private String name;
     private Date birthday;

@@ -70,11 +70,11 @@
     <TextView
         android:id="@+id/emailTextfield"
         android:layout_width="150dp"
-        android:layout_height="27dp"
-        android:layout_marginBottom="344dp"
+        android:layout_height="39dp"
+        android:layout_marginBottom="336dp"
         android:text=""
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.88"
+        app:layout_constraintHorizontal_bias="0.89"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 

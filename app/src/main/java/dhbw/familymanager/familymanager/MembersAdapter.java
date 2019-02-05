@@ -2,9 +2,11 @@ package dhbw.familymanager.familymanager;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,7 +21,6 @@ public class MembersAdapter extends BaseAdapter {
 
         Context context;
         User users[];
-        ;
         LayoutInflater inflter;
         Activity activity;
 
@@ -56,4 +57,6 @@ public class MembersAdapter extends BaseAdapter {
             Glide.with(activity).load(storageReference).into(icon);
             return view;
         }
+
+
 }
