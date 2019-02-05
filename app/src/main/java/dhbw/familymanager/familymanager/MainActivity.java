@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setContentView(R.layout.activity_main);
 
+        findViewById(R.id.galleryButton).setOnClickListener(this);
         findViewById(R.id.profilButton).setOnClickListener(this);
         findViewById(R.id.listButton).setOnClickListener(this);
         findViewById(R.id.calendarButton).setOnClickListener(this);
@@ -112,6 +113,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (view.getId()) {
         case R.id.profilButton:
             startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+            break;
+        case R.id.galleryButton:
+            startActivity(new Intent(MainActivity.this, PhotoGalleryActivity.class));
             break;
         case R.id.listButton:
             startActivity(new Intent(MainActivity.this, Lists.class));
