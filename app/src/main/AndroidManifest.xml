@@ -55,6 +55,14 @@
                 android:value="dhbw.familymanager.familymanager.Profile.ProfileActivity" />
         </activity>
         <activity
+            android:name=".photoGallery.CreateFolderActivity"
+            android:label="Create Folder"
+            android:parentActivityName=".photoGallery.PhotoGalleryActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="dhbw.familymanager.familymanager.photoGallery.PhotoGalleryActivity" />
+        </activity>
+        <activity
             android:name=".ShowMemberActivity"
             android:label="Mitglieder"
             android:parentActivityName=".MainActivity">
@@ -63,7 +71,7 @@
                 android:value="dhbw.familymanager.familymanager.MainActivity" />
         </activity>
         <activity
-            android:name=".PhotoGalleryActivity"
+            android:name=".photoGallery.PhotoGalleryActivity"
             android:label="Fotoalbum"
             android:parentActivityName=".MainActivity">
             <meta-data

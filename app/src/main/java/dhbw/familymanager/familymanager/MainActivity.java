@@ -31,6 +31,7 @@ import java.util.List;
 
 import dhbw.familymanager.familymanager.Profile.ProfileActivity;
 import dhbw.familymanager.familymanager.model.User;
+import dhbw.familymanager.familymanager.photoGallery.PhotoGalleryActivity;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<String> familieIds;
     private ArrayAdapter<String> adapter;
     private static String currentFamily;
+    private static Boolean updateFamilies = false;
 
 
     @Override
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAuth=FirebaseAuth.getInstance();
 
         setContentView(R.layout.activity_main);
-
+        setFamilies();
         findViewById(R.id.galleryButton).setOnClickListener(this);
         findViewById(R.id.profilButton).setOnClickListener(this);
         findViewById(R.id.listButton).setOnClickListener(this);
@@ -80,10 +82,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    public static void updateFamiles(){
+        updateFamilies = true;
+    }
+
     @Override
     protected void onPostResume(){
         super.onPostResume();
-        setFamilies();
+        if (updateFamilies){
+            updateFamilies = false;
+            setFamilies();
+        }
     }
 
     @Override
@@ -169,11 +178,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             public void onSuccess(QuerySnapshot querySnapshot) {
 
                                 List<DocumentSnapshot> documents = querySnapshot.getDocuments();
-
+                                int number = 0;
                                 for (DocumentSnapshot document : documents) {
                                     Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                                     familieIds.add(document.getId());
                                     adapter.add(document.get("familyName").toString());
+                                    if(document.getId().equals(currentFamily))
+                                    {
+                                        dropdown.setSelection(number);
+                                    }
+                                    number ++;
                                 }
                                 if (items.isEmpty()){
                                     adapter.add("No Family exist");
@@ -198,6 +212,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onNothingSelected(AdapterView<?> adapterView) {}
             });
         }
+    }
+
+    private void selectItem() {
     }
 
     private void setFamily(String family)

@@ -53,6 +53,7 @@ public class AddFamilyActivity extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.createFamilyButton:
                 createFamily();
+                MainActivity.updateFamiles();
                 this.finish();
                 break;
 

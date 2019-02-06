@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dhbw.familymanager.familymanager.Profile.ProfileActivity;
+import dhbw.familymanager.familymanager.adapter.MembersAdapter;
 import dhbw.familymanager.familymanager.model.User;
 
 public class ShowMemberActivity extends AppCompatActivity {

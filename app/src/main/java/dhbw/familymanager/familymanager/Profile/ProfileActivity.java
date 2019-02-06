@@ -76,10 +76,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         user = new User();
         user.setName((String) document.get("name"));
         user.setEmail((String) document.get("email"));
-
         Timestamp birth = (Timestamp) document.get("birthday");
-        //final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
-        //dateFormat.format(birth.toDate());
         user.setBirthday(birth.toDate());
         user.setPhonenumber((String) document.get("phonenumber"));
         user.setPicturePath((String) document.get("picturePath"));
