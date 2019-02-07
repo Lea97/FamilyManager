@@ -6,15 +6,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import dhbw.familymanager.familymanager.MainActivity;
 import dhbw.familymanager.familymanager.R;
+import dhbw.familymanager.familymanager.model.Folder;
 
 public class CreateFolderActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -36,10 +41,15 @@ public class CreateFolderActivity extends AppCompatActivity implements View.OnCl
     private void createFolder() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         TextView nameField = (TextView) findViewById(R.id.newFolderName);
-        folders.add(nameField.getText().toString());
+        String newFolderName = nameField.getText().toString();
+        folders.add(newFolderName);
         Map<String, Object> gallery = new HashMap<>();
         gallery.put("folderName", folders);
         db.collection("gallery").document(family).set(gallery);
+
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        Folder folder = new Folder(auth.getUid(), new Date(), new ArrayList<String>());
+        db.collection("folders").document(family + newFolderName).set(folder);
     }
 
     @Override

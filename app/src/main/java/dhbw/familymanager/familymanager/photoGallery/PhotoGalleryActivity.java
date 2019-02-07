@@ -34,8 +34,13 @@ public class PhotoGalleryActivity extends AppCompatActivity implements View.OnCl
         family = MainActivity.getFamily();
         folders = new ArrayList<String>();
         setContentView(R.layout.photo_gallery);
-        findViewById(R.id.addFolder).setOnClickListener(this);
-        addFolders();
+        if (family == null){
+            findViewById(R.id.addFolder).setVisibility(View.INVISIBLE);
+        }
+        else {
+            findViewById(R.id.addFolder).setOnClickListener(this);
+            addFolders();
+        }
     }
 
     private void addFolders() {

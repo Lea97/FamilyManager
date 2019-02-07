@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         familieIds = new ArrayList<String>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        final FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null)
         {
             String mail = mAuth.getCurrentUser().getEmail();
@@ -190,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     number ++;
                                 }
                                 if (items.isEmpty()){
+                                    currentFamily = null;
                                     adapter.add("No Family exist");
                                 }
                             }
