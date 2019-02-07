@@ -6,11 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -32,7 +30,7 @@ public class CreateFolderActivity extends AppCompatActivity implements View.OnCl
         family = MainActivity.getFamily();
         Intent i = getIntent();
         String[] folder = i.getStringArrayExtra("folders");
-        folders = new ArrayList<String>(Arrays.asList(folder));
+        folders = new ArrayList<>(Arrays.asList(folder));
         setContentView(R.layout.create_photo_folder);
         findViewById(R.id.createNewFolder).setOnClickListener(this);
         findViewById(R.id.cancleNewFolder).setOnClickListener(this);

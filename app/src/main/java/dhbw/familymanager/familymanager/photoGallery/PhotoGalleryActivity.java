@@ -79,7 +79,9 @@ public class PhotoGalleryActivity extends AppCompatActivity implements View.OnCl
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Intent intent = new Intent(PhotoGalleryActivity.this, FolderScreenActivity.class);
+                intent.putExtra("albumName", folders.get(position));
+                startActivity(intent);
             }
         });
     }

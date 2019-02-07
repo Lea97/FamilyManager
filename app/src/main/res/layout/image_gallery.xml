@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/com_facebook_auth_dialog_corner_radius_oversized"
+    android:paddingLeft="@dimen/com_facebook_auth_dialog_corner_radius_oversized"
+    android:paddingRight="@dimen/com_facebook_auth_dialog_corner_radius_oversized"
+    android:paddingTop="@dimen/com_facebook_auth_dialog_corner_radius_oversized">
+
+    <GridView
+        android:id="@+id/gridview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:columnWidth="100dp"
+        android:gravity="center"
+        android:horizontalSpacing="2dp"
+        android:numColumns="auto_fit"
+        android:stretchMode="spacingWidthUniform"
+        android:verticalSpacing="2dp" />
+
+</RelativeLayout>
