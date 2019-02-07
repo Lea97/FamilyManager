@@ -5,7 +5,8 @@
     android:paddingBottom="@dimen/com_facebook_auth_dialog_corner_radius_oversized"
     android:paddingLeft="@dimen/com_facebook_auth_dialog_corner_radius_oversized"
     android:paddingRight="@dimen/com_facebook_auth_dialog_corner_radius_oversized"
-    android:paddingTop="@dimen/com_facebook_auth_dialog_corner_radius_oversized">
+    android:paddingTop="@dimen/com_facebook_auth_dialog_corner_radius_oversized"
+    android:id="@+id/relativLayout1">>
 
     <GridView
         android:id="@+id/gridview"

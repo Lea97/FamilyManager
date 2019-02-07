@@ -11,5 +11,7 @@
     <string name="events_week">Woche</string>
     <string name="families">Familien</string>
     <string name="lists">Listen</string>
+    <string name="add_photo">Foto hinzufügen</string>
+    <string name="add_folder">Album hinzufügen</string>
 
 </resources>

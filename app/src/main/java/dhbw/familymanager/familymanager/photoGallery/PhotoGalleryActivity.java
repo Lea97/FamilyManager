@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -22,7 +24,7 @@ import dhbw.familymanager.familymanager.MainActivity;
 import dhbw.familymanager.familymanager.R;
 import dhbw.familymanager.familymanager.adapter.FolderAdapter;
 
-public class PhotoGalleryActivity extends AppCompatActivity implements View.OnClickListener {
+public class PhotoGalleryActivity extends AppCompatActivity {
 
     private String family;
     private List<String> folders;
@@ -35,10 +37,9 @@ public class PhotoGalleryActivity extends AppCompatActivity implements View.OnCl
         folders = new ArrayList<String>();
         setContentView(R.layout.photo_gallery);
         if (family == null){
-            findViewById(R.id.addFolder).setVisibility(View.INVISIBLE);
+            findViewById(R.id.add_photo).setVisibility(View.INVISIBLE);
         }
         else {
-            findViewById(R.id.addFolder).setOnClickListener(this);
             addFolders();
         }
     }
@@ -88,25 +89,33 @@ public class PhotoGalleryActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     protected void onPostResume(){
-
         super.onPostResume();
         if(update)
         {
             update = false;
             addFolders();
         }
-
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.addFolder:
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.folderoverview_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.add_folder:
                 Intent createFolder = new Intent(PhotoGalleryActivity.this, CreateFolderActivity.class);
                 String[] fileArray = new String[folders.size()];
                 createFolder.putExtra("folders", folders.toArray(fileArray));
                 startActivity(createFolder);
                 break;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
         }
+        return true;
     }
 }
