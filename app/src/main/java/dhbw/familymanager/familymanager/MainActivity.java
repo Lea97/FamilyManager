@@ -30,6 +30,7 @@ import java.util.Date;
 import java.util.List;
 
 import dhbw.familymanager.familymanager.Profile.ProfileActivity;
+import dhbw.familymanager.familymanager.calendar.CalendarActivity;
 import dhbw.familymanager.familymanager.model.User;
 import dhbw.familymanager.familymanager.photoGallery.PhotoGalleryActivity;
 
@@ -62,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.addFamilyButton).setOnClickListener(this);
         findViewById(R.id.logoutButton).setOnClickListener(this);
         findViewById(R.id.memberButton).setOnClickListener(this);
+        findViewById(R.id.chat).setOnClickListener(this);
+        findViewById(R.id.map).setOnClickListener(this);
     }
 
     @Override
@@ -120,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void onClick(View view) {
         switch (view.getId()) {
+
         case R.id.profilButton:
             startActivity(new Intent(MainActivity.this, ProfileActivity.class));
             break;
@@ -138,9 +142,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         case R.id.logoutButton:
             logout();
             break;
+
         case R.id.memberButton:
             startActivity(new Intent(MainActivity.this, ShowMemberActivity.class));
             break;
+
+            case R.id.chat:
+                startActivity(new Intent(MainActivity.this, ChatActivity.class));
+                break;
+
+
         }
     }
 

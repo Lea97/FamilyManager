@@ -1,4 +1,4 @@
-package dhbw.familymanager.familymanager;
+package dhbw.familymanager.familymanager.calendar;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -27,6 +27,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Random;
 
+import dhbw.familymanager.familymanager.DatePickerFragment;
+import dhbw.familymanager.familymanager.R;
+import dhbw.familymanager.familymanager.TimePickerFragment;
 import dhbw.familymanager.familymanager.controller.EventRepository;
 import dhbw.familymanager.familymanager.model.Event;
 

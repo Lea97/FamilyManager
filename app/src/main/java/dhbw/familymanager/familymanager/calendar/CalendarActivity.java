@@ -1,4 +1,4 @@
-package dhbw.familymanager.familymanager;
+package dhbw.familymanager.familymanager.calendar;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -20,9 +20,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.CancellationException;
-import java.util.stream.Collectors;
 
+import dhbw.familymanager.familymanager.R;
 import dhbw.familymanager.familymanager.controller.EventRepository;
 import dhbw.familymanager.familymanager.model.Event;
 
