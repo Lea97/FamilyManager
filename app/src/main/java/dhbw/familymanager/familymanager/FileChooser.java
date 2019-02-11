@@ -1,5 +1,6 @@
 package dhbw.familymanager.familymanager;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -20,7 +22,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.IOException;
 import java.util.UUID;
 
-public class FileChooser extends AppCompatActivity {
+public class FileChooser extends AppCompatActivity{
 
     private Uri filePath;
     private String picturePath;
@@ -28,12 +30,17 @@ public class FileChooser extends AppCompatActivity {
     private StorageReference storageReference;
     private FirebaseStorage storage;
     private Context context;
+    private Activity activity;
+    private ImageView imageView;
 
-    public FileChooser(String picturePath, Context context) {
+    public FileChooser(String picturePath, Context context, Activity activity, ImageView imageView) {
         this.picturePath = picturePath;
         this.context = context;
+        this.activity = activity;
+        this.imageView = imageView;
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+        showFileChooser();
     }
 
     private void showFileChooser() {
@@ -43,7 +50,7 @@ public class FileChooser extends AppCompatActivity {
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
         try {
-            startActivityForResult(
+            activity.startActivityForResult(
                     Intent.createChooser(intent, "Select a Picture to Upload"),
                     PICK_IMAGE_REQUEST);
         } catch (android.content.ActivityNotFoundException ex) {
@@ -61,7 +68,7 @@ public class FileChooser extends AppCompatActivity {
             filePath = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                //mImageView.setImageBitmap(bitmap);
+                imageView.setImageBitmap(bitmap);
             }
             catch (IOException e)
             {
@@ -70,7 +77,7 @@ public class FileChooser extends AppCompatActivity {
         }
     }
 
-    private void uploadImage() {
+    public void uploadImage() {
 
         if(filePath != null)
         {
