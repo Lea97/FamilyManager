@@ -48,4 +48,12 @@
         android:divider="@android:color/transparent"
         android:id="@+id/list_of_messages"
         android:layout_marginBottom="16dp"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/create_room"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_launcher_background" />
 </RelativeLayout>

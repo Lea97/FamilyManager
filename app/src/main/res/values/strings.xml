@@ -13,5 +13,7 @@
     <string name="lists">Listen</string>
     <string name="add_photo">Foto hinzufügen</string>
     <string name="add_folder">Album hinzufügen</string>
+    <string name="create_room">Chat anlegen</string>
+    <string name="hint_create_room">Empty</string>
 
 </resources>
