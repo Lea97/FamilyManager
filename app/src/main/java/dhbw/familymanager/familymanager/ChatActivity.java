@@ -1,9 +1,12 @@
 package dhbw.familymanager.familymanager;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -17,18 +20,22 @@ import dhbw.familymanager.familymanager.model.ChatMessage;
 
 class ChatActivity extends AppCompatActivity {
     private FirebaseListAdapter<ChatMessage> adapter;
+    private FloatingActionButton createRoom;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chatlyout);
         //displayChatMessages();
-        FloatingActionButton fab =
-                (FloatingActionButton)findViewById(R.id.fab);
+        createRoom = findViewById(R.id.create_room);
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        createRoom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("MainActivity", "Launch create a room screen");
+                Intent intent=new Intent(ChatActivity.this, CreateChatroom.class);
+
                 EditText input = (EditText)findViewById(R.id.input);
+                startActivity(intent);
 
                 // Read the input field and push a new instance
                 // of ChatMessage to the Firebase database

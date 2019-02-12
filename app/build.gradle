@@ -38,6 +38,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     compile 'com.github.alamkanak:android-week-view:1.2.6'
     compile 'com.firebaseui:firebase-ui:0.6.0'
+    implementation 'com.android.support:design:27.1.1'
 
 }
 
