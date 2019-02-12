@@ -13,5 +13,9 @@
     <string name="lists">Listen</string>
     <string name="add_photo">Foto hinzufügen</string>
     <string name="add_folder">Album hinzufügen</string>
+    <string name="action_delete_done_tasks">Delete done tasks</string>
+    <string name="action_delete_all">Delete All</string>
+    <string name="context_delete">Delete</string>
+    <string name="context_edit">Edit</string>
 
 </resources>
