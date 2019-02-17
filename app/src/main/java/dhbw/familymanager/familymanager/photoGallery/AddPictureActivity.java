@@ -1,24 +1,49 @@
 package dhbw.familymanager.familymanager.photoGallery;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+
 import dhbw.familymanager.familymanager.FileChooser;
 import dhbw.familymanager.familymanager.MainActivity;
 import dhbw.familymanager.familymanager.R;
+import dhbw.familymanager.familymanager.model.Photo;
 
 public class AddPictureActivity extends AppCompatActivity implements View.OnClickListener {
 
     private String family;
     private String folderName;
+    private final int PICK_IMAGE_REQUEST = 71;
+    private FileChooser fileChooser;
+    private String photoName;
+    private FirebaseFirestore db;
+    private String photoPath;
+    private Uri filePath;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db = FirebaseFirestore.getInstance();
         family = MainActivity.getFamily();
         Intent i = getIntent();
         folderName = i.getStringExtra("albumName");
@@ -48,8 +73,7 @@ public class AddPictureActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void startFileChooser() {
-        ImageView imageView = findViewById(R.id.choosedPicture);
-        FileChooser fileChooser  = new FileChooser("albumPhotos/"+family + "/" + folderName+ "/",getApplicationContext(), this, imageView);
+        fileChooser  = new FileChooser(getApplicationContext(), this);
     }
 
     private Boolean validate() {
@@ -63,6 +87,68 @@ public class AddPictureActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void addPhoto() {
-
+        setPhotoName();
+        addPictureToFolderDB();
+        addPictureToStorage();
+        addPictureToPhotosDB();
     }
+
+    private void setPhotoName() {
+        EditText nameText = findViewById(R.id.newPhotoName);
+        photoName = nameText.getText().toString();
+    }
+
+    private void addPictureToPhotosDB() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        Photo photo = new Photo(photoPath, auth.getCurrentUser().getUid(), new Date());
+        db.collection("photos").document(family + folderName + photoName).set(photo);
+    }
+
+    private void addPictureToStorage() {
+        photoPath = "albumPhotos/"+family + "/" + folderName+ "/" + photoName;
+        fileChooser.uploadImage(photoPath, filePath);
+    }
+
+    private void addPictureToFolderDB() {
+        db = FirebaseFirestore.getInstance();
+        DocumentReference docRef = db.collection("folders").document(family + folderName);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                        ArrayList<String> photos = (ArrayList<String>) document.get("photos");
+                        photos.add(photoName);
+                        db.collection("folders").document(family+folderName).update("photos", photos);
+                    } else {
+                        Log.d("TAG", "No such document");
+                    }
+                } else {
+                    Log.d("TAG", "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null )
+        {
+            filePath = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                ImageView imageView = findViewById(R.id.choosedPicture);
+                imageView.setImageBitmap(bitmap);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }

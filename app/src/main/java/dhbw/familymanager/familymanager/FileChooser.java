@@ -4,12 +4,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -19,25 +16,19 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.IOException;
-import java.util.UUID;
 
 public class FileChooser extends AppCompatActivity{
 
-    private Uri filePath;
-    private String picturePath;
     private final int PICK_IMAGE_REQUEST = 71;
     private StorageReference storageReference;
     private FirebaseStorage storage;
     private Context context;
     private Activity activity;
-    private ImageView imageView;
 
-    public FileChooser(String picturePath, Context context, Activity activity, ImageView imageView) {
-        this.picturePath = picturePath;
+
+    public FileChooser(Context context, Activity activity) {
         this.context = context;
         this.activity = activity;
-        this.imageView = imageView;
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
         showFileChooser();
@@ -59,32 +50,13 @@ public class FileChooser extends AppCompatActivity{
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null )
-        {
-            filePath = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                imageView.setImageBitmap(bitmap);
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void uploadImage() {
+    public void uploadImage(String picturePath, Uri filePath) {
 
         if(filePath != null)
         {
-            final ProgressDialog progressDialog = new ProgressDialog(this);
+            final ProgressDialog progressDialog = new ProgressDialog(context);
             progressDialog.setTitle("Uploading...");
-            progressDialog.show();
-            String picturePath = "ProfilPictures/"+ UUID.randomUUID().toString();
+            //progressDialog.show();
             StorageReference ref = storageReference.child(picturePath);
             ref.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
