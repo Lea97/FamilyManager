@@ -28,6 +28,7 @@ public class FolderScreenActivity extends AppCompatActivity {
     private String family;
     private String folderName;
     private ArrayList<String> photos;
+    private static boolean refresh = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,22 @@ public class FolderScreenActivity extends AppCompatActivity {
         setContentView(R.layout.image_gallery);
         getPhotos();
     }
+
+    public static void update(){
+        refresh = true;
+    }
+
+    @Override
+    protected void onPostResume(){
+        super.onPostResume();
+        if (refresh)
+        {
+            refresh = false;
+            photos.clear();
+            getPhotos();
+        }
+    }
+
 
     private void getPhotos() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -76,7 +93,8 @@ public class FolderScreenActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String photo = photos.get(position);
                 Intent intent = new Intent(FolderScreenActivity.this, ShowPictureActivity.class);
-                intent.putExtra("photoObject", family+folderName+photo);
+                intent.putExtra("photoObject", photo);
+                intent.putExtra("albumName", family+folderName);
                 startActivity(intent);
             }
         });
