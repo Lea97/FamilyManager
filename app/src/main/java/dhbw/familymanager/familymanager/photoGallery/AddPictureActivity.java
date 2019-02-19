@@ -100,7 +100,7 @@ public class AddPictureActivity extends AppCompatActivity implements View.OnClic
 
     private void addPictureToPhotosDB() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        Photo photo = new Photo(photoPath, auth.getCurrentUser().getUid(), new Date());
+        Photo photo = new Photo(photoPath, auth.getCurrentUser().getUid(), new Date(), photoName);
         db.collection("photos").document(family + folderName + photoName).set(photo);
     }
 

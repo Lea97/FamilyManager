@@ -10,13 +10,15 @@ public class Photo {
     private String path;
     private String owner;
     private Date added;
+    private String name;
 
     public Photo() {}
 
-    public Photo(String path, String owner, Date added) {
+    public Photo(String path, String owner, Date added, String name) {
         this.path = path;
         this.owner = owner;
         this.added = added;
+        this.name = name;
     }
 
     public String getPath() {
@@ -25,6 +27,14 @@ public class Photo {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getOwner() {

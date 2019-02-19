@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -69,6 +71,15 @@ public class FolderScreenActivity extends AppCompatActivity {
         String[] photoArray = new String[photosPath.size()];
         GalleryViewAdapter adapter = new GalleryViewAdapter(getApplicationContext(), photosPath.toArray(photoArray), this);
         gridView.setAdapter(adapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String photo = photos.get(position);
+                Intent intent = new Intent(FolderScreenActivity.this, ShowPictureActivity.class);
+                intent.putExtra("photoObject", family+folderName+photo);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
