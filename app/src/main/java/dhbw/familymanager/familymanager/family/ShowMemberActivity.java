@@ -1,10 +1,12 @@
-package dhbw.familymanager.familymanager;
+package dhbw.familymanager.familymanager.family;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -22,7 +24,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import dhbw.familymanager.familymanager.MainActivity;
 import dhbw.familymanager.familymanager.Profile.ProfileActivity;
+import dhbw.familymanager.familymanager.R;
 import dhbw.familymanager.familymanager.adapter.MembersAdapter;
 import dhbw.familymanager.familymanager.model.User;
 
@@ -32,6 +36,7 @@ public class ShowMemberActivity extends AppCompatActivity {
     String family;
     ListView listView;
     List<User> users;
+    private static boolean update = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +48,21 @@ public class ShowMemberActivity extends AppCompatActivity {
         family = MainActivity.getFamily();
         if(family != null)
         {
+            getFamilyMembers();
+        }
+    }
+
+    public static void update(){
+        update = true;
+    }
+
+    @Override
+    protected void onPostResume(){
+        super.onPostResume();
+        if (update)
+        {
+            update = false;
+            users.clear();
             getFamilyMembers();
         }
     }
@@ -88,7 +108,7 @@ public class ShowMemberActivity extends AppCompatActivity {
     private void setMembers(DocumentSnapshot document) {
         final ArrayList<String> members = (ArrayList<String>) document.get("members");
 
-        Query query = db.collection("users");//.whereEqualTo("email",member);
+        Query query = db.collection("users");
         query.get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -109,11 +129,9 @@ public class ShowMemberActivity extends AppCompatActivity {
                                 user.setPicturePath((String) document.get("picturePath"));
 
                                 users.add(user);
-                                Log.d("MEMBER HINZUGEFUEGT",userMail);
                             }
                         }
                         for (String member : members) {
-                            Log.d("MEMBER",member);
                             User user = new User();
                             user.setEmail(member + "  (only invited)");
                             user.setPicturePath("ProfilPictures/profile_picture.png");
@@ -122,6 +140,25 @@ public class ShowMemberActivity extends AppCompatActivity {
                         addListAdapter();
                     }
                 });
-        }
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.family_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.add_member:
+                Intent intent = new Intent(ShowMemberActivity.this, AddMemberActivity.class);
+                startActivity(intent);
+                break;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return true;
+    }
 }

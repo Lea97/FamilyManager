@@ -1,4 +1,4 @@
-package dhbw.familymanager.familymanager;
+package dhbw.familymanager.familymanager.family;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
+import dhbw.familymanager.familymanager.MainActivity;
+import dhbw.familymanager.familymanager.R;
 import dhbw.familymanager.familymanager.model.Family;
 
 public class AddFamilyActivity extends AppCompatActivity implements View.OnClickListener {

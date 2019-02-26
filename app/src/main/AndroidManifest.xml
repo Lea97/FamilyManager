@@ -81,6 +81,14 @@
                 android:value="dhbw.familymanager.familymanager.photoGallery.FolderScreenActivity" />
         </activity>
         <activity
+            android:name=".family.AddMemberActivity"
+            android:label="Mitglied hinzufügen"
+            android:parentActivityName=".family.ShowMemberActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="dhbw.familymanager.familymanager.family.ShowMemberActivity" />
+        </activity>
+        <activity
             android:name=".photoGallery.ShowPictureActivity"
             android:label="Foto"
             android:parentActivityName=".photoGallery.FolderScreenActivity">
@@ -89,7 +97,7 @@
                 android:value="dhbw.familymanager.familymanager.photoGallery.FolderScreenActivity" />
         </activity>
         <activity
-            android:name=".ShowMemberActivity"
+            android:name=".family.ShowMemberActivity"
             android:label="Mitglieder"
             android:parentActivityName=".MainActivity">
             <meta-data
@@ -137,7 +145,7 @@
                 android:value="dhbw.familymanager.familymanager.MainActivity" />
         </activity>
         <activity
-            android:name=".AddFamilyActivity"
+            android:name=".family.AddFamilyActivity"
             android:label="AddFamily"
             android:parentActivityName=".MainActivity">
             <meta-data
