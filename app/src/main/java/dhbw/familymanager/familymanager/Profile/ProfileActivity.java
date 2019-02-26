@@ -8,7 +8,8 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,7 +36,7 @@ import dhbw.familymanager.familymanager.R;
 import dhbw.familymanager.familymanager.model.User;
 
 
-public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
+public class ProfileActivity extends AppCompatActivity {
 
     private Uri filePath;
     private final int PICK_IMAGE_REQUEST = 71;
@@ -46,6 +47,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     FirebaseStorage storage;
     StorageReference storageReference;
     private static Boolean refresh = false;
+    private FirebaseFirestore db;
+    private FirebaseUser firebaseUser;
 
     @Override
     protected void onPostResume(){
@@ -95,9 +98,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         storageReference = storage.getReference();
         Intent i = getIntent();
         user = (User) i.getSerializableExtra("userObject");
-        setContentView(R.layout.profil);
+        db = FirebaseFirestore.getInstance();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        setContentView(R.layout.profile);
         setValues();
-        findViewById(R.id.changeProfilButton).setOnClickListener(this);
     }
 
     @Override
@@ -124,20 +128,37 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         Glide.with(this /* context */).load(storageReference).into(imageView);
     }
 
-
-    private void setValues() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
         if (user != null)
         {
             if(!(user.getEmail().equals(firebaseUser.getEmail()))){
-                findViewById(R.id.changeProfilButton).setVisibility(View.GONE);
+                return false;
             }
-            fillFormular();
         }
-        else {
-            String userId = firebaseUser.getUid();
+        getMenuInflater().inflate(R.menu.profile_menu, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.edit_profile:
+                Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+                intent.putExtra("userObject", user);
+                startActivity(intent);
+                setValues();
+                break;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return true;
+    }
+
+    private void setValues() {
+        if (user == null){
+            String userId = firebaseUser.getUid();
             DocumentReference docRef = db.collection("users").document(userId);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -157,6 +178,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 }
             });
+        }
+        else{
+            fillFormular();
         }
     }
 
@@ -180,18 +204,4 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         String picturePath = user.getPicturePath();
         showPicture(picturePath);
     }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.changeProfilButton:
-                Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
-                intent.putExtra("userObject", user);
-                startActivity(intent);
-                setValues();
-                break;
-        }
-    }
-
-
 }

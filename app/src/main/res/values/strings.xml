@@ -20,5 +20,6 @@
     <string name="context_delete">Delete</string>
     <string name="context_edit">Edit</string>
     <string name="delete_photo">Foto löschen</string>
+    <string name="edit_profile">Profil bearbeiten</string>
 
 </resources>
