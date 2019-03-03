@@ -3,8 +3,18 @@ package dhbw.familymanager.familymanager.model;
 public class ChatRoom {
     private String chatId;
     private String chatName;
+    private String userId;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public ChatRoom() {
+
     }
 
     public String getChatId() {

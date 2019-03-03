@@ -1,8 +1,7 @@
 package dhbw.familymanager.familymanager;
 
-import android.app.ListActivity;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
@@ -10,17 +9,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import org.w3c.dom.DocumentType;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -31,27 +30,37 @@ class ChatActivity extends AppCompatActivity {
     private FloatingActionButton createRoom;
     private ListView layout;
     private FirebaseFirestore db;
-    private FirebaseAuth user;
+    private String user;
     private ArrayList<String> chatrooms;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chatrooms);
-        user=FirebaseAuth.getInstance();
+        user=FirebaseAuth.getInstance().getCurrentUser().getUid();
         db=FirebaseFirestore.getInstance();
         if(user!=null){
-            chatrooms=getUserChatrooms();
+           // chatrooms=getUserChatrooms();
+
         }
 
 
        layout=findViewById(R.id.chatroomListView);
+        chatrooms=new ArrayList<>();
+        getUserChatrooms();
+        if(chatrooms.size()==0){
+            chatrooms.add("Sie haben noch keine Chats!");
+        }
 
-        String [] values=new String[]{"Chatroom1", "Chatroom2", "Chatroom3", "Chatroom4", "Chatroom5"};
+        ArrayList<String> values=new ArrayList<>();
+        values.add("Chatroom hallo");
+        values.add("chatroom2");
+        //"Chatroom1", "Chatroom2", "Chatroom3", "Chatroom4", "Chatroom5"};
+
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, values);
+                android.R.layout.simple_list_item_1, chatrooms);
         layout.setAdapter(adapter);
 
-layout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    layout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
@@ -91,8 +100,23 @@ layout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
     }
 
     private ArrayList<String> getUserChatrooms() {
-        //TODO read from db
-        return null;
+
+        Task<QuerySnapshot> ref=db.collection("chatrooms").whereEqualTo("userId", user).get().
+                addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        ArrayList<String> chatrooms=new ArrayList<>();
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d("TAG", document.getId() + " => " + document.getData());
+                                chatrooms.add(document.getString("chatName"));
+                            }
+                        } else {
+                            Log.d("TAG", "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        return chatrooms;
     }
 
 
