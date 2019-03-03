@@ -4,14 +4,42 @@ import java.util.Date;
 
 public class ChatMessage {
     private String messageText;
-    private String messageUser;
-    private long messageTime;
+    private String senderId;
+    private String messageId;
+    private String chatId;
+    private long timestamp;
+    private String messageType;
+
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+    }
+
+    public String getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(String chatId) {
+        this.chatId = chatId;
+    }
+
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
 
     public ChatMessage(String messageText, String messageUser) {
         this.messageText = messageText;
-        this.messageUser = messageUser;
-        messageTime = new Date().getTime();
-        messageTime = new Date().getTime();
+        this.senderId = messageUser;
+        timestamp = new Date().getTime();
+        timestamp = new Date().getTime();
 
         }
     public ChatMessage(){
@@ -26,19 +54,19 @@ public class ChatMessage {
         this.messageText = messageText;
     }
 
-    public String getMessageUser() {
-        return messageUser;
+    public String getSenderId() {
+        return senderId;
     }
 
-    public void setMessageUser(String messageUser) {
-        this.messageUser = messageUser;
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
     }
 
-    public long getMessageTime() {
-        return messageTime;
+    public long getTimestamp() {
+        return timestamp;
     }
 
-    public void setMessageTime(long messageTime) {
-        this.messageTime = messageTime;
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }
