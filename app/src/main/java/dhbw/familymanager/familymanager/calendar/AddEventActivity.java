@@ -39,7 +39,7 @@ class AddEventActivity extends AppCompatActivity implements DatePickerDialog.OnD
     private CalendarView calendar;
     private Button saveEventBtn;
     private Calendar eventStart, eventEnd;
-    private EditText title;
+    private EditText title,location;
     private EventRepository repository;
     private boolean startEvent=false;
     private CalendarView calendarView;
@@ -55,6 +55,7 @@ class AddEventActivity extends AppCompatActivity implements DatePickerDialog.OnD
         setContentView(R.layout.add_event);
         repository = EventRepository.getInstance(EventRepository.RepositoryMode.PRODUCTIVE);
         title=findViewById(R.id.eventTitle);
+        location=findViewById(R.id.eventLocation);
         Button start=findViewById(R.id.eventStart);
         Button end=findViewById(R.id.end);
         start.setOnClickListener(new View.OnClickListener() {
@@ -62,9 +63,6 @@ class AddEventActivity extends AppCompatActivity implements DatePickerDialog.OnD
             public void onClick(View v) {
                 DatePickerFragment fragment = new DatePickerFragment();
                 fragment.show(getFragmentManager(), "datePicker");
-
-
-
 
             }
         });
@@ -87,14 +85,14 @@ class AddEventActivity extends AppCompatActivity implements DatePickerDialog.OnD
                final Event e = new Event();
                Random r=new Random();
                e.setFamilyId("12345");
-               e.setStart(new Date(2019, 1, 1, 14, 50, 0));
+               //e.setStart(new Date(2019, 1, 1, 14, 50, 0));
                //e.setEnd(new Date(2019, 1, 1, 14, 55, 0));
                e.setStart(new Date(eventStart.get(Calendar.YEAR)-1900, eventStart.get(Calendar.MONTH), eventStart.get(Calendar.DAY_OF_MONTH), eventStart.get(Calendar.HOUR_OF_DAY), eventStart.get(Calendar.MINUTE), 0));
                e.setEnd(new Date(eventEnd.get(Calendar.YEAR)-1900, eventEnd.get(Calendar.MONTH), eventEnd.get(Calendar.DAY_OF_MONTH), eventEnd.get(Calendar.HOUR_OF_DAY), eventEnd.get(Calendar.MINUTE), 0));
                e.setUid(FirebaseAuth.getInstance().getCurrentUser().getUid());
                e.setTitle(title.getText().toString());
                e.setId(r.nextLong());
-
+               e.setLocation(location.getText().toString());
 
 
                Thread t=new Thread(new Runnable() {

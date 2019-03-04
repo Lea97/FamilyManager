@@ -30,6 +30,8 @@ public class CalendarActivity extends AppCompatActivity {
     private FloatingActionButton addEventButton;
     private Random random = new Random();
     private int calendarType;
+    private List<Integer> colors=new ArrayList();
+
 
 
 
@@ -46,11 +48,6 @@ public class CalendarActivity extends AppCompatActivity {
     private List<WeekViewEvent> readEvents() {
 
         final EventRepository repo = EventRepository.getInstance();
-
-
-        // TODO: read user-specific events
-        //List<Event> events = repo.readAllEvents();
-
 
         List<Event> userEvents=repo.readEventsForUser();
         List<WeekViewEvent> result = new ArrayList<>();
@@ -73,6 +70,10 @@ public class CalendarActivity extends AppCompatActivity {
             weekViewEvent.setStartTime(calStart);
             weekViewEvent.setEndTime(calEnd);
             weekViewEvent.setStartTime(calStart);
+            weekViewEvent.setLocation(e.getLocation());
+            weekViewEvent.setColor(colors.get(random.nextInt(colors.size())));
+
+
 
 
             result.add(weekViewEvent);
@@ -128,6 +129,7 @@ public class CalendarActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setColors();
         setContentView(R.layout.calendar);
 
 
@@ -166,6 +168,18 @@ public class CalendarActivity extends AppCompatActivity {
 
             }
         });
+
+
+    }
+
+    private void setColors() {
+        colors.add(getResources().getColor(R.color.peach));
+        colors.add(getResources().getColor(R.color.pink));
+        colors.add(getResources().getColor(R.color.blue));
+        colors.add(getResources().getColor(R.color.red));
+        colors.add(getResources().getColor(R.color.green));
+        colors.add(getResources().getColor(R.color.darkgreen));
+        colors.add(getResources().getColor(R.color.orange));
 
 
     }

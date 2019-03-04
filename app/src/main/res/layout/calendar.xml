@@ -9,18 +9,16 @@
         android:id="@+id/weekView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:eventTextColor="@android:color/holo_blue_light"
+        app:eventTextColor="@android:color/white"
         app:textSize="12sp"
-        app:hourHeight="50dp"
+        app:hourHeight="60dp"
         app:headerColumnPadding="8dp"
-        app:headerColumnTextColor="#8f000000"
         app:headerRowPadding="12dp"
         app:columnGap="8dp"
         app:noOfVisibleDays="3"
-        app:headerRowBackgroundColor="#ffefefef"
-        app:dayBackgroundColor="@color/lightBlue"
-        app:todayBackgroundColor="@color/peach"
-        app:headerColumnBackground="#ffffffff"/>
+        app:dayBackgroundColor="#05000000"
+        app:todayBackgroundColor="#1848adff"
+        app:eventCornerRadius="@dimen/cardview_default_radius" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addEventButton"

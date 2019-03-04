@@ -5,5 +5,11 @@
     <color name="lightBlue">#def2f9</color>
     <color name="peach">#fde2a3</color>
     <color name="pink">#ffc7fd</color>
+    <color name="green">#d2f8d2</color>
+    <color name="blue">#59dbe0</color>
+    <color name="red">#f57f68</color>
+    <color name="darkgreen">#87d288</color>
+    <color name="orange">#f8b552</color>
+
 
 </resources>

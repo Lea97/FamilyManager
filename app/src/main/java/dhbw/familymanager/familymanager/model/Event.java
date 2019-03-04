@@ -7,7 +7,15 @@ import java.util.Date;
 public class Event {
     private String uid;
     private long id;
+    private String location;
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 
     private String title;
     private String familyId;
