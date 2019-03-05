@@ -50,7 +50,7 @@
         </activity>
         <activity
             android:name=".Profile.EditProfileActivity"
-            android:label="Edit Profile"
+            android:label="Profil bearbeiten"
             android:parentActivityName=".Profile.ProfileActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -58,7 +58,7 @@
         </activity>
         <activity
             android:name=".photoGallery.CreateFolderActivity"
-            android:label="Create Folder"
+            android:label="Album erstellen"
             android:parentActivityName=".photoGallery.PhotoGalleryActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -114,7 +114,7 @@
         </activity>
         <activity
             android:name=".Lists"
-            android:label="Lists"
+            android:label="Listen"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -130,7 +130,7 @@
         </activity>
         <activity
             android:name=".calendar.CalendarActivity"
-            android:label="Calendar"
+            android:label="Kalender"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -146,7 +146,7 @@
         </activity>
         <activity
             android:name=".family.AddFamilyActivity"
-            android:label="AddFamily"
+            android:label="Familie erstellen"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
