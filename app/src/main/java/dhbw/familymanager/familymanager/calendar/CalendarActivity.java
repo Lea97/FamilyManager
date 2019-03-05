@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -15,7 +16,12 @@ import com.alamkanak.weekview.DateTimeInterpreter;
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseException;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,6 +35,7 @@ import dhbw.familymanager.familymanager.controller.EventRepository;
 import dhbw.familymanager.familymanager.model.Event;
 
 public class CalendarActivity extends AppCompatActivity implements WeekView.EventClickListener {
+    private FirebaseFirestore db;
     private WeekView mWeekView;
     private FloatingActionButton addEventButton;
     private Random random = new Random();
@@ -153,6 +160,7 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
 // The week view has infinite scrolling horizontally. We have to provide the events of a
 // month every time the month changes on the week view.
         mWeekView.setMonthChangeListener(mMonthChangeListener);
+        mWeekView.setOnEventClickListener(this);
 
 
 
@@ -179,9 +187,31 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
 
     }
 
-    private void deleteEvent(){
+    private void deleteEvent(WeekViewEvent event){
+        db=FirebaseFirestore.getInstance();
+        FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
+        String eventId=Long.toString(event.getId());
+        System.out.println("Event mit id "+eventId+"!");
+        db.collection("events").document(eventId)
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("TAG", "DocumentSnapshot successfully deleted!");
+                        mWeekView.notifyDatasetChanged();
+                        //mWeekView.goToDate(new GregorianCalendar());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("TAG", "Error deleting document", e);
+                    }
+                });
 
-    }
+        }
+
+
 
     private void startEventReading() {
         final Activity thisActivity = this;
@@ -215,7 +245,7 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
 
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
-        deleteEvent();
+        deleteEvent(event);
         }
 
 
