@@ -190,7 +190,7 @@
                     android:singleLine="false"
                     android:backgroundTint="@color/lightBlue"
                     android:textAlignment="center"
-                    android:text="Mitglieder"
+                    android:text="Familie"
                     android:textSize="18sp"
                     />
 

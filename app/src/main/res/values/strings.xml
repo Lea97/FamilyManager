@@ -22,5 +22,6 @@
     <string name="add_member">Mitglied hinzufügen</string>
     <string name="delete_photo">Foto löschen</string>
     <string name="edit_profile">Profil bearbeiten</string>
+    <string name="leave_family">Familie verlassen</string>
 
 </resources>

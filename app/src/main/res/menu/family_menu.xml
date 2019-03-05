@@ -4,4 +4,7 @@
     <item android:title="@string/add_member"
         android:id="@+id/add_member" />
 
+    <item android:title="@string/leave_family"
+        android:id="@+id/leave_family" />
+
 </menu>

@@ -118,6 +118,9 @@ public class CalendarActivity extends AppCompatActivity {
             case R.id.events_week:
                 mWeekView.setNumberOfVisibleDays(7);
                 break;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
         }
         mWeekView.notifyDatasetChanged();
         mWeekView.goToDate(new GregorianCalendar());

@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -32,11 +33,12 @@ import dhbw.familymanager.familymanager.model.User;
 
 public class ShowMemberActivity extends AppCompatActivity {
 
-    FirebaseFirestore db;
-    String family;
-    ListView listView;
-    List<User> users;
+    private FirebaseFirestore db;
+    private String family;
+    private ListView listView;
+    private List<User> users;
     private static boolean update = false;
+    private ArrayList<String> members;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +108,7 @@ public class ShowMemberActivity extends AppCompatActivity {
     }
 
     private void setMembers(DocumentSnapshot document) {
-        final ArrayList<String> members = (ArrayList<String>) document.get("members");
+        members = (ArrayList<String>) document.get("members");
 
         Query query = db.collection("users");
         query.get()
@@ -155,10 +157,46 @@ public class ShowMemberActivity extends AppCompatActivity {
                 Intent intent = new Intent(ShowMemberActivity.this, AddMemberActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.leave_family:
+                leaveFamily();
+                break;
             case android.R.id.home:
                 onBackPressed();
                 return true;
         }
         return true;
+    }
+
+    private void leaveFamily() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        DocumentReference docRef = db.collection("users").document(auth.getCurrentUser().getUid());
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                        deleteMember(document);
+                        finishActivityPage();
+
+                    } else {
+                        Log.d("TAG", "No such document");
+                    }
+                } else {
+                    Log.d("TAG", "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+    private void finishActivityPage() {
+        MainActivity.updateFamiles();
+        this.finish();
+    }
+
+    private void deleteMember(DocumentSnapshot document) {
+        members.remove(document.get("email"));
+        db.collection("families").document(family).update("members",members);
     }
 }
