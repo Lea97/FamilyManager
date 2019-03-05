@@ -2,9 +2,11 @@ package dhbw.familymanager.familymanager.calendar;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,6 +15,7 @@ import com.alamkanak.weekview.DateTimeInterpreter;
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
+import com.google.firebase.database.DatabaseException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,26 +28,12 @@ import dhbw.familymanager.familymanager.R;
 import dhbw.familymanager.familymanager.controller.EventRepository;
 import dhbw.familymanager.familymanager.model.Event;
 
-public class CalendarActivity extends AppCompatActivity {
+public class CalendarActivity extends AppCompatActivity implements WeekView.EventClickListener {
     private WeekView mWeekView;
     private FloatingActionButton addEventButton;
     private Random random = new Random();
-    private int calendarType;
     private List<Integer> colors=new ArrayList();
-
-
-
-
-
     private List<WeekViewEvent> events = readEvents();
-
-    private GregorianCalendar getCalendar(Date date) {
-        Calendar calendar=new GregorianCalendar();
-        calendar.setTime(date);
-        return null;
-
-    }
-
     private List<WeekViewEvent> readEvents() {
 
         final EventRepository repo = EventRepository.getInstance();
@@ -58,12 +47,8 @@ public class CalendarActivity extends AppCompatActivity {
             WeekViewEvent weekViewEvent = new WeekViewEvent();
             Calendar calStart = Calendar.getInstance();
            Calendar calEnd = Calendar.getInstance();
-
-
-
            calStart.setTime(e.getStart());
            calEnd.setTime(e.getEnd());
-
 
             weekViewEvent.setId(e.getId());
             weekViewEvent.setName(e.getTitle());
@@ -80,6 +65,9 @@ public class CalendarActivity extends AppCompatActivity {
         }}
         return result;
     }
+
+
+
 
 
     MonthLoader.MonthChangeListener mMonthChangeListener = new MonthLoader.MonthChangeListener() {
@@ -105,6 +93,10 @@ public class CalendarActivity extends AppCompatActivity {
 
         return true;
     }
+
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
@@ -220,6 +212,11 @@ public class CalendarActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public void onEventClick(WeekViewEvent event, RectF eventRect) {
+        deleteEvent();
+        }
 
 
     //mWeekView.setOnEventClickListener(onEventClickListener);

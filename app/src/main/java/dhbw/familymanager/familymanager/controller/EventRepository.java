@@ -63,11 +63,7 @@ public class EventRepository {
     public void storeEvent(Event event) {
         FirebaseAuth auth=FirebaseAuth.getInstance();
        String uid=auth.getCurrentUser().getUid();
-
-
-
-
-        Task<DocumentReference> task = db.collection(collectionPath).add(event);
+       Task<DocumentReference> task = db.collection(collectionPath).add(event);
 
         try {
             Tasks.await(task);
@@ -79,7 +75,6 @@ public class EventRepository {
     public List<Event> readEventsForUser() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         String current = auth.getCurrentUser().getUid();
-
 
 
         try {
