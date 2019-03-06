@@ -1,16 +1,22 @@
 package dhbw.familymanager.familymanager.calendar;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.RectF;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.constraint.solver.widgets.WidgetContainer;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import com.alamkanak.weekview.DateTimeInterpreter;
 import com.alamkanak.weekview.MonthLoader;
@@ -41,6 +47,13 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
     private Random random = new Random();
     private List<Integer> colors=new ArrayList();
     private List<WeekViewEvent> events = readEvents();
+    private GregorianCalendar getCalendar(Date date) {
+        Calendar calendar=new GregorianCalendar();
+        calendar.setTime(date);
+        return null;
+
+    }
+
     private List<WeekViewEvent> readEvents() {
 
         final EventRepository repo = EventRepository.getInstance();
@@ -160,6 +173,7 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
 // The week view has infinite scrolling horizontally. We have to provide the events of a
 // month every time the month changes on the week view.
         mWeekView.setMonthChangeListener(mMonthChangeListener);
+
         mWeekView.setOnEventClickListener(this);
 
 
@@ -186,6 +200,13 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
 
 
     }
+    private void updateEvent(WeekViewEvent event){
+        Intent intent=new Intent(this, AddEventActivity.class);
+        intent.putExtra("eventId", event.getId());
+        startActivity(intent);
+
+
+    }
 
     private void deleteEvent(WeekViewEvent event){
         db=FirebaseFirestore.getInstance();
@@ -199,6 +220,7 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
                     public void onSuccess(Void aVoid) {
                         Log.d("TAG", "DocumentSnapshot successfully deleted!");
                         mWeekView.notifyDatasetChanged();
+                        //TODO refresh calendar
                         //mWeekView.goToDate(new GregorianCalendar());
                     }
                 })
@@ -245,7 +267,15 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
 
     @Override
     public void onEventClick(WeekViewEvent event, RectF eventRect) {
-        deleteEvent(event);
+
+        startActivity(new Intent(CalendarActivity.this, EditEventActivity.class));
+
+        Intent intent=new Intent(CalendarActivity.this, EditEventActivity.class);
+       intent.putExtra("eventId", String.valueOf(event.getId()));
+       System.out.println(event.getId());
+        CalendarActivity.this.startActivity(intent);
+
+       // deleteEvent(event);
         }
 
 

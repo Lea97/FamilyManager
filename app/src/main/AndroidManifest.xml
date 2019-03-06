@@ -137,6 +137,14 @@
                 android:value="dhbw.familymanager.familymanager.MainActivity" />
         </activity>
         <activity
+            android:name=".calendar.EditEventActivity"
+            android:label="EditEvent"
+            android:parentActivityName=".calendar.CalendarActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="dhbw.familymanager.familymanager.calendar.CalendarActivity" />
+        </activity>
+        <activity
             android:name=".calendar.AddEventActivity"
             android:label="Neuer Termin"
             android:parentActivityName=".calendar.CalendarActivity">
