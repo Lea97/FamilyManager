@@ -208,7 +208,7 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
 
     }
 
-    
+
 
     private void startEventReading() {
         final Activity thisActivity = this;

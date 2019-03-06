@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alamkanak.weekview.WeekViewEvent;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,7 +44,9 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
         eventTitle=findViewById(R.id.eventTitle1);
         eventLocation=findViewById(R.id.eventLocation);
         eventStart=findViewById(R.id.eventStart);
+        eventStart.setOnClickListener(this);
         eventEnd=findViewById(R.id.eventEnd);
+        eventEnd.setOnClickListener(this);
 
 
        Intent intent=getIntent();
@@ -90,17 +93,20 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void editEvent(String eventId) {
-        //TODO edit event
+        Intent intent=new Intent();
+
     }
 //TODO fix bugs in deleteEvent
     private void deleteEvent(String eventId) {
-       String id=db.collection("events").whereEqualTo("id",Long.parseLong(eventId)).get().getResult().getDocuments().get(0).getId();
+
+       String id=String.valueOf(db.collection("events").whereEqualTo("id",Long.parseLong(eventId)).get().getResult().toObjects(Event.class).get(0).getId());
+       System.out.println(id);
        db.collection("events").document(id).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
            @Override
            public void onSuccess(Void aVoid) {
                Log.d("TAG", "DocumentSnapshot successfully deleted!");
                System.out.println("Event mit id "+" deleted");
-               //TODO toast message
+               Toast.makeText(getApplicationContext(), " Event successfully deleted", Toast.LENGTH_SHORT).show();
            }
        })
                .addOnFailureListener(new OnFailureListener() {
@@ -111,7 +117,13 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
                });
 
 
-    }}
+    }
+
+    @Override
+    public void onBackPressed(){
+        startActivity(new Intent(EditEventActivity.this, CalendarActivity.class));
+    }
+}
 
 
 
