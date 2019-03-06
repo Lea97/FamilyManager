@@ -208,32 +208,7 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
 
     }
 
-    private void deleteEvent(WeekViewEvent event){
-        db=FirebaseFirestore.getInstance();
-        FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
-        String eventId=Long.toString(event.getId());
-        System.out.println("Event mit id "+eventId+"!");
-        db.collection("events").document(eventId)
-                .delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("TAG", "DocumentSnapshot successfully deleted!");
-                        mWeekView.notifyDatasetChanged();
-                        //TODO refresh calendar
-                        //mWeekView.goToDate(new GregorianCalendar());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("TAG", "Error deleting document", e);
-                    }
-                });
-
-        }
-
-
+    
 
     private void startEventReading() {
         final Activity thisActivity = this;
