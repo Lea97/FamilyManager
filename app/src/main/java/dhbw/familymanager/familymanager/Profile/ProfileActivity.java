@@ -1,11 +1,13 @@
 package dhbw.familymanager.familymanager.Profile;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -30,8 +32,10 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
+import dhbw.familymanager.familymanager.MainActivity;
 import dhbw.familymanager.familymanager.R;
 import dhbw.familymanager.familymanager.model.User;
 
@@ -44,11 +48,12 @@ public class ProfileActivity extends AppCompatActivity {
     private User user;
     private ImageView mImageView;
     private static final String TAG = null;
-    FirebaseStorage storage;
-    StorageReference storageReference;
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
     private static Boolean refresh = false;
     private FirebaseFirestore db;
     private FirebaseUser firebaseUser;
+    private FirebaseAuth auth;
 
     @Override
     protected void onPostResume(){
@@ -95,6 +100,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         storage = FirebaseStorage.getInstance();
+        auth = FirebaseAuth.getInstance();
         storageReference = storage.getReference();
         Intent i = getIntent();
         user = (User) i.getSerializableExtra("userObject");
@@ -149,11 +155,71 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(intent);
                 setValues();
                 break;
+            case R.id.delete_profile:
+                showAlertDialog();
+                break;
             case android.R.id.home:
                 onBackPressed();
                 return true;
         }
         return true;
+    }
+
+    private void showAlertDialog(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Willst du wirklich dein Profil löschen? Dies kann nicht rückgängig gemacht werden.");
+        alertDialogBuilder.setCancelable(true);
+
+        alertDialogBuilder.setPositiveButton(
+                "Löschen",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        deleteProfile();
+                        MainActivity.logoutUser();
+                        finish();
+                    }
+                });
+
+        alertDialogBuilder.setNegativeButton(
+                "Abbrechen",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void deleteProfile() {
+        deleteFromFamily();
+        db.collection("users").document(auth.getCurrentUser().getUid()).delete();
+        auth.getCurrentUser().delete();
+    }
+
+    private void deleteFromFamily() {
+        final String currentEmail = auth.getCurrentUser().getEmail();
+        Query query = db.collection("families").whereArrayContains("members", currentEmail);
+        query.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot querySnapshot) {
+
+                        List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+                        for (DocumentSnapshot document : documents) {
+                            deleteMember(document, currentEmail);
+                        }
+                    }
+                });
+
+    }
+
+    private void deleteMember(DocumentSnapshot document, String emailAdress) {
+        ArrayList<String> members = (ArrayList<String>) document.get("members");
+        members.remove(emailAdress);
+        db.collection("families").document(document.getId()).update("members",members);
     }
 
     private void setValues() {

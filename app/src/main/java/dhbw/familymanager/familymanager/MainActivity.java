@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
@@ -46,14 +47,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayAdapter<String> adapter;
     private static String currentFamily;
     private static Boolean updateFamilies = false;
+    private FirebaseFirestore db;
+    private FirebaseUser user;
+    private static Boolean logoutUser = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder().setTimestampsInSnapshotsEnabled(true).build();
-        firestore.setFirestoreSettings(settings);
+        db.setFirestoreSettings(settings);
         mAuth=FirebaseAuth.getInstance();
 
         setContentView(R.layout.activity_main);
@@ -72,8 +76,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser == null) {
+        user = mAuth.getCurrentUser();
+        showLoginDialog();
+    }
+
+    public static void logoutUser(){
+        logoutUser = true;
+    }
+
+    private void showLoginDialog() {
+        if (user == null) {
             List<AuthUI.IdpConfig> providers = Arrays.asList(
                     new AuthUI.IdpConfig.EmailBuilder().build(),
                     new AuthUI.IdpConfig.FacebookBuilder().build());
@@ -94,6 +106,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onPostResume(){
         super.onPostResume();
+        if (logoutUser){
+            logoutUser = false;
+            user = null;
+            showLoginDialog();
+        }
         if (updateFamilies){
             updateFamilies = false;
             setFamilies();
@@ -109,16 +126,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             if (resultCode == RESULT_OK) {
                 // Successfully signed in
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
-                String uid = user.getUid();
-                Boolean exists =!db.collection("users").equals(uid);
-                if (!exists)
-                {
-                    String email=user.getEmail();
-                    User userModel = new User("", new Date(01,00,01), email, "", "ProfilPictures/profile_picture.png");
-                    db.collection("users").document(uid).set(userModel);
-                }
+                user = FirebaseAuth.getInstance().getCurrentUser();
+
+                DocumentReference docRef = db.collection("users").document(user.getUid());
+                docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+
+                            } else {
+                                Log.d("TAG", "No such document");
+                                String email= user.getEmail();
+                                User userModel = new User("", new Date(01,00,01), email, "", "ProfilPictures/profile_picture.png");
+                                db.collection("users").document(user.getUid()).set(userModel);
+                            }
+                        } else {
+                            Log.d("TAG", "get failed with ", task.getException());
+                        }
+                    }
+                });
+                setFamilies();
             }
         }
     }
@@ -176,12 +206,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         final Spinner dropdown = findViewById(R.id.familySpinner);
         items = new ArrayList<String>();
         familieIds = new ArrayList<String>();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        final FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null)
+        user = mAuth.getCurrentUser();
+        if(user != null)
         {
-            String mail = mAuth.getCurrentUser().getEmail();
+            String mail = user.getEmail();
             if(mail!= null) {
                 Query query = db.collection("families").whereArrayContains("members", mail);
 
