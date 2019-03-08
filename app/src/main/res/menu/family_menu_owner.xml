@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <item android:title="@string/add_member"
+        android:id="@+id/add_member" />
+
     <item android:title="@string/leave_family"
         android:id="@+id/leave_family" />
+
+    <item android:title="@string/delete_family"
+        android:id="@+id/delete_family" />
 
 </menu>

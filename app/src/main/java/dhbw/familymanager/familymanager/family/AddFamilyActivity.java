@@ -42,7 +42,7 @@ public class AddFamilyActivity extends AppCompatActivity implements View.OnClick
             members.add(member.trim());
         }
 
-        Family family = new Family(familyNameTextfield.getText().toString(), members);
+        Family family = new Family(familyNameTextfield.getText().toString(), members, mAuth.getCurrentUser().getUid());
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("families").document().set(family);
     }

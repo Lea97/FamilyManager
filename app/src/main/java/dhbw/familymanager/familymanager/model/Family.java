@@ -9,14 +9,16 @@ public class Family {
 
     private String familyName;
     private List<String> members;
+    private String owner;
 
 
     public Family() {
     }
 
-    public Family(String familyName, List<String> members) {
+    public Family(String familyName, List<String> members, String owner) {
         this.familyName = familyName;
         this.members = members;
+        this.owner = owner;
     }
 
     public String getFamilyName() {
@@ -34,4 +36,8 @@ public class Family {
     public void setMembers(List<String> users) {
         this.members = members;
     }
+
+    public String getOwner() {return owner;}
+
+    public void setOwner(String owner) {this.owner = owner;}
 }

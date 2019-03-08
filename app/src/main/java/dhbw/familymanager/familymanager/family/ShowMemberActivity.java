@@ -23,6 +23,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ public class ShowMemberActivity extends AppCompatActivity {
     private List<User> users;
     private static boolean update = false;
     private ArrayList<String> members;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,8 +149,33 @@ public class ShowMemberActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.family_menu, menu);
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        auth = FirebaseAuth.getInstance();
+        DocumentReference docRef = db.collection("families").document(family);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                        String owner = document.get("owner").toString();
+                        if (owner.equals(auth.getCurrentUser().getUid()))
+                        {
+                            getMenuInflater().inflate(R.menu.family_menu_owner, menu);
+                        }
+                        else {
+                            getMenuInflater().inflate(R.menu.family_menu, menu);
+                        }
+
+                    } else {
+                        Log.d("TAG", "No such document");
+                    }
+                } else {
+                    Log.d("TAG", "get failed with ", task.getException());
+                }
+            }
+        });
         return true;
     }
 
@@ -162,11 +189,116 @@ public class ShowMemberActivity extends AppCompatActivity {
             case R.id.leave_family:
                 showAlertDialog();
                 break;
+            case R.id.delete_family:
+                showDeleteAlertDialog();
+                break;
             case android.R.id.home:
                 onBackPressed();
                 return true;
         }
         return true;
+    }
+
+    private void showDeleteAlertDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Wollen Sie sicher die Familie löschen? Dies kann nicht rückgängig gemacht werden.");
+        alertDialogBuilder.setCancelable(true);
+
+        alertDialogBuilder.setPositiveButton(
+                "Löschen",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        deleteFamily();
+                    }
+                });
+
+        alertDialogBuilder.setNegativeButton(
+                "Abbrechen",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void deleteFamily() {
+        db.collection("families").document(family).delete();
+        DocumentReference docRef =  db.collection("gallery").document(family);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                        ArrayList<String> folders = (ArrayList<String>) document.get("folderName");
+                        deleteFolders(folders);
+                        db.collection("gallery").document(family).delete();
+                    } else {
+                        Log.d("TAG", "No such document");
+                    }
+                } else {
+                    Log.d("TAG", "get failed with ", task.getException());
+                }
+            }
+        });
+        MainActivity.updateFamiles();
+        finish();
+    }
+
+    private void deleteFolders(ArrayList<String> folders) {
+        for (final String folder: folders)
+        {
+            DocumentReference docRef =  db.collection("folders").document(family + folder);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                            ArrayList<String> pictures = (ArrayList<String>) document.get("photos");
+                            deletePhotos(pictures, folder);
+                            db.collection("folders").document(family + folder).delete();
+
+                        } else {
+                            Log.d("TAG", "No such document");
+                        }
+                    } else {
+                        Log.d("TAG", "get failed with ", task.getException());
+                    }
+                }
+            });
+        }
+    }
+
+    private void deletePhotos(ArrayList<String> pictures, final String folder) {
+        for (final String photo: pictures)
+        {
+            DocumentReference docRef =  db.collection("photos").document(family + folder + photo);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                            FirebaseStorage storage = FirebaseStorage.getInstance();
+                            storage.getReference(document.get("path").toString()).delete();
+                            db.collection("photos").document(family + folder + photo).delete();
+                        } else {
+                            Log.d("TAG", "No such document");
+                        }
+                    } else {
+                        Log.d("TAG", "get failed with ", task.getException());
+                    }
+                }
+            });
+        }
     }
 
     private void showAlertDialog(){
