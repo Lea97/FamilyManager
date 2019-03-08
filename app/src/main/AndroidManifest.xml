@@ -57,6 +57,14 @@
                 android:value="dhbw.familymanager.familymanager.Profile.ProfileActivity" />
         </activity>
         <activity
+            android:name=".Profile.EditCredentialsActivity"
+            android:label="Anmeldedaten bearbeiten"
+            android:parentActivityName=".Profile.EditProfileActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="dhbw.familymanager.familymanager.Profile.EditProfileActivity" />
+        </activity>
+        <activity
             android:name=".photoGallery.CreateFolderActivity"
             android:label="Album erstellen"
             android:parentActivityName=".photoGallery.PhotoGalleryActivity">

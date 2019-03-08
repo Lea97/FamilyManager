@@ -25,5 +25,6 @@
     <string name="leave_family">Familie verlassen</string>
     <string name="delete_profile">Profil löschen</string>
     <string name="delete_family">Familie löschen</string>
+    <string name="edit_credentials"> Anmeldedaten bearbeiten</string>
 
 </resources>

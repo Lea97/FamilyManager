@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -117,9 +119,6 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         final TextView nameTextfield = (TextView) findViewById(R.id.nameTextfield);
         nameTextfield.setText(user.getName());
 
-        final TextView mailTextfield = (TextView) findViewById(R.id.emailTextfield);
-        mailTextfield.setText(user.getEmail());
-
         final TextView birthTextView = (TextView) findViewById(R.id.showDate);
         if (user.getBirthday() != null)
         {
@@ -203,13 +202,13 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                     finishActivity();
                 }
                 break;
-    }}
+        }
+    }
 
         private void saveProfileChanges() {
             uploadImage();
             final TextView dateTextView = (TextView) findViewById(R.id.showDate);
             final TextView nameTextView = (TextView) findViewById(R.id.nameTextfield);
-            final TextView emailTextView = (TextView) findViewById(R.id.emailTextfield);
             final TextView numberTextView = (TextView) findViewById(R.id.numberTextfield);
 
             final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
@@ -222,11 +221,31 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             if(filePath != null)
             {
-                db.collection("users").document(currentUser.getUid()).update("picturePath",picturePath,"birthday", birthday,"name", nameTextView.getText().toString(),"phonenumber", numberTextView.getText().toString(), "email", emailTextView.getText().toString());
+                db.collection("users").document(currentUser.getUid()).update("picturePath",picturePath,"birthday", birthday,"name", nameTextView.getText().toString(),"phonenumber", numberTextView.getText().toString());
             }
             else{
-                db.collection("users").document(currentUser.getUid()).update("birthday", birthday,"name", nameTextView.getText().toString(),"phonenumber", numberTextView.getText().toString(), "email", emailTextView.getText().toString());
+                db.collection("users").document(currentUser.getUid()).update("birthday", birthday,"name", nameTextView.getText().toString(),"phonenumber", numberTextView.getText().toString());
             }
            //  currentUser.updateEmail(emailTextView.getText().toString());
         }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.edit_profil_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.edit_credentials:
+                Intent intent = new Intent(EditProfileActivity.this, EditCredentialsActivity.class);
+                startActivity(intent);
+                break;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return true;
+    }
 }

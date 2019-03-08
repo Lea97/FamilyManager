@@ -56,29 +56,32 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseAuth auth;
 
     @Override
-    protected void onPostResume(){
+    protected void onPostResume() {
         super.onPostResume();
-        if (refresh)
-        {
+        if (refresh) {
             refresh = false;
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            Query query = db.collection("users").whereEqualTo("email", user.getEmail());
-            query.get()
-                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot querySnapshot) {
+            DocumentReference docRef = db.collection("users").document(auth.getCurrentUser().getUid());
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                            createUserFromDocument(document);
+                            fillFormular();
 
-                            List<DocumentSnapshot> documents = querySnapshot.getDocuments();
-
-                            for (DocumentSnapshot document : documents) {
-
-                                createUserFromDocument(document);
-                                fillFormular();
-                            }
+                        } else {
+                            Log.d("TAG", "No such document");
                         }
-                    });
-            }
+                    } else {
+                        Log.d("TAG", "get failed with ", task.getException());
+                    }
+                }
+            });
         }
+    }
 
     private void createUserFromDocument(DocumentSnapshot document) {
         user = new User();
