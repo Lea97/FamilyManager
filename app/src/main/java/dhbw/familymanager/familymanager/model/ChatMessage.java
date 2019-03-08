@@ -9,7 +9,15 @@ public class ChatMessage {
     private String chatId;
     private long timestamp;
     private String messageType;
+    private boolean isNew;
 
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public void setNew(boolean aNew) {
+        isNew = aNew;
+    }
 
     public String getMessageId() {
         return messageId;
