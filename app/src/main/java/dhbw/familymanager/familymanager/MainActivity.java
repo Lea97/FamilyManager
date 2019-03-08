@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             } else {
                                 Log.d("TAG", "No such document");
                                 String email= user.getEmail();
-                                User userModel = new User("", new Date(01,00,01), email, "", "ProfilPictures/profile_picture.png");
+                                User userModel = new User(user.getDisplayName(), new Date(01,00,01), email, "", "ProfilPictures/profile_picture.png");
                                 db.collection("users").document(user.getUid()).set(userModel);
                             }
                         } else {

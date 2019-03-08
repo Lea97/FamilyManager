@@ -13,11 +13,11 @@
         android:text=""
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.827"
+        app:layout_constraintHorizontal_bias="0.804"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.254" />
+        app:layout_constraintVertical_bias="0.131" />
 
     <EditText
         android:id="@+id/familyMemberTextfield"
@@ -34,49 +34,35 @@
 
     <TextView
         android:id="@+id/familyNameLable"
-        android:layout_width="50dp"
-        android:layout_height="24dp"
-        android:text="Name"
+        android:layout_width="76dp"
+        android:layout_height="51dp"
+        android:text="Name der Familie"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.187"
+        app:layout_constraintHorizontal_bias="0.095"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.26" />
+        app:layout_constraintVertical_bias="0.139" />
 
     <TextView
         android:id="@+id/memberLable"
-        android:layout_width="110dp"
-        android:layout_height="39dp"
-        android:text="Member E-Mail Adresse"
+        android:layout_width="120dp"
+        android:layout_height="75dp"
+        android:text="E-Mail Adressen der Mitglieder (getrennt mit Komma)"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.145"
+        app:layout_constraintHorizontal_bias="0.112"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.618" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-
-    <TextView
-        android:id="@+id/headline"
-        android:layout_width="152dp"
-        android:layout_height="55dp"
-        android:text="Add Family"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.576"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.072" />
 
     <Button
         android:id="@+id/createFamilyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Create"
+        android:text="Erstellen"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.668"
+        app:layout_constraintHorizontal_bias="0.773"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -86,9 +72,9 @@
         android:id="@+id/cancleAddFamilyButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cancle"
+        android:text="Abbrechen"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.283"
+        app:layout_constraintHorizontal_bias="0.269"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
