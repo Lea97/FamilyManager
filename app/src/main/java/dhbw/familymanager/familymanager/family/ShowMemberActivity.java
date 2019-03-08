@@ -1,8 +1,10 @@
 package dhbw.familymanager.familymanager.family;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -158,7 +160,7 @@ public class ShowMemberActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.leave_family:
-                leaveFamily();
+                showAlertDialog();
                 break;
             case android.R.id.home:
                 onBackPressed();
@@ -167,9 +169,35 @@ public class ShowMemberActivity extends AppCompatActivity {
         return true;
     }
 
+    private void showAlertDialog(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Wollen Sie wirklich die Familie verlassen?");
+        alertDialogBuilder.setCancelable(true);
+
+        alertDialogBuilder.setPositiveButton(
+                "Verlassen",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                        leaveFamily();
+                    }
+                });
+
+        alertDialogBuilder.setNegativeButton(
+                "Abbrechen",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
     private void leaveFamily() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        DocumentReference docRef = db.collection("users").document(auth.getCurrentUser().getUid());
+        DocumentReference docRef = db.collection("families").document(MainActivity.getFamily());
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -196,7 +224,9 @@ public class ShowMemberActivity extends AppCompatActivity {
     }
 
     private void deleteMember(DocumentSnapshot document) {
-        members.remove(document.get("email"));
-        db.collection("families").document(family).update("members",members);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        ArrayList<String> memberList = (ArrayList<String>) document.get("members");
+        memberList.remove(auth.getCurrentUser().getEmail());
+        db.collection("families").document(family).update("members", memberList);
     }
 }

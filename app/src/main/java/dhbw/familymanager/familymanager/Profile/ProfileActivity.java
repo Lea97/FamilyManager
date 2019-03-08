@@ -167,7 +167,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void showAlertDialog(){
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Willst du wirklich dein Profil löschen? Dies kann nicht rückgängig gemacht werden.");
+        alertDialogBuilder.setMessage("Wollen Sie wirklich Ihr Profil löschen? Dies kann nicht rückgängig gemacht werden.");
         alertDialogBuilder.setCancelable(true);
 
         alertDialogBuilder.setPositiveButton(

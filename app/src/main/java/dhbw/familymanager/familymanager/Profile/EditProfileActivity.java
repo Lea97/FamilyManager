@@ -217,16 +217,16 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             Timestamp birthday = new Timestamp(date);
 
             FirebaseAuth auth = FirebaseAuth.getInstance();
-            FirebaseUser curretUser = auth.getCurrentUser();
+            FirebaseUser currentUser = auth.getCurrentUser();
 
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             if(filePath != null)
             {
-                db.collection("users").document(curretUser.getUid()).update("picturePath",picturePath,"birthday", birthday,"name", nameTextView.getText().toString(),"phonenumber", numberTextView.getText().toString(), "email", emailTextView.getText().toString());
+                db.collection("users").document(currentUser.getUid()).update("picturePath",picturePath,"birthday", birthday,"name", nameTextView.getText().toString(),"phonenumber", numberTextView.getText().toString(), "email", emailTextView.getText().toString());
             }
             else{
-                db.collection("users").document(curretUser.getUid()).update("birthday", birthday,"name", nameTextView.getText().toString(),"phonenumber", numberTextView.getText().toString(), "email", emailTextView.getText().toString());
+                db.collection("users").document(currentUser.getUid()).update("birthday", birthday,"name", nameTextView.getText().toString(),"phonenumber", numberTextView.getText().toString(), "email", emailTextView.getText().toString());
             }
-            // user.updateEmail(emailTextfield.getText().toString());
+           //  currentUser.updateEmail(emailTextView.getText().toString());
         }
 }
