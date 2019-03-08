@@ -1,5 +1,6 @@
 package dhbw.familymanager.familymanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -32,10 +34,12 @@ class ChatActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String user;
     private ArrayList<String> chatrooms;
+    private View addChatroomButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chatrooms);
+
         user=FirebaseAuth.getInstance().getCurrentUser().getUid();
         db=FirebaseFirestore.getInstance();
         if(user!=null){
@@ -50,6 +54,15 @@ class ChatActivity extends AppCompatActivity {
         if(chatrooms.size()==0){
             chatrooms.add("Sie haben noch keine Chats!");
         }
+        addChatroomButton=(View)findViewById(R.id.addChatroomButton);
+        addChatroomButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ChatActivity.this, CreateChatroomActivity.class));
+                    //TODO addChatRoom
+                }
+                }
+        );
 
         ArrayList<String> values=new ArrayList<>();
         values.add("Chatroom hallo");
@@ -63,6 +76,7 @@ class ChatActivity extends AppCompatActivity {
     layout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        //TODO openChat
 
     }
 });
@@ -76,7 +90,7 @@ class ChatActivity extends AppCompatActivity {
             //@Override
             //public void onClick(View view) {
              //   Log.d("MainActivity", "Launch create a room screen");
-             //   Intent intent=new Intent(ChatActivity.this, CreateChatroom.class);
+             //   Intent intent=new Intent(ChatActivity.this, CreateChatroomActivity.class);
 
               //  EditText input = (EditText)findViewById(R.id.input);
               //  startActivity(intent);

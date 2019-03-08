@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 
-class CreateChatroom extends AppCompatActivity {
+class CreateChatroomActivity extends AppCompatActivity {
     private EditText roomName;
 
 

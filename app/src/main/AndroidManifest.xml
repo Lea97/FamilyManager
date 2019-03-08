@@ -129,6 +129,14 @@
                 android:value="dhbw.familymanager.familymanager.MainActivity" />
         </activity>
         <activity
+            android:name=".CreateChatroomActivity"
+            android:label="Create Chatroom"
+            android:parentActivityName=".ChatActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="dhbw.familymanager.familymanager.CreateChatroomActivity" />
+        </activity>
+        <activity
             android:name=".calendar.CalendarActivity"
             android:label="Kalender"
             android:parentActivityName=".MainActivity">
