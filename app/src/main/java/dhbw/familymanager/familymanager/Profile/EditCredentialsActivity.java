@@ -1,12 +1,28 @@
 package dhbw.familymanager.familymanager.Profile;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import dhbw.familymanager.familymanager.R;
 
@@ -14,6 +30,10 @@ public class EditCredentialsActivity extends AppCompatActivity implements View.O
 
     private FirebaseAuth auth;
     private EditText emailField;
+    private EditText oldPasswordField;
+    private EditText newPasswordField;
+    private String oldEmail;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +59,6 @@ public class EditCredentialsActivity extends AppCompatActivity implements View.O
             case R.id.saveCedentialChange:
                 if (validate()) {
                     saveChanges();
-                    finish();
                 }
                 break;
         }
@@ -56,14 +75,14 @@ public class EditCredentialsActivity extends AppCompatActivity implements View.O
     }
 
     private boolean validate() {
-        EditText oldPasswordField = findViewById(R.id.oldPasswordTextfield);
+        oldPasswordField = findViewById(R.id.oldPasswordTextfield);
         if(oldPasswordField.getText().toString().isEmpty())
         {
             oldPasswordField.setError("Bitte geben Sie ihr aktuelles Passwort ein.");
             return false;
         }
-        EditText newPasswordField = findViewById(R.id.newPasswordTextfield);
-        EditText repeatNewPasswordField = findViewById(R.id.repeatPasswordField);
+        newPasswordField = findViewById(R.id.newPasswordTextfield);
+        EditText repeatNewPasswordField = findViewById(R.id.repeatPasswordTextfield);
         if(!(newPasswordField.getText().toString().isEmpty())& !(repeatNewPasswordField.getText().toString().isEmpty()))
         {
             if(!newPasswordField.getText().toString().equals(repeatNewPasswordField.getText().toString()))
@@ -77,7 +96,7 @@ public class EditCredentialsActivity extends AppCompatActivity implements View.O
             return false;
         }
         if ((newPasswordField.getText().toString().isEmpty())& !(repeatNewPasswordField.getText().toString().isEmpty())){
-            repeatNewPasswordField.setError("Bitte geben Sie ihr neues Passwort ein.");
+            newPasswordField.setError("Bitte geben Sie ihr neues Passwort ein.");
             return false;
         }
         //TODO validieren dass eingegeben E-Mail Adresse auch dem Format einer solchen entspricht
@@ -86,11 +105,50 @@ public class EditCredentialsActivity extends AppCompatActivity implements View.O
     }
 
     private void saveChanges() {
-      //  AuthCredential authCredential;
-      //  FirebaseUser user = auth.getCurrentUser();
-      //  auth.getCurrentUser().reauthenticateAndRetrieveData(authCredential);
+        final FirebaseUser user = auth.getCurrentUser();
+        oldEmail = user.getEmail();
+        AuthCredential credential = EmailAuthProvider.getCredential(oldEmail, oldPasswordField.getText().toString());
+        user.reauthenticateAndRetrieveData(credential).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                if (!oldEmail.equals(emailField.getText().toString())) {
+                    user.updateEmail(emailField.getText().toString());
+                    changeEmailInDB();
+                    ProfileActivity.refreshValues();
+                }
+                if(!newPasswordField.getText().toString().isEmpty())
+                {
+                    user.updatePassword(newPasswordField.getText().toString());
+                }
+                finish();
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(EditCredentialsActivity.this, "Die Anmeldedaten konnten nicht geändert werden.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
-      //  user.updateEmail(emailField.getText().toString());
+    private void changeEmailInDB() {
+        db = FirebaseFirestore.getInstance();
+        db.collection("users").document(auth.getCurrentUser().getUid()).update("email", emailField.getText().toString());
 
+        Query query = db.collection("families").whereArrayContains("members", oldEmail);
+        query.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot querySnapshot) {
+                        List<DocumentSnapshot> documents = querySnapshot.getDocuments();
+                        for (DocumentSnapshot document : documents) {
+                            Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                            ArrayList<String> members = (ArrayList<String>) document.get("members");
+                            members.remove(oldEmail);
+                            members.add(emailField.getText().toString());
+                            db.collection("families").document(document.getId()).update("members", members);
+                        }
+                    }
+                });
     }
 }
