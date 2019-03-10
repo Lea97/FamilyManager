@@ -39,7 +39,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Start"
-         />
+        />
 
     <EditText
         android:id="@+id/eventEnd"
@@ -58,10 +58,10 @@
         />
 
     <Button
-        android:id="@+id/cancelButton"
+        android:id="@+id/deleteEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cancel"
-         />
+        android:text="Delete"
+        />
 
 </LinearLayout>
