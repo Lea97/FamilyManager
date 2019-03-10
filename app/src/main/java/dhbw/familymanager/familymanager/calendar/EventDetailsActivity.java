@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,7 +22,7 @@ import dhbw.familymanager.familymanager.R;
 import dhbw.familymanager.familymanager.model.Event;
 
 public class EventDetailsActivity extends AppCompatActivity implements View.OnClickListener{
-    private EditText eventTitle, eventLocation, eventStart, eventEnd;
+    private TextView eventTitle, eventLocation, eventStart, eventEnd;
     private Button edit, delete;
     private Event event;
     private String eventId, dbEntryId;
