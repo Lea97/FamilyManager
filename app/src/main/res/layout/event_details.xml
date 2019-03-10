@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:orientation="vertical" >
+    android:layout_height="match_parent">
+
     <TextView
         android:id="@+id/header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="120dp"
+        android:layout_marginTop="120dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Event details"/>
+        android:text="Event details"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
@@ -19,49 +23,57 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Event title" />
+        android:text="Event title"
+        app:layout_constraintStart_toStartOf="@+id/header"
+        app:layout_constraintTop_toBottomOf="@+id/header" />
 
     <TextView
         android:id="@+id/eventLocation"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="18dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:text="Event location"
-        />
+        app:layout_constraintStart_toStartOf="@+id/eventTitle1"
+        app:layout_constraintTop_toTopOf="@+id/eventTitle1" />
 
 
     <TextView
         android:id="@+id/eventStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
         android:ems="10"
-        android:inputType="textPersonName"
         android:text="Start"
-        />
+        app:layout_constraintStart_toStartOf="@+id/eventLocation"
+        app:layout_constraintTop_toBottomOf="@+id/eventLocation" />
 
     <TextView
         android:id="@+id/eventEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
         android:text="End"
-        />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="120dp"
+        tools:layout_editor_absoluteY="101dp" />
 
     <Button
         android:id="@+id/editEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="108dp"
         android:text="Edit"
-        />
+        app:layout_constraintStart_toStartOf="@+id/eventEnd"
+        app:layout_constraintTop_toBottomOf="@+id/eventEnd" />
 
     <Button
         android:id="@+id/deleteEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Delete"
-        />
+        app:layout_constraintStart_toStartOf="@+id/editEvent"
+        app:layout_constraintTop_toBottomOf="@+id/editEvent" />
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>
