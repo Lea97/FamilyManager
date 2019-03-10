@@ -34,7 +34,9 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
     private EditText eventTitle, eventLocation, eventStart, eventEnd;
     private Button edit, delete;
     private Event event;
-    String eventId;
+    private String eventId, dbEntryId;
+
+
     FirebaseFirestore db=FirebaseFirestore.getInstance();
 
     @Override
@@ -54,6 +56,7 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
        System.out.println(eventId);
 
 
+
         db.collection("events").whereEqualTo("id", Long.parseLong(eventId)).get().
         addOnCompleteListener((new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -63,12 +66,19 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
                         event=task.getResult().toObjects(Event.class).get(0);
                         //Log.d("TAG", document.getId() + " => " + document.getData());
                         setEventData();
+                        dbEntryId=task.getResult().getDocuments().get(0).getId();
+
 
                 } else {
                     Log.d("TAG", "Error getting documents: ", task.getException());
                 }
             }
+
         }));
+        delete=findViewById(R.id.deleteEvent);
+        delete.setOnClickListener(this);
+        edit=findViewById(R.id.editEvent);
+        edit.setOnClickListener(this);
 
     }
 
@@ -78,6 +88,8 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
         eventLocation.setText(event.getLocation());
         eventStart.setText(event.getStart().toString());
         eventEnd.setText(event.getEnd().toString());
+       // eventId= String.valueOf(event.getId());
+
     }
 
     @Override
@@ -96,17 +108,17 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
         Intent intent=new Intent();
 
     }
-//TODO fix bugs in deleteEvent
+
     private void deleteEvent(String eventId) {
 
-       String id=String.valueOf(db.collection("events").whereEqualTo("id",Long.parseLong(eventId)).get().getResult().toObjects(Event.class).get(0).getId());
-       System.out.println(id);
-       db.collection("events").document(id).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+
+       db.collection("events").document(dbEntryId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
            @Override
            public void onSuccess(Void aVoid) {
                Log.d("TAG", "DocumentSnapshot successfully deleted!");
                System.out.println("Event mit id "+" deleted");
                Toast.makeText(getApplicationContext(), " Event successfully deleted", Toast.LENGTH_SHORT).show();
+               //TODO refresh calendar activity
            }
        })
                .addOnFailureListener(new OnFailureListener() {
