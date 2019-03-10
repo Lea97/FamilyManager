@@ -10,149 +10,147 @@
         android:layout_width="102dp"
         android:layout_height="101dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.108"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.156"
+        app:layout_constraintVertical_bias="0.063"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <EditText
-        android:id="@+id/nameTextfield"
-        android:layout_width="149dp"
-        android:layout_height="39dp"
-        android:text=""
-        android:textSize="14sp"
+    <TableLayout
+        android:layout_width="270dp"
+        android:layout_height="206dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.89"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.141" />
+        app:layout_constraintVertical_bias="0.563">
 
-    <TextView
-        android:id="@+id/nameLable"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Name"
+        <TableRow
+            android:layout_height="18dp"
+            android:layout_margin="8dp">
+
+            <TextView
+                android:id="@+id/nameLable"
+                style="@style/HeadlineTextViewsStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:gravity="start"
+                android:text="@string/profile_namefield" />
+
+            <EditText
+                android:id="@+id/nameTextfield"
+                style="@style/NormalEditTextStyle"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:gravity="start" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="234dp"
+            android:layout_height="18dp"
+            android:layout_margin="8dp">
+
+            <TextView
+                android:id="@+id/numberLable"
+                style="@style/HeadlineTextViewsStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:gravity="start"
+                android:text="@string/profile_numberfield" />
+
+            <EditText
+                android:id="@+id/numberTextfield"
+                style="@style/NormalEditTextStyle"
+                android:layout_width="92dp"
+                android:layout_height="wrap_content"
+                android:gravity="start" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_height="18dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp">
+
+            <TextView
+                android:id="@+id/birthLable"
+                style="@style/HeadlineTextViewsStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:gravity="start"
+                android:text="@string/profile_birthfield" />
+
+            <TextView
+                android:id="@+id/showDate"
+                style="@style/NormalTextViewsStyle"
+                android:layout_width="121dp"
+                android:layout_height="match_parent"
+                android:gravity="start" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_height="18dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp">
+
+            <TextView android:layout_width="93dp" />
+
+            <Button
+                android:id="@+id/picDate"
+                style="@style/SmallButtonStyle"
+                android:layout_width="wrap_content"
+                android:gravity="center"
+                android:onClick="datePicker"
+                android:text="@string/choose_date" />
+        </TableRow>
+
+    </TableLayout>
+
+    <TableLayout
+        android:layout_width="222dp"
+        android:layout_height="156dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.45"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.16" />
+        app:layout_constraintVertical_bias="1.143">
 
-    <EditText
-        android:id="@+id/numberTextfield"
-        android:layout_width="148dp"
-        android:layout_height="47dp"
-        android:text=""
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.891"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.273" />
+        <TableRow>
 
-    <TextView
-        android:id="@+id/numberLable"
-        android:layout_width="wrap_content"
-        android:layout_height="19dp"
-        android:text="Nummer"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.445"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.282" />
-
-    <TextView
-        android:id="@+id/birthLable"
-        android:layout_width="52dp"
-        android:layout_height="37dp"
-        android:text="Geburtsdatum"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.441"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.394" />
-
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Speichern"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.72"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.87" />
+            <Button
+                android:id="@+id/cancelButton"
+                style="@style/NormalButtonStyle"
+                android:layout_width="wrap_content"
+                android:text="@string/cancle_button"
+                android:layout_marginEnd="15dp"/>
 
 
-    <Button
-        android:id="@+id/cancelButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Abbrechen"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.242"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.87" />
+            <Button
+                style="@style/NormalButtonStyle"
+                android:id="@+id/saveButton"
+                android:layout_width="wrap_content"
+                android:text="@string/save_button" />
+        </TableRow>
 
-    <Button
-        android:id="@+id/picDate"
-        android:layout_width="148dp"
-        android:layout_height="44dp"
-        android:onClick="datePicker"
-        android:text="Datum wählen"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.9"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.498" />
-
-    <TextView
-        android:id="@+id/showDate"
-        android:layout_width="143dp"
-        android:layout_height="34dp"
-        android:layout_below="@+id/picDate"
-        android:textSize="18dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.894"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.392" />
-
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="23dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.047"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.452" />
+    </TableLayout>
 
     <Button
         android:id="@+id/btnChoose"
+        style="@style/SmallButtonStyle"
         android:layout_width="115dp"
-        android:layout_height="40dp"
         android:layout_weight="1"
-        android:text="Auswählen"
+        android:text="@string/choose_button"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.069"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.354" />
+        app:layout_constraintVertical_bias="0.266" />
 
 </android.support.constraint.ConstraintLayout>
