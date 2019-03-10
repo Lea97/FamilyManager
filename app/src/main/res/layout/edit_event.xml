@@ -31,6 +31,7 @@
         android:text="Event location"
         />
 
+
     <EditText
         android:id="@+id/eventStart"
         android:layout_width="wrap_content"
@@ -57,10 +58,10 @@
         />
 
     <Button
-        android:id="@+id/deleteEvent"
+        android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Delete"
+        android:text="Cancel"
          />
 
 </LinearLayout>

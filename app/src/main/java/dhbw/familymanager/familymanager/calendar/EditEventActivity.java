@@ -1,41 +1,37 @@
 package dhbw.familymanager.familymanager.calendar;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.alamkanak.weekview.WeekViewEvent;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.Transaction;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.model.Document;
-import com.google.type.TimeOfDayOrBuilder;
 
+import dhbw.familymanager.familymanager.MainActivity;
 import dhbw.familymanager.familymanager.R;
+import dhbw.familymanager.familymanager.family.AddFamilyActivity;
 import dhbw.familymanager.familymanager.model.Event;
 
-public class EditEventActivity extends AppCompatActivity implements View.OnClickListener{
+class EditEventActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText eventTitle, eventLocation, eventStart, eventEnd;
-    private Button edit, delete;
+    private Button edit, cancel;
     private Event event;
-    String eventId;
-    FirebaseFirestore db=FirebaseFirestore.getInstance();
+    private String eventId, dbEntryId;
+    private FirebaseFirestore db=FirebaseFirestore.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,83 +43,49 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
         eventStart.setOnClickListener(this);
         eventEnd=findViewById(R.id.eventEnd);
         eventEnd.setOnClickListener(this);
+        eventEnd.setOnClickListener(this);
+        edit=findViewById(R.id.editEvent);
+        edit.setOnClickListener(this);
+        cancel=findViewById(R.id.cancelButton);
+        cancel.setOnClickListener(this);
+        setEventId();
 
+}
 
-       Intent intent=getIntent();
-       eventId=intent.getStringExtra("eventId");
-       System.out.println(eventId);
-
-
-        db.collection("events").whereEqualTo("id", Long.parseLong(eventId)).get().
-        addOnCompleteListener((new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-
-                        event=task.getResult().toObjects(Event.class).get(0);
-                        //Log.d("TAG", document.getId() + " => " + document.getData());
-                        setEventData();
-
-                } else {
-                    Log.d("TAG", "Error getting documents: ", task.getException());
-                }
-            }
-        }));
-
-    }
-
-    private void setEventData() {
-
-        eventTitle.setText(event.getTitle());
-        eventLocation.setText(event.getLocation());
-        eventStart.setText(event.getStart().toString());
-        eventEnd.setText(event.getEnd().toString());
+    private void setEventId() {
+        Intent intent=getIntent();
+        eventId=intent.getStringExtra("eventId");
     }
 
     @Override
     public void onClick(View v) {
         switch(v.getId()){
-            case(R.id.deleteEvent):
-                deleteEvent(eventId);
+            case R.id.editEvent:
+                //editEvent(eventId);
                 break;
-            case(R.id.editEvent):
-                editEvent(eventId);
+            case R.id.cancel_button:
+                //startActivity(new Intent(EditEventActivity.this, EventDetailsActivity.class));
                 break;
         }
     }
 
     private void editEvent(String eventId) {
-        Intent intent=new Intent();
 
-    }
-//TODO fix bugs in deleteEvent
-    private void deleteEvent(String eventId) {
-
-       String id=String.valueOf(db.collection("events").whereEqualTo("id",Long.parseLong(eventId)).get().getResult().toObjects(Event.class).get(0).getId());
-       System.out.println(id);
-       db.collection("events").document(id).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-           @Override
-           public void onSuccess(Void aVoid) {
-               Log.d("TAG", "DocumentSnapshot successfully deleted!");
-               System.out.println("Event mit id "+" deleted");
-               Toast.makeText(getApplicationContext(), " Event successfully deleted", Toast.LENGTH_SHORT).show();
-           }
-       })
-               .addOnFailureListener(new OnFailureListener() {
-                   @Override
-                   public void onFailure(@NonNull Exception e) {
-                       Log.w("TAG", "Error deleting document", e);
-                   }
-               });
+        db.collection("events").whereEqualTo("id", eventId).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                event=task.getResult().toObjects(Event.class).get(0);
+                dbEntryId= String.valueOf(event.getId());
+                final DocumentReference docRef = db.collection("events").document(dbEntryId);
+                docRef.update("title", eventTitle.getText().toString());
+                docRef.update("location", eventLocation.getText().toString());
+                docRef.update("start", eventStart.getText().toString());
 
 
-    }
 
-    @Override
-    public void onBackPressed(){
-        startActivity(new Intent(EditEventActivity.this, CalendarActivity.class));
+
+            }
+        });
+
     }
 }
-
-
-
