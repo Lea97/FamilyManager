@@ -2,7 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout"
+    android:id="@+id/event_details"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -50,10 +50,8 @@
         android:drawableLeft="@android:drawable/ic_menu_my_calendar"
         android:ems="12"
         android:text="Start"
-        app:layout_constraintBottom_toTopOf="@+id/eventEnd"
         app:layout_constraintStart_toStartOf="@+id/eventLocation"
-        app:layout_constraintTop_toBottomOf="@+id/eventLocation"
-        app:layout_constraintVertical_bias="0.19" />
+        app:layout_constraintTop_toBottomOf="@+id/eventLocation" />
 
     <TextView
         android:id="@+id/eventEnd"
@@ -62,9 +60,8 @@
         android:drawableLeft="@android:drawable/ic_menu_my_calendar"
         android:ems="10"
         android:text="End"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="128dp"
-        tools:layout_editor_absoluteY="230dp" />
+        app:layout_constraintStart_toStartOf="@+id/eventStart"
+        app:layout_constraintTop_toBottomOf="@+id/eventStart" />
 
     <Button
         android:id="@+id/editEvent"
