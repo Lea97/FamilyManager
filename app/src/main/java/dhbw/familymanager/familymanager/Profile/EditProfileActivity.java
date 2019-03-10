@@ -231,7 +231,8 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.edit_profil_menu, menu);
+        //TODO Passwort ändern geht noch nicht und eingegeben E-Mail muss validiert werden
+        //getMenuInflater().inflate(R.menu.edit_profil_menu, menu);
         return true;
     }
 

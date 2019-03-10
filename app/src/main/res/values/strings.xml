@@ -34,5 +34,8 @@
     <string name="profile_numberfield">Nummer</string>
     <string name="add_family_name">Name der Familie</string>
     <string name="add_family_members">E-Mail Adressen der Mitglieder (getrennt mit Komma)</string>
+    <string name="choose_date">Datum wählen</string>
+    <string name="save_button">Speicheren</string>
+    <string name="choose_button">Auswählen</string>
 
 </resources>

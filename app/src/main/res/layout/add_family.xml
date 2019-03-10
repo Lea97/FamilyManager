@@ -77,7 +77,6 @@
                 android:id="@+id/cancleAddFamilyButton"
                 style="@style/NormalButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_marginEnd="25dp"
                 android:text="@string/cancle_button" />
 
@@ -85,7 +84,6 @@
                 android:id="@+id/createFamilyButton"
                 style="@style/NormalButtonStyle"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="@string/create_button" />
         </TableRow>
 

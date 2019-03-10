@@ -33,41 +33,82 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/saveEvent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="136dp"
-        android:text="Add Event"
+    <TableLayout
+        android:layout_width="222dp"
+        android:layout_height="156dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.676">
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/showStartDate"
+                style="@style/NormalTextViewsStyle"
+                android:layout_width="107dp"
+                android:layout_height="wrap_content"
+                android:gravity="start" />
+
+            <TextView
+                android:id="@+id/showEndDate"
+                style="@style/NormalTextViewsStyle"
+                android:layout_width="109dp"
+                android:layout_height="wrap_content"
+                android:gravity="start" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <Button
+                android:id="@+id/eventStart"
+                style="@style/SmallButtonStyle"
+                android:layout_width="wrap_content"
+                android:onClick="datePicker"
+                android:text="Start" />
+
+            <Button
+                android:id="@+id/end"
+                style="@style/SmallButtonStyle"
+                android:layout_width="wrap_content"
+                android:onClick="datePicker"
+                android:text="End" />
+
+        </TableRow>
+
+    </TableLayout>
 
 
-    <Button
-        android:id="@+id/eventStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="208dp"
-        android:onClick="datePicker"
-        android:text="Start"
+    <TableLayout
+        android:layout_width="223dp"
+        android:layout_height="156dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.277"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.143">
 
-    <Button
-        android:id="@+id/end"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="208dp"
-        android:onClick="datePicker"
-        android:text="End"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.76"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        <TableRow>
+
+            <Button
+                android:id="@+id/cancelEvent"
+                style="@style/NormalButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_marginEnd="15dp"
+                android:text="@string/cancle_button" />
+
+
+            <Button
+                android:id="@+id/saveEvent"
+                style="@style/NormalButtonStyle"
+                android:layout_width="wrap_content"
+                android:text="@string/create_button" />
+        </TableRow>
+
+    </TableLayout>
 
 
 

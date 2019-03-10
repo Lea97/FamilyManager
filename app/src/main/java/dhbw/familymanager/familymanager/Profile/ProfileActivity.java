@@ -158,9 +158,10 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(intent);
                 setValues();
                 break;
-            case R.id.delete_profile:
-                showAlertDialog();
-                break;
+           // case R.id.delete_profile:
+                //TODO muss mit Passwort bestätigt werden
+            //    showAlertDialog();
+            //    break;
             case android.R.id.home:
                 onBackPressed();
                 return true;
