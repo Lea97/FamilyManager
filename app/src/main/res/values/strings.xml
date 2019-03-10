@@ -26,5 +26,13 @@
     <string name="delete_profile">Profil löschen</string>
     <string name="delete_family">Familie löschen</string>
     <string name="edit_credentials"> Anmeldedaten bearbeiten</string>
+    <string name="create_button">Erstellen</string>
+    <string name="cancle_button">Abbrechen</string>
+    <string name="profile_namefield">Name</string>
+    <string name="profile_emailfield">E-Mail</string>
+    <string name="profile_birthfield">Geburtstag</string>
+    <string name="profile_numberfield">Nummer</string>
+    <string name="add_family_name">Name der Familie</string>
+    <string name="add_family_members">E-Mail Adressen der Mitglieder (getrennt mit Komma)</string>
 
 </resources>

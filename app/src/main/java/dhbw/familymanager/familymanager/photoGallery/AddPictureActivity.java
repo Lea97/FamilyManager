@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -38,6 +39,7 @@ public class AddPictureActivity extends AppCompatActivity implements View.OnClic
     private FirebaseFirestore db;
     private String photoPath;
     private Uri filePath;
+    private ArrayList<String> photos;
 
 
     @Override
@@ -57,6 +59,7 @@ public class AddPictureActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.addPhoto:
+                setFamilyPhotos();
                 if (validate())
                 {
                     addPhoto();
@@ -79,8 +82,18 @@ public class AddPictureActivity extends AppCompatActivity implements View.OnClic
     private Boolean validate() {
         EditText editText = findViewById(R.id.newPhotoName);
         String photoName = editText.getText().toString();
-        if (photoName.isEmpty())
+        if(filePath == null)
         {
+            Toast.makeText(AddPictureActivity.this, "Es wurde kein Bild zum Hochladen ausgewählt.", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if(photoName.isEmpty())
+        {
+            editText.setError("Name des Bildes muss gesetzt werden.");
+            return false;
+        }
+        if (photos.contains(photoName)){
+            editText.setError("Ein Foto mit diesem Namen existiert bereits im Album");
             return false;
         }
         return true;
@@ -109,7 +122,7 @@ public class AddPictureActivity extends AppCompatActivity implements View.OnClic
         fileChooser.uploadImage(photoPath, filePath);
     }
 
-    private void addPictureToFolderDB() {
+    private void setFamilyPhotos(){
         db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("folders").document(family + folderName);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -119,9 +132,7 @@ public class AddPictureActivity extends AppCompatActivity implements View.OnClic
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d("TAG", "DocumentSnapshot data: " + document.getData());
-                        ArrayList<String> photos = (ArrayList<String>) document.get("photos");
-                        photos.add(photoName);
-                        db.collection("folders").document(family+folderName).update("photos", photos);
+                        photos = (ArrayList<String>) document.get("photos");
                     } else {
                         Log.d("TAG", "No such document");
                     }
@@ -130,6 +141,11 @@ public class AddPictureActivity extends AppCompatActivity implements View.OnClic
                 }
             }
         });
+    }
+
+    private void addPictureToFolderDB() {
+        photos.add(photoName);
+        db.collection("folders").document(family+folderName).update("photos", photos);
     }
 
     @Override

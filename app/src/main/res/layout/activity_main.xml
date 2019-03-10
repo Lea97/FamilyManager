@@ -8,34 +8,50 @@
     tools:context=".MainActivity">
 
     <LinearLayout
+        style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <ImageButton
+            style="?android:attr/buttonBarButtonStyle"
             android:id="@+id/profilButton"
-            android:layout_width="41dp"
-            android:layout_height="39dp"
-            app:srcCompat="@android:drawable/ic_menu_myplaces" />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="left|center"
+            android:layout_weight="0.15"
+            android:padding="@dimen/cardview_default_elevation"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/profilepicture" />
 
         <Spinner
+            style="?android:attr/buttonBarButtonStyle"
             android:id="@+id/familySpinner"
-            android:layout_width="152dp"
-            android:layout_height="42dp"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="2"
             android:background="@android:drawable/btn_dropdown"
             android:spinnerMode="dropdown" />
 
         <ImageButton
+            style="?android:attr/buttonBarButtonStyle"
             android:id="@+id/addFamilyButton"
-            android:layout_width="40dp"
-            android:layout_height="42dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_gravity="left|center"
             app:srcCompat="@android:drawable/ic_input_add" />
 
-        <Button
+        <ImageButton
             android:id="@+id/logoutButton"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:text="logout" />
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="right|center"
+            android:layout_weight="0.15"
+            android:padding="@dimen/cardview_default_elevation"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/logout" />
 
     </LinearLayout>
 
@@ -62,6 +78,7 @@
                 android:layout_weight="0.5">
 
                 <Button
+                    style="@style/Widget.AppCompat.Button"
                     android:id="@+id/galleryButton"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -70,15 +87,17 @@
                     android:gravity="center"
                     android:paddingBottom="10dp"
                     android:singleLine="false"
-                    android:backgroundTint="@color/peach"
                     android:text="Fotoalbum"
+                    android:backgroundTint="@color/peach"
+                    android:theme="@style/ThemeOverlay.AppCompat.Light"
                     android:textAlignment="center"
                     android:textSize="18sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true" />
+                    android:layout_centerInParent="true"
+                    />
             </RelativeLayout>
 
             <RelativeLayout
