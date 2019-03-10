@@ -8,4 +8,21 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="HeadlineTextViewsStyle" parent="android:Widget.TextView">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="NormalTextViewsStyle" parent="android:Widget.TextView">
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="NormalEditTextStyle" parent="android:Widget.EditText">
+        <item name="android:textSize">16dp</item>
+    </style>
+
+    <style name="NormalButtonStyle" parent="Base.TextAppearance.AppCompat.Button">
+        <item name="android:textSize">14dp</item>
+    </style>
+
 </resources>
