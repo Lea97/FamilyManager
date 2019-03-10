@@ -1,4 +1,4 @@
-package dhbw.familymanager.familymanager;
+package dhbw.familymanager.familymanager.Todo;
 
 import android.content.Context;
 import android.graphics.Paint;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import dhbw.familymanager.familymanager.R;
 import dhbw.familymanager.familymanager.model.Task;
 
 public class ListAdapter extends BaseAdapter {
