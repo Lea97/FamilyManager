@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -207,9 +208,9 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
         private void saveProfileChanges() {
             uploadImage();
-            final TextView dateTextView = (TextView) findViewById(R.id.showDate);
-            final TextView nameTextView = (TextView) findViewById(R.id.nameTextfield);
-            final TextView numberTextView = (TextView) findViewById(R.id.numberTextfield);
+            final TextView dateTextView = findViewById(R.id.showDate);
+            final EditText nameTextView = findViewById(R.id.nameTextfield);
+            final EditText numberTextView = findViewById(R.id.numberTextfield);
 
             final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
             Date date = new Date(dateTextView.getText().toString());
@@ -219,14 +220,16 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             FirebaseUser currentUser = auth.getCurrentUser();
 
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            if(filePath != null)
-            {
-                db.collection("users").document(currentUser.getUid()).update("picturePath",picturePath,"birthday", birthday,"name", nameTextView.getText().toString(),"phonenumber", numberTextView.getText().toString());
+            if(currentUser != null) {
+                if (filePath != null) {
+                    db.collection("users").document(currentUser.getUid()).update("picturePath", picturePath, "birthday", birthday, "name", nameTextView.getText().toString(), "phonenumber", numberTextView.getText().toString());
+                } else {
+                    db.collection("users").document(currentUser.getUid()).update("birthday", birthday, "name", nameTextView.getText().toString(), "phonenumber", numberTextView.getText().toString());
+                }
             }
-            else{
-                db.collection("users").document(currentUser.getUid()).update("birthday", birthday,"name", nameTextView.getText().toString(),"phonenumber", numberTextView.getText().toString());
+            else {
+                Toast.makeText(EditProfileActivity.this, "Die Nutzerdaten konnten aufgrund eines Fehlers nicht geändert werden.", Toast.LENGTH_LONG).show();
             }
-           //  currentUser.updateEmail(emailTextView.getText().toString());
         }
 
     @Override

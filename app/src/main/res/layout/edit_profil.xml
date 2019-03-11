@@ -43,12 +43,12 @@
                 style="@style/NormalEditTextStyle"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
-                android:gravity="start" />
+                android:gravity="start"
+                android:inputType="text"/>
 
         </TableRow>
 
         <TableRow
-            android:layout_width="234dp"
             android:layout_height="18dp"
             android:layout_margin="8dp">
 
@@ -66,6 +66,7 @@
                 style="@style/NormalEditTextStyle"
                 android:layout_width="92dp"
                 android:layout_height="wrap_content"
+                android:inputType="text"
                 android:gravity="start" />
 
         </TableRow>
