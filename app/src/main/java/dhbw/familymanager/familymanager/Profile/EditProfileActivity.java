@@ -54,6 +54,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private StorageReference storageReference;
     private String picturePath;
     private Boolean loadFile = false;
+    private Calendar cal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +72,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int day) {
-        Calendar cal = new GregorianCalendar(year, month, day);
+        cal = new GregorianCalendar(year, month, day);
         final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
         ((TextView) findViewById(R.id.showDate)).setText(dateFormat.format(cal.getTime()));
     }
@@ -208,13 +209,9 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
         private void saveProfileChanges() {
             uploadImage();
-            final TextView dateTextView = findViewById(R.id.showDate);
             final EditText nameTextView = findViewById(R.id.nameTextfield);
             final EditText numberTextView = findViewById(R.id.numberTextfield);
 
-            final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
-            Date date = new Date(dateTextView.getText().toString());
-            Timestamp birthday = new Timestamp(date);
 
             FirebaseAuth auth = FirebaseAuth.getInstance();
             FirebaseUser currentUser = auth.getCurrentUser();
@@ -222,9 +219,15 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             if(currentUser != null) {
                 if (filePath != null) {
-                    db.collection("users").document(currentUser.getUid()).update("picturePath", picturePath, "birthday", birthday, "name", nameTextView.getText().toString(), "phonenumber", numberTextView.getText().toString());
+                    db.collection("users").document(currentUser.getUid()).update("picturePath", picturePath, "name", nameTextView.getText().toString(), "phonenumber", numberTextView.getText().toString());
                 } else {
-                    db.collection("users").document(currentUser.getUid()).update("birthday", birthday, "name", nameTextView.getText().toString(), "phonenumber", numberTextView.getText().toString());
+                    db.collection("users").document(currentUser.getUid()).update("name", nameTextView.getText().toString(), "phonenumber", numberTextView.getText().toString());
+                }
+
+                if (cal != null)
+                {
+                    Timestamp birthday = new Timestamp(cal.getTime());
+                    db.collection("users").document(currentUser.getUid()).update("birthday", birthday);
                 }
             }
             else {
