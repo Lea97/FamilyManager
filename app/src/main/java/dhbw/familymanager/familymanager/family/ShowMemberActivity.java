@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -47,14 +48,17 @@ public class ShowMemberActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.members_list_layout);
-
         users = new ArrayList<User>();
         db = FirebaseFirestore.getInstance();
         family = MainActivity.getFamily();
         if(family != null)
         {
+            setContentView(R.layout.members_list_layout);
             getFamilyMembers();
+        }
+        else {
+            setContentView(R.layout.empty_page);
+            Toast.makeText(ShowMemberActivity.this, "Wählen Sie eine Familie um die Funktionalitäten zu nutzen.", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -150,32 +154,32 @@ public class ShowMemberActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        auth = FirebaseAuth.getInstance();
-        DocumentReference docRef = db.collection("families").document(family);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
-                        String owner = document.get("owner").toString();
-                        if (owner.equals(auth.getCurrentUser().getUid()))
-                        {
-                            getMenuInflater().inflate(R.menu.family_menu_owner, menu);
-                        }
-                        else {
-                            getMenuInflater().inflate(R.menu.family_menu, menu);
-                        }
+        if (family != null) {
+            auth = FirebaseAuth.getInstance();
+            DocumentReference docRef = db.collection("families").document(family);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                            String owner = document.get("owner").toString();
+                            if (owner.equals(auth.getCurrentUser().getUid())) {
+                                getMenuInflater().inflate(R.menu.family_menu_owner, menu);
+                            } else {
+                                getMenuInflater().inflate(R.menu.family_menu, menu);
+                            }
 
+                        } else {
+                            Log.d("TAG", "No such document");
+                        }
                     } else {
-                        Log.d("TAG", "No such document");
+                        Log.d("TAG", "get failed with ", task.getException());
                     }
-                } else {
-                    Log.d("TAG", "get failed with ", task.getException());
                 }
-            }
-        });
+            });
+        }
         return true;
     }
 

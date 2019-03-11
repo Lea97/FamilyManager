@@ -1,6 +1,5 @@
 package dhbw.familymanager.familymanager.family;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -37,9 +36,12 @@ public class AddFamilyActivity extends AppCompatActivity implements View.OnClick
         final TextView familyNameTextfield =  findViewById(R.id.familyNameTextfield);
         final TextView familyMembers =  findViewById(R.id.familyMemberTextfield);
 
-        String[] allMembers = familyMembers.getText().toString().split(",");
-        for (String member: allMembers) {
-            members.add(member.trim());
+        if(!familyMembers.getText().toString().isEmpty())
+        {
+            String[] allMembers = familyMembers.getText().toString().split(",");
+            for (String member: allMembers) {
+                members.add(member.trim());
+            }
         }
 
         Family family = new Family(familyNameTextfield.getText().toString(), members, mAuth.getCurrentUser().getUid());
@@ -58,7 +60,6 @@ public class AddFamilyActivity extends AppCompatActivity implements View.OnClick
                 MainActivity.updateFamiles();
                 this.finish();
                 break;
-
         }
     }
 }

@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -35,12 +36,14 @@ public class PhotoGalleryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         family = MainActivity.getFamily();
         folders = new ArrayList<String>();
-        setContentView(R.layout.photo_gallery);
-        if (family == null){
-            findViewById(R.id.add_photo).setVisibility(View.INVISIBLE);
+        if (family != null)
+        {
+            setContentView(R.layout.photo_gallery);
+            addFolders();
         }
         else {
-            addFolders();
+            setContentView(R.layout.empty_page);
+            Toast.makeText(PhotoGalleryActivity.this, "Wählen Sie eine Familie um die Funktionalitäten zu nutzen.", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -99,7 +102,10 @@ public class PhotoGalleryActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.folderoverview_menu, menu);
+        if (family != null)
+        {
+            getMenuInflater().inflate(R.menu.folderoverview_menu, menu);
+        }
         return true;
     }
 
