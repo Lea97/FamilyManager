@@ -1,4 +1,4 @@
-package dhbw.familymanager.familymanager;
+package dhbw.familymanager.familymanager.chat;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,9 +24,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import dhbw.familymanager.familymanager.R;
 import dhbw.familymanager.familymanager.model.ChatMessage;
 
-class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity {
     private FirebaseListAdapter<ChatMessage> adapter;
     private FloatingActionButton createRoom;
     private ListView layout;

@@ -1,12 +1,9 @@
 package dhbw.familymanager.familymanager.calendar;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,18 +11,13 @@ import android.widget.EditText;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import dhbw.familymanager.familymanager.MainActivity;
 import dhbw.familymanager.familymanager.R;
-import dhbw.familymanager.familymanager.family.AddFamilyActivity;
 import dhbw.familymanager.familymanager.model.Event;
 
-class EditEventActivity extends AppCompatActivity implements View.OnClickListener {
+public class EditEventActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText eventTitle, eventLocation, eventStart, eventEnd;
     private Button edit, cancel;
     private Event event;

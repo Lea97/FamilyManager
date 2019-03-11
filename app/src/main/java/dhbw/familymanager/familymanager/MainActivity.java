@@ -31,8 +31,8 @@ import java.util.Date;
 import java.util.List;
 
 import dhbw.familymanager.familymanager.Profile.ProfileActivity;
-import dhbw.familymanager.familymanager.Todo.ListsActivity;
 import dhbw.familymanager.familymanager.calendar.CalendarActivity;
+import dhbw.familymanager.familymanager.chat.ChatActivity;
 import dhbw.familymanager.familymanager.family.AddFamilyActivity;
 import dhbw.familymanager.familymanager.family.ShowMemberActivity;
 import dhbw.familymanager.familymanager.model.User;

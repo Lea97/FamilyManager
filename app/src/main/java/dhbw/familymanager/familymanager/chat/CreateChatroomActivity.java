@@ -1,10 +1,12 @@
-package dhbw.familymanager.familymanager;
+package dhbw.familymanager.familymanager.chat;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 
-class CreateChatroomActivity extends AppCompatActivity {
+import dhbw.familymanager.familymanager.R;
+
+public class CreateChatroomActivity extends AppCompatActivity {
     private EditText roomName;
 
 
