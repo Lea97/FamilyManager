@@ -66,8 +66,6 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
             weekViewEvent.setColor(colors.get(random.nextInt(colors.size())));
 
 
-
-
             result.add(weekViewEvent);
         }}
         return result;
@@ -102,7 +100,15 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
     }
 
 
+@Override
+public void onResume() {
 
+    super.onResume();
+    readEvents();
+    mWeekView.notifyDatasetChanged();
+    mWeekView.goToDate(new GregorianCalendar());
+
+}
 
 
     @Override
