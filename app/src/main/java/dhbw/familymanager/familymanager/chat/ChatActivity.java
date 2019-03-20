@@ -64,9 +64,9 @@ public class ChatActivity extends AppCompatActivity {
                 }
         );
 
-        ArrayList<String> values=new ArrayList<>();
-        values.add("Chatroom hallo");
-        values.add("chatroom2");
+       // ArrayList<String> values=new ArrayList<>();
+       // values.add("Chatroom hallo");
+       // values.add("chatroom2");
         //"Chatroom1", "Chatroom2", "Chatroom3", "Chatroom4", "Chatroom5"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
