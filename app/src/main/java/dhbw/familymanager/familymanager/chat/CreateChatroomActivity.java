@@ -1,5 +1,6 @@
 package dhbw.familymanager.familymanager.chat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Random;
 
 import dhbw.familymanager.familymanager.R;
+import dhbw.familymanager.familymanager.calendar.AddEventActivity;
+import dhbw.familymanager.familymanager.calendar.CalendarActivity;
 import dhbw.familymanager.familymanager.model.ChatRoom;
 
 public class CreateChatroomActivity extends AppCompatActivity {
@@ -36,23 +39,27 @@ public class CreateChatroomActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ChatRoom createdChatroom=createChatroomObject();
                 persistChatroomObject(createdChatroom);
-                FirebaseFirestore db=FirebaseFirestore.getInstance();
+
+
 
             }
         });
 
     }
 
-    private void persistChatroomObject(ChatRoom createdChatroom) {
+    private void persistChatroomObject(final ChatRoom createdChatroom) {
         FirebaseFirestore db=FirebaseFirestore.getInstance();
         db.collection("chatrooms").add(createdChatroom).
                 addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
                 System.out.println("Chatroom added to database");
+                startActivity(new Intent(CreateChatroomActivity.this, ChatActivity.class));
 
             }
         });
+
+
     }
 
     private ChatRoom createChatroomObject() {

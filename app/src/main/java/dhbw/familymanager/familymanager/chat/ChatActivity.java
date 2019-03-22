@@ -1,5 +1,6 @@
 package dhbw.familymanager.familymanager.chat;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -42,15 +43,13 @@ public class ChatActivity extends AppCompatActivity {
 
         user=FirebaseAuth.getInstance().getCurrentUser().getUid();
         db=FirebaseFirestore.getInstance();
+        layout=findViewById(R.id.chatroomListView);
         if(user!=null){
-           // chatrooms=getUserChatrooms();
+            chatrooms=new ArrayList<>();
+           getUserChatrooms();
 
         }
 
-
-       layout=findViewById(R.id.chatroomListView);
-        chatrooms=new ArrayList<>();
-        getUserChatrooms();
         if(chatrooms.size()==0){
             chatrooms.add("Sie haben noch keine Chats!");
         }
@@ -59,15 +58,10 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ChatActivity.this, CreateChatroomActivity.class));
-                    //TODO addChatRoom
                 }
                 }
         );
 
-       // ArrayList<String> values=new ArrayList<>();
-       // values.add("Chatroom hallo");
-       // values.add("chatroom2");
-        //"Chatroom1", "Chatroom2", "Chatroom3", "Chatroom4", "Chatroom5"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, chatrooms);
@@ -76,7 +70,9 @@ public class ChatActivity extends AppCompatActivity {
     layout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //TODO openChat
+        TextView textView = (TextView) view.findViewById(android.R.id.text1);
+        String chatName = textView.getText().toString();
+        startActivity(new Intent(ChatActivity.this, ChatMessagesActivity.class).putExtra("chatName", chatName));
 
     }
 });
@@ -112,14 +108,19 @@ public class ChatActivity extends AppCompatActivity {
        // });
 
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        getUserChatrooms();
+    }
 
-    private ArrayList<String> getUserChatrooms() {
+    private void getUserChatrooms() {
 
         Task<QuerySnapshot> ref=db.collection("chatrooms").whereEqualTo("userId", user).get().
                 addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        ArrayList<String> chatrooms=new ArrayList<>();
+
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d("TAG", document.getId() + " => " + document.getData());
@@ -130,7 +131,7 @@ public class ChatActivity extends AppCompatActivity {
                         }
                     }
                 });
-        return chatrooms;
+
     }
 
 

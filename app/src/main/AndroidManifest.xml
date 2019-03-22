@@ -137,6 +137,14 @@
                 android:value="dhbw.familymanager.familymanager.MainActivity" />
         </activity>
         <activity
+            android:name=".chat.ChatMessagesActivity"
+            android:label="Chat"
+            android:parentActivityName=".chat.ChatActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="dhbw.familymanager.familymanager.MainActivity" />
+        </activity>
+        <activity
             android:name="calendar.EditEventActivity"
             android:label="EditEvent"
             android:parentActivityName=".calendar.EventDetailsActivity">
