@@ -55,6 +55,7 @@ public class ChatActivity extends AppCompatActivity {
         }
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, chatrooms);
+        adapter.notifyDataSetChanged();
         layout.setAdapter(adapter);
         addChatroomButton=(View)findViewById(R.id.addChatroomButton);
         addChatroomButton.setOnClickListener(new View.OnClickListener() {

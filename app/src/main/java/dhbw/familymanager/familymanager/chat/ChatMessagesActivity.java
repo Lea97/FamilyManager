@@ -23,4 +23,10 @@ public class ChatMessagesActivity extends AppCompatActivity {
 
 
     }
+    public void sendMessage(){
+        //TODO implement
+    }
+    public void displayMessages(){
+        //TODO implement
+    }
 }
