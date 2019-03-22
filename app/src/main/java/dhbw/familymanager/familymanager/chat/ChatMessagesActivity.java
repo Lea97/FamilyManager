@@ -18,11 +18,6 @@ public class ChatMessagesActivity extends AppCompatActivity {
         chatName=getIntent().getStringExtra("chatName");
         setTitle(chatName);
         setContentView(R.layout.chat_messages);
-        TextView chatNameView=findViewById(R.id.chatName);
-        chatNameView.setText(chatName);
-
-
-
 
 
 

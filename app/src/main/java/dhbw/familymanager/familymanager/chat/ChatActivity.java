@@ -53,6 +53,9 @@ public class ChatActivity extends AppCompatActivity {
         if(chatrooms.size()==0){
             chatrooms.add("Sie haben noch keine Chats!");
         }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, chatrooms);
+        layout.setAdapter(adapter);
         addChatroomButton=(View)findViewById(R.id.addChatroomButton);
         addChatroomButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,9 +66,7 @@ public class ChatActivity extends AppCompatActivity {
         );
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, chatrooms);
-        layout.setAdapter(adapter);
+
 
     layout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
     @Override
