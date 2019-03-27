@@ -29,13 +29,15 @@ import dhbw.familymanager.familymanager.R;
 import dhbw.familymanager.familymanager.model.ChatMessage;
 
 public class ChatActivity extends AppCompatActivity {
-    private FirebaseListAdapter<ChatMessage> adapter;
+    private FirebaseListAdapter<ChatMessage> fListAdapter;
     private FloatingActionButton createRoom;
     private ListView layout;
     private FirebaseFirestore db;
     private String user;
     private ArrayList<String> chatrooms;
     private View addChatroomButton;
+    private ArrayAdapter<String> arrayAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,20 +46,24 @@ public class ChatActivity extends AppCompatActivity {
         user=FirebaseAuth.getInstance().getCurrentUser().getUid();
         db=FirebaseFirestore.getInstance();
         layout=findViewById(R.id.chatroomListView);
-        if(user!=null){
-            chatrooms=new ArrayList<>();
-           getUserChatrooms();
+        chatrooms=new ArrayList<>();
+        arrayAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, chatrooms);
 
+        if(user!=null){
+            getUserChatrooms();
         }
+
 
         if(chatrooms.size()==0){
             chatrooms.add("Sie haben noch keine Chats!");
+            arrayAdapter.notifyDataSetChanged();
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, chatrooms);
 
-        layout.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+
+
+        layout.setAdapter(arrayAdapter);
+
         addChatroomButton=(View)findViewById(R.id.addChatroomButton);
         addChatroomButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,11 +121,11 @@ public class ChatActivity extends AppCompatActivity {
 
     private void getUserChatrooms() {
 
-        Task<QuerySnapshot> ref=db.collection("chatrooms").whereEqualTo("userId", user).get().
+        final Task<QuerySnapshot> ref=db.collection("chatrooms").whereEqualTo("userId", user).get().
                 addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
+                            chatrooms.clear();
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d("TAG", document.getId() + " => " + document.getData());
@@ -128,6 +134,9 @@ public class ChatActivity extends AppCompatActivity {
                         } else {
                             Log.d("TAG", "Error getting documents: ", task.getException());
                         }
+                        arrayAdapter.notifyDataSetChanged();
+                        //layout.refreshDrawableState();
+                        //layout.invalidate();
                     }
                 });
 
@@ -137,7 +146,7 @@ public class ChatActivity extends AppCompatActivity {
     private void displayChatMessages() {
         ListView listOfMessages = (ListView)findViewById(R.id.message);
 
-        adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
+        fListAdapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
                 R.layout.message, FirebaseDatabase.getInstance().getReference()) {
             @Override
             protected void populateView(View v, ChatMessage model, int position) {
@@ -156,7 +165,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         };
 
-        listOfMessages.setAdapter(adapter);
+        listOfMessages.setAdapter(fListAdapter);
     }
 
 
