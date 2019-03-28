@@ -10,8 +10,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +23,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -158,10 +164,10 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(intent);
                 setValues();
                 break;
-           // case R.id.delete_profile:
+           case R.id.delete_profile:
                 //TODO muss mit Passwort bestätigt werden
-            //    showAlertDialog();
-            //    break;
+               showAlertDialog();
+               break;
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -174,20 +180,22 @@ public class ProfileActivity extends AppCompatActivity {
         alertDialogBuilder.setMessage("Wollen Sie wirklich Ihr Profil löschen? Dies kann nicht rückgängig gemacht werden.");
         alertDialogBuilder.setCancelable(true);
 
-        alertDialogBuilder.setPositiveButton(
-                "Löschen",
-                new DialogInterface.OnClickListener() {
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.dialog_delete_profile, null);
+        alertDialogBuilder.setView(dialogView)
+                .setPositiveButton(R.string.delete_button, new DialogInterface.OnClickListener() {
+                    @Override
                     public void onClick(DialogInterface dialog, int id) {
+                        EditText passwordField = (EditText) dialogView.findViewById(R.id.passwordForDelete);
+                        String password = passwordField.getText().toString();
                         dialog.cancel();
-                        deleteProfile();
+                        deleteProfile(password);
                         MainActivity.logoutUser();
                         finish();
                     }
-                });
+                })
 
-        alertDialogBuilder.setNegativeButton(
-                "Abbrechen",
-                new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancle_button, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
@@ -197,10 +205,18 @@ public class ProfileActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void deleteProfile() {
-        deleteFromFamily();
-        db.collection("users").document(auth.getCurrentUser().getUid()).delete();
-        auth.getCurrentUser().delete();
+    private void deleteProfile(String password) {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), password);
+        user.reauthenticateAndRetrieveData(credential).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                auth.getCurrentUser().delete();
+                deleteFromFamily();
+                db.collection("users").document(auth.getCurrentUser().getUid()).delete();
+                finish();
+            }
+        });
     }
 
     private void deleteFromFamily() {

@@ -31,11 +31,13 @@
     <string name="profile_namefield">Name</string>
     <string name="profile_emailfield">E-Mail</string>
     <string name="profile_birthfield">Geburtstag</string>
-    <string name="profile_numberfield">Telefonnummer</string>
+    <string name="profile_numberfield">Tel. Nummer</string>
     <string name="add_family_name">Name der Familie</string>
     <string name="add_family_members">E-Mail Adressen der Mitglieder (getrennt mit Komma)</string>
     <string name="choose_date">Datum wählen</string>
     <string name="save_button">Speicheren</string>
     <string name="choose_button">Auswählen</string>
+    <string name="password">Passwort</string>
+    <string name="delete_button">Löschen</string>
 
 </resources>
