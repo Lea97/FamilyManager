@@ -39,5 +39,6 @@
     <string name="choose_button">Auswählen</string>
     <string name="password">Passwort</string>
     <string name="delete_button">Löschen</string>
+    <string name="logout_successful">Du wurdest erfolgreich ausgelogt.</string>
 
 </resources>

@@ -170,7 +170,6 @@ public class ProfileActivity extends AppCompatActivity {
                 setValues();
                 break;
            case R.id.delete_profile:
-                //TODO muss mit Passwort bestätigt werden
                showAlertDialog();
                break;
             case android.R.id.home:

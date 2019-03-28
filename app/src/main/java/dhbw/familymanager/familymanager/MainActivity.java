@@ -156,7 +156,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void onClick(View view) {
         switch (view.getId()) {
-
         case R.id.profilButton:
             startActivity(new Intent(MainActivity.this, ProfileActivity.class));
             break;
@@ -175,33 +174,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         case R.id.logoutButton:
             user = null;
             showLoginDialog();
+            Toast.makeText(MainActivity.this, R.string.logout_successful, Toast.LENGTH_LONG).show();
             break;
-
         case R.id.memberButton:
             startActivity(new Intent(MainActivity.this, ShowMemberActivity.class));
             break;
-
-            case R.id.chat:
-                startActivity(new Intent(MainActivity.this, ChatActivity.class));
-                break;
-
-
+        case R.id.chat:
+            startActivity(new Intent(MainActivity.this, ChatActivity.class));
+            break;
         }
-    }
-
-    private void logout() {
-        AuthUI.getInstance().signOut(this)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(MainActivity.this,
-                                "You have been signed out.",
-                                Toast.LENGTH_LONG)
-                                .show();
-                        // Close activity
-                        finish();
-                    }
-                });
     }
 
     public void setFamilies(){
@@ -257,9 +238,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onNothingSelected(AdapterView<?> adapterView) {}
             });
         }
-    }
-
-    private void selectItem() {
     }
 
     private void setFamily(String family)
