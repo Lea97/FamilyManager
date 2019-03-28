@@ -14,12 +14,14 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
@@ -60,6 +62,9 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseUser firebaseUser;
     private FirebaseAuth auth;
+    private Boolean deleted = false;
+    private AlertDialog alertDialog;
+    private EditText passwordField;
 
     @Override
     protected void onPostResume() {
@@ -176,45 +181,65 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void showAlertDialog(){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("Wollen Sie wirklich Ihr Profil löschen? Dies kann nicht rückgängig gemacht werden.");
         alertDialogBuilder.setCancelable(true);
 
         LayoutInflater inflater = this.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.dialog_delete_profile, null);
         alertDialogBuilder.setView(dialogView)
-                .setPositiveButton(R.string.delete_button, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        EditText passwordField = (EditText) dialogView.findViewById(R.id.passwordForDelete);
-                        String password = passwordField.getText().toString();
-                        dialog.cancel();
-                        deleteProfile(password);
-                        MainActivity.logoutUser();
-                        finish();
-                    }
-                })
+                .setPositiveButton(R.string.delete_button, null)
 
                 .setNegativeButton(R.string.cancle_button, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
+                       dialog.cancel();
                     }
                 });
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog = alertDialogBuilder.create();
+
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+
+                Button button = ((AlertDialog) alertDialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View view) {
+                        passwordField = (EditText) dialogView.findViewById(R.id.passwordForDelete);
+                        String password = passwordField.getText().toString();
+                        deleteProfile(password);
+                    }
+                });
+            }
+        });
+
         alertDialog.show();
     }
 
     private void deleteProfile(String password) {
+        deleted = false;
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), password);
-        user.reauthenticateAndRetrieveData(credential).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+        user.reauthenticateAndRetrieveData(credential)
+                .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
                 auth.getCurrentUser().delete();
+                deleted = true;
                 deleteFromFamily();
                 db.collection("users").document(auth.getCurrentUser().getUid()).delete();
+                alertDialog.cancel();
                 finish();
+                MainActivity.logoutUser();
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                passwordField.setError("Passwort ist falsch");
             }
         });
     }
