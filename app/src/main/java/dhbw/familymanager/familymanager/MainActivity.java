@@ -95,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     AuthUI.getInstance()
                             .createSignInIntentBuilder()
                             .setAvailableProviders(providers)
+                            .setTheme(R.style.Theme_AppCompat_Light)
                             .build(),
                     RC_SIGN_IN);
         }
@@ -173,8 +174,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             break;
         case R.id.logoutButton:
             user = null;
-            showLoginDialog();
-            Toast.makeText(MainActivity.this, R.string.logout_successful, Toast.LENGTH_LONG).show();
+            AuthUI.getInstance().signOut(this).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    showLoginDialog();
+                    Toast.makeText(MainActivity.this, R.string.logout_successful, Toast.LENGTH_LONG).show();
+                }
+            });
             break;
         case R.id.memberButton:
             startActivity(new Intent(MainActivity.this, ShowMemberActivity.class));
