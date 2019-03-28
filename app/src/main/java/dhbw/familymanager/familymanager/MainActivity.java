@@ -173,7 +173,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(MainActivity.this, AddFamilyActivity.class));
             break;
         case R.id.logoutButton:
-            logout();
+            user = null;
+            showLoginDialog();
             break;
 
         case R.id.memberButton:
