@@ -39,9 +39,9 @@
         <TableRow>
 
             <TextView
-                style="@style/HeadlineTextViewsStyle"
                 android:id="@+id/memberLable"
-                android:layout_width="137dp"
+                style="@style/HeadlineTextViewsStyle"
+                android:layout_width="156dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="15dp"
                 android:gravity="center|start"
@@ -56,6 +56,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center|start"
                 android:minLines="4"
+                android:inputType="textEmailAddress"
                 android:textSize="14sp" />
 
         </TableRow>

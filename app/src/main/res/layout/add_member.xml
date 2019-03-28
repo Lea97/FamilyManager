@@ -49,6 +49,7 @@
         android:layout_marginStart="-217dp"
         android:layout_marginBottom="260dp"
         android:layout_toEndOf="@+id/addMember"
+        android:inputType="textEmailAddress"
         android:text=""
         android:textSize="14sp"
         tools:layout_editor_absoluteX="112dp"

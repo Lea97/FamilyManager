@@ -53,7 +53,13 @@ public class MembersAdapter extends BaseAdapter {
             view = inflter.inflate(R.layout.list_item_memberlist, null);
             TextView member = (TextView) view.findViewById(R.id.textViewMember);
             ImageView icon = (ImageView) view.findViewById(R.id.icon);
-            member.setText(users[i].getEmail());
+            if (users[i].getName() != null)
+            {
+                member.setText(users[i].getName());
+            }
+            else {
+                member.setText(users[i].getEmail());
+            }
             StorageReference storageReference = storage.getReference(users[i].getPicturePath());
             Glide.with(activity).load(storageReference).into(icon);
             return view;

@@ -49,6 +49,7 @@ public class AddPictureActivity extends AppCompatActivity implements View.OnClic
         family = MainActivity.getFamily();
         Intent i = getIntent();
         folderName = i.getStringExtra("albumName");
+        photos = new ArrayList<String>();
         setContentView(R.layout.add_photo);
         findViewById(R.id.addPhoto).setOnClickListener(this);
         findViewById(R.id.cancleAddPhoto).setOnClickListener(this);
