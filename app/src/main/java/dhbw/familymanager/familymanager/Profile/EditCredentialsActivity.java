@@ -111,14 +111,14 @@ public class EditCredentialsActivity extends AppCompatActivity implements View.O
         user.reauthenticateAndRetrieveData(credential).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
+                if(!newPasswordField.getText().toString().isEmpty())
+                {
+                    user.updatePassword(newPasswordField.getText().toString());
+                }
                 if (!oldEmail.equals(emailField.getText().toString())) {
                     user.updateEmail(emailField.getText().toString());
                     changeEmailInDB();
                     ProfileActivity.refreshValues();
-                }
-                if(!newPasswordField.getText().toString().isEmpty())
-                {
-                    user.updatePassword(newPasswordField.getText().toString());
                 }
                 finish();
             }

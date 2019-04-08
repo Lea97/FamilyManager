@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +33,7 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -84,18 +87,33 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void showFileChooser() {
-
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-
         try {
-            startActivityForResult(
-                    Intent.createChooser(intent, "Select a Picture to Upload"),
-                    PICK_IMAGE_REQUEST);
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(this, "Please install a File Manager.",
-                    Toast.LENGTH_SHORT).show();
+            //TODO Bug wenn man ein Bild von der Kamera aus hochladen möchte
+            File imageStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "FamilyManagerFotos");
+            if (!imageStorageDir.exists()) {
+                imageStorageDir.mkdirs();
+            }
+
+            File file = new File(
+                     imageStorageDir + File.separator + "IMG_"
+                            + String.valueOf(System.currentTimeMillis())
+                            + ".jpg");
+
+            filePath = Uri.fromFile(file);
+            final Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, filePath);
+            Intent i = new Intent(Intent.ACTION_GET_CONTENT);
+            i.addCategory(Intent.CATEGORY_OPENABLE);
+            i.setType("image/*");
+
+            Intent chooserIntent = Intent.createChooser(i, "Wähle ein Bild zu hochladen aus");
+
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Parcelable[] { captureIntent });
+            startActivityForResult(chooserIntent, PICK_IMAGE_REQUEST);
+        }
+        catch(Exception e){
+                Toast.makeText(getBaseContext(), "Exception:"+e,
+                        Toast.LENGTH_LONG).show();
         }
     }
 
@@ -237,8 +255,8 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //TODO Passwort ändern geht noch nicht und eingegeben E-Mail muss validiert werden
-        //getMenuInflater().inflate(R.menu.edit_profil_menu, menu);
+        //TODO E-Mail muss validiert werden
+        getMenuInflater().inflate(R.menu.edit_profil_menu, menu);
         return true;
     }
 
