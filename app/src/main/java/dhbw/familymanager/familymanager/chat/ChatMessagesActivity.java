@@ -52,62 +52,72 @@ public class ChatMessagesActivity extends AppCompatActivity {
         FirebaseFirestore reference1, reference2;
         String user=FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseFirestore db=FirebaseFirestore.getInstance();
-        String chatroomId;
+        String chatroomId, chatName;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-                setContentView(R.layout.chat_messages);
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.chat_messages);
 
-                layout = (LinearLayout) findViewById(R.id.layout1);
-                layout_2 = (RelativeLayout)findViewById(R.id.layout2);
-                sendButton = (ImageView)findViewById(R.id.sendButton);
-                messageArea = (EditText)findViewById(R.id.messageArea);
-                scrollView = (ScrollView)findViewById(R.id.scrollView);
-                Intent intent=getIntent();
-                String chatName=intent.getStringExtra("chatName");
-                System.out.println(chatName);
+            layout = (LinearLayout) findViewById(R.id.layout1);
+            layout_2 = (RelativeLayout) findViewById(R.id.layout2);
+            sendButton = (ImageView) findViewById(R.id.sendButton);
+            messageArea = (EditText) findViewById(R.id.messageArea);
+            scrollView = (ScrollView) findViewById(R.id.scrollView);
+            Intent intent = getIntent();
+            String chatName = intent.getStringExtra("chatName");
+            System.out.println(chatName);
+            sendButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String messageText = messageArea.getText().toString();
+
+                    if(!messageText.equals("")){
+                        ChatMessage message=new ChatMessage();
+                        message.setMessageText(messageText);
+                        message.setSenderId(user);
+                        addMessageBox(messageText, 1);
+                        //reference1.add(message);
 
 
-                db.collection("chatrooms").whereEqualTo("chatName", chatName).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                       // chatroomId=task.getResult().getDocuments().get(0).toObject(ChatRoom.class).getChatId();
+                        messageArea.setText("");
                     }
-                });
-System.out.println(chatroomId);
+                }
+            });
 
-        final CollectionReference reference1=FirebaseFirestore.getInstance().collection("chatrooms").document(chatroomId).collection("messages");
-        reference1.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                addMessageBox(messageArea.getText().toString(), 1);
-            }
-        });
 
-                //reference1 = new FirebaseFirestore("https://androidchatapp-76776.firebaseio.com/messages/" + UserDetails.username + "_" + UserDetails.chatWith);
-                //reference2 = new Firebase("https://androidchatapp-76776.firebaseio.com/messages/" + UserDetails.chatWith + "_" + UserDetails.username);
+            //setUp();
 
-                sendButton.setOnClickListener(new View.OnClickListener() {
+        }
+
+
+                private void setUp(){
+                    db.collection("chatrooms").whereEqualTo("chatName", chatName).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
-                        public void onClick(View v) {
-                                String messageText = messageArea.getText().toString();
-
-                                if(!messageText.equals("")){
-                                    ChatMessage message=new ChatMessage();
-                                    message.setMessageText(messageText);
-                                    message.setSenderId(user);
-                                    reference1.add(message);
-
-
-                                        messageArea.setText("");
-                                }
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            // chatroomId=task.getResult().getDocuments().get(0).toObject(ChatRoom.class).getChatId();
                         }
-                });
+                    });
+                    System.out.println(chatroomId);
 
-                //final DocumentReference docRef = FirebaseFirestore.getInstance().collection("chatrooms").document("");
+                    final CollectionReference reference1=FirebaseFirestore.getInstance().collection("chatrooms").document(chatroomId).collection("messages");
+                    reference1.addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                            addMessageBox(messageArea.getText().toString(), 1);
+                        }
+                    });
+
+                    //reference1 = new FirebaseFirestore("https://androidchatapp-76776.firebaseio.com/messages/" + UserDetails.username + "_" + UserDetails.chatWith);
+                    //reference2 = new Firebase("https://androidchatapp-76776.firebaseio.com/messages/" + UserDetails.chatWith + "_" + UserDetails.username);
+
+
+                    //final DocumentReference docRef = FirebaseFirestore.getInstance().collection("chatrooms").document("");
 
                 }
+
+
+
 
 
 
