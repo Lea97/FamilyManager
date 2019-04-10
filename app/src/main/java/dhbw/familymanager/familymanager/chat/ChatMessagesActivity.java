@@ -1,94 +1,135 @@
 package dhbw.familymanager.familymanager.chat;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.Transaction;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.HashMap;
+import java.util.Map;
 
-import dhbw.familymanager.familymanager.MainActivity;
 import dhbw.familymanager.familymanager.R;
 import dhbw.familymanager.familymanager.model.ChatMessage;
 import dhbw.familymanager.familymanager.model.ChatRoom;
-import dhbw.familymanager.familymanager.model.Family;
 
 public class ChatMessagesActivity extends AppCompatActivity {
-    private String chatName;
-    private EditText messageSent;
-    private ImageButton sendMessage;
-    private String family;
-    private FirebaseUser user;
-    private List<String> members;
-    private String chatId;
+        LinearLayout layout;
+        RelativeLayout layout_2;
+        ImageView sendButton;
+        EditText messageArea;
+        ScrollView scrollView;
+        FirebaseFirestore reference1, reference2;
+        String user=FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseFirestore db=FirebaseFirestore.getInstance();
+        String chatroomId;
 
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        user= FirebaseAuth.getInstance().getCurrentUser();
-        family=MainActivity.getFamily();
-        Task<QuerySnapshot> querySnapshotTask=FirebaseFirestore.getInstance().collection("chatrooms").whereEqualTo("chatName", chatName).get();
-        ChatRoom current=querySnapshotTask.getResult().toObjects(ChatRoom.class).get(0);
-        chatId=current.getChatId();
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                setContentView(R.layout.chat_messages);
 
-        chatName=getIntent().getStringExtra("chatName");
-        setTitle(chatName);
-        setContentView(R.layout.chat_messages);
-        messageSent=findViewById(R.id.messageSent);
-        sendMessage=findViewById(R.id.send_message);
-
-
-
-
-    }
-    public void sendMessage(String message){
-        getFamilyMembers();
-        for(String s:members){
-            System.out.println(s);
-        }
-        Random r=new Random();
-        ChatMessage messageObject=new ChatMessage();
-        messageObject.setMessageId(String.valueOf(r.nextLong()));
-        messageObject.setMessageText(messageSent.getText().toString());
-        messageObject.setSenderId(user.getUid());
-        FirebaseFirestore.getInstance().collection("chatrooms").document(chatId).collection("messages").add(ChatMessage.class);
+                layout = (LinearLayout) findViewById(R.id.layout1);
+                layout_2 = (RelativeLayout)findViewById(R.id.layout2);
+                sendButton = (ImageView)findViewById(R.id.sendButton);
+                messageArea = (EditText)findViewById(R.id.messageArea);
+                scrollView = (ScrollView)findViewById(R.id.scrollView);
+                Intent intent=getIntent();
+                String chatName=intent.getStringExtra("chatName");
+                System.out.println(chatName);
 
 
-    }
-
-    private void getFamilyMembers() {
-
-
-        Task<DocumentSnapshot> result=FirebaseFirestore.getInstance().collection("families").document(family).get().addOnCompleteListener(
-                new OnCompleteListener<DocumentSnapshot>() {
+                db.collection("chatrooms").whereEqualTo("chatName", chatName).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        members= (List<String>) task.getResult().get("members");
-
-
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                       // chatroomId=task.getResult().getDocuments().get(0).toObject(ChatRoom.class).getChatId();
                     }
-                }
-        );
-    }
+                });
+System.out.println(chatroomId);
 
-    public void displayMessages(){
-        //TODO implement
-    }
+        final CollectionReference reference1=FirebaseFirestore.getInstance().collection("chatrooms").document(chatroomId).collection("messages");
+        reference1.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+                addMessageBox(messageArea.getText().toString(), 1);
+            }
+        });
+
+                //reference1 = new FirebaseFirestore("https://androidchatapp-76776.firebaseio.com/messages/" + UserDetails.username + "_" + UserDetails.chatWith);
+                //reference2 = new Firebase("https://androidchatapp-76776.firebaseio.com/messages/" + UserDetails.chatWith + "_" + UserDetails.username);
+
+                sendButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                                String messageText = messageArea.getText().toString();
+
+                                if(!messageText.equals("")){
+                                    ChatMessage message=new ChatMessage();
+                                    message.setMessageText(messageText);
+                                    message.setSenderId(user);
+                                    reference1.add(message);
+
+
+                                        messageArea.setText("");
+                                }
+                        }
+                });
+
+                //final DocumentReference docRef = FirebaseFirestore.getInstance().collection("chatrooms").document("");
+
+                }
+
+
+
+
+
+        public void addMessageBox(String message, int type){
+                TextView textView = new TextView(ChatMessagesActivity.this);
+                textView.setText(message);
+
+                LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                lp2.weight = 1.0f;
+
+                if(type == 1) {
+                        lp2.gravity = Gravity.LEFT;
+                        textView.setBackgroundResource(R.drawable.bubble_in);
+                }
+                else{
+                        lp2.gravity = Gravity.RIGHT;
+                        textView.setBackgroundResource(R.drawable.bubble_out);
+                }
+                textView.setLayoutParams(lp2);
+                layout.addView(textView);
+                scrollView.fullScroll(View.FOCUS_DOWN);
+        }
 }
