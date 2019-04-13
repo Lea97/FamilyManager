@@ -1,9 +1,11 @@
 package dhbw.familymanager.familymanager.chat;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -38,6 +40,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.ref.Reference;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,13 +53,14 @@ import dhbw.familymanager.familymanager.model.ChatRoom;
 public class ChatMessagesActivity extends AppCompatActivity {
         LinearLayout layout;
         RelativeLayout layout_2;
-        ImageView sendButton;
-        EditText messageArea;
-        ScrollView scrollView;
-        FirebaseFirestore reference1, reference2;
-        String user=FirebaseAuth.getInstance().getCurrentUser().getUid();
-        FirebaseFirestore db=FirebaseFirestore.getInstance();
-        String chatroomId, chatName;
+       private ImageView sendButton;
+       private EditText messageArea;
+       private  ScrollView scrollView;
+
+        private String user=FirebaseAuth.getInstance().getCurrentUser().getUid();
+        private FirebaseFirestore db=FirebaseFirestore.getInstance();
+       private String chatroomId, chatName;
+       private long timestamp=0;
     List<ChatMessage> messages;
 
     @Override
@@ -82,6 +87,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
                         ChatMessage message=new ChatMessage();
                         message.setMessageText(messageText);
                         message.setSenderId(user);
+                        message.setTimestamp(new Date().getTime());
                         addMessageBox(messageText, 2);
                         db.collection("chatrooms").document(chatroomId).collection("messages").add(message);
 
@@ -101,12 +107,20 @@ public class ChatMessagesActivity extends AppCompatActivity {
 
     private void readChatMessages() {
             db.collection("chatrooms").document(chatroomId).collection("messages").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
+
+                    if(!task.getResult().isEmpty())
                     messages=task.getResult().toObjects(ChatMessage.class);
+                    messages.sort((e1, e2) -> new Long(e1.getTimestamp()).compareTo(new Long(e2.getTimestamp())));
+
+
 
 
                     for(ChatMessage message:messages){
+                        if(message.getTimestamp()>timestamp){
+
 
                         if(message.getSenderId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
                             addMessageBox(message.getMessageText(), 2);
@@ -114,7 +128,8 @@ public class ChatMessagesActivity extends AppCompatActivity {
                         }else{
                             addMessageBox(message.getMessageText(), 1);
                         }
-                    }
+                    }}
+                    timestamp=messages.get(messages.size()-1).getTimestamp();
                 }
             });
 
@@ -157,7 +172,8 @@ public class ChatMessagesActivity extends AppCompatActivity {
             @Override
             public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
 
-                addMessageBox(messageArea.getText().toString(), 1);
+                //addMessageBox(messageArea.getText().toString(), 1);
+                readChatMessages();
             }
         });
         readChatMessages();
