@@ -37,7 +37,9 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.lang.ref.Reference;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import dhbw.familymanager.familymanager.R;
@@ -53,9 +55,10 @@ public class ChatMessagesActivity extends AppCompatActivity {
         FirebaseFirestore reference1, reference2;
         String user=FirebaseAuth.getInstance().getCurrentUser().getUid();
         FirebaseFirestore db=FirebaseFirestore.getInstance();
-        String chatroomId="", chatName;
+        String chatroomId, chatName;
+    List<ChatMessage> messages;
 
-        @Override
+    @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.chat_messages);
@@ -68,6 +71,8 @@ public class ChatMessagesActivity extends AppCompatActivity {
             Intent intent = getIntent();
             chatName = intent.getStringExtra("chatName");
             System.out.println(chatName);
+            setUp();
+           // readChatMessages();
             sendButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -77,7 +82,10 @@ public class ChatMessagesActivity extends AppCompatActivity {
                         ChatMessage message=new ChatMessage();
                         message.setMessageText(messageText);
                         message.setSenderId(user);
-                        addMessageBox(messageText, 1);
+                        addMessageBox(messageText, 2);
+                        db.collection("chatrooms").document(chatroomId).collection("messages").add(message);
+
+
                         //reference1.add(message);
 
 
@@ -87,32 +95,52 @@ public class ChatMessagesActivity extends AppCompatActivity {
             });
 
 
-            setUp();
+
 
         }
 
+    private void readChatMessages() {
+            db.collection("chatrooms").document(chatroomId).collection("messages").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    messages=task.getResult().toObjects(ChatMessage.class);
 
-                private void setUp(){
+
+                    for(ChatMessage message:messages){
+
+                        if(message.getSenderId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                            addMessageBox(message.getMessageText(), 2);
+
+                        }else{
+                            addMessageBox(message.getMessageText(), 1);
+                        }
+                    }
+                }
+            });
+
+                }
+
+
+
+
+    private void setUp(){
             System.out.println(chatName);
                     db.collection("chatrooms").whereEqualTo("chatName", chatName).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             System.out.println(task.getResult().getDocuments().size());
                             //System.out.println(task.getResult().getDocuments().get(0).getId());
-                            if(task.isSuccessful()&&task.getResult().getDocuments().size()==1){
+                            if(task.isSuccessful()){
                             chatroomId=task.getResult().getDocuments().get(0).getId();}
+                            getChatroomId();
+
                             //ChatRoom room=task.getResult().toObjects(ChatRoom.class).get(0);
                            // chatroomId= String.valueOf(room.getChatId());
                         }
                     });
                     System.out.println(chatroomId);
 
-                    FirebaseFirestore.getInstance().collection("chatrooms").document(chatroomId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                        @Override
-                        public void onEvent(@javax.annotation.Nullable DocumentSnapshot documentSnapshot, @javax.annotation.Nullable FirebaseFirestoreException e) {
-                            addMessageBox(messageArea.getText().toString(), 1);
-                        }
-                    });
+
 
 
                     //reference1 = new FirebaseFirestore("https://androidchatapp-76776.firebaseio.com/messages/" + UserDetails.username + "_" + UserDetails.chatWith);
@@ -123,14 +151,20 @@ public class ChatMessagesActivity extends AppCompatActivity {
 
                 }
 
+    private void getChatroomId() {
+        FirebaseFirestore db=FirebaseFirestore.getInstance();
+        db.collection("chatrooms").document(chatroomId).collection("messages").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
+
+                addMessageBox(messageArea.getText().toString(), 1);
+            }
+        });
+        readChatMessages();
+    }
 
 
-
-
-
-
-
-        public void addMessageBox(String message, int type){
+    public void addMessageBox(String message, int type){
                 TextView textView = new TextView(ChatMessagesActivity.this);
                 textView.setText(message);
 
