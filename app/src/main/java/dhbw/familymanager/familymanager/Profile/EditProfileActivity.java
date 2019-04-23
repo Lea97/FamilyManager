@@ -1,8 +1,10 @@
 package dhbw.familymanager.familymanager.Profile;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +12,8 @@ import android.os.Environment;
 import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,7 +41,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.UUID;
 
@@ -58,6 +61,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private String picturePath;
     private Boolean loadFile = false;
     private Calendar cal;
+    private final int REQUEST_WRITE_STORAGE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,12 +90,43 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         fragment.show(getFragmentManager(), "datePicker");
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode)
+        {
+            case REQUEST_WRITE_STORAGE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    createFolder();
+                } else
+                {
+                    Toast.makeText(this, "Die App hat keine Erlaubnis auf deine Dateien zuzugreifen. Willst du dieses Recht erlauben? ", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
+
+    public void createFolder() {
+        final File imageStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "FamilyManager");
+        if (!imageStorageDir.exists()) {
+            Toast.makeText(this, "Neuer Ordner wird erstellt...", Toast.LENGTH_SHORT).show();
+            boolean rv = imageStorageDir.mkdir();
+            Toast.makeText(this, "Ordner" + ( rv ? "wurde erstellt" : "konnte nicht erstellt werden"), Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void showFileChooser() {
+        final File imageStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "FamilyManager");
         try {
-            //TODO Bug wenn man ein Bild von der Kamera aus hochladen möchte
-            File imageStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "FamilyManagerFotos");
-            if (!imageStorageDir.exists()) {
-                imageStorageDir.mkdirs();
+
+            boolean hasPermission = (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+
+            if (!hasPermission) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        REQUEST_WRITE_STORAGE);
             }
 
             File file = new File(
@@ -124,6 +159,9 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                 && data != null && data.getData() != null )
         {
             filePath = data.getData();
+        }
+        if(filePath != null)
+        {
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 mImageView.setImageBitmap(bitmap);
