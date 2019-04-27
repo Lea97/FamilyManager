@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -41,7 +40,6 @@ import java.util.Date;
 import java.util.UUID;
 
 import dhbw.familymanager.familymanager.MainActivity;
-import dhbw.familymanager.familymanager.Profile.EditProfileActivity;
 import dhbw.familymanager.familymanager.R;
 import dhbw.familymanager.familymanager.adapter.GalleryViewAdapter;
 import dhbw.familymanager.familymanager.model.Photo;
@@ -88,7 +86,6 @@ public class FolderScreenActivity extends AppCompatActivity {
             getPhotos();
         }
     }
-
 
     private void getPhotos() {
         DocumentReference docRef = db.collection("folders").document(family + folderName);
@@ -144,10 +141,7 @@ public class FolderScreenActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case R.id.add_photo:
                 showFileChooser();
-                //TODO Hochladevorgang eines Bildes (nach dem Aussuchen eines Bildes passiert noch nichts)
-                //Intent intent = new Intent(FolderScreenActivity.this, AddPictureActivity.class);
-                //intent.putExtra("albumName", folderName);
-                //startActivity(intent);
+                return true;
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -217,7 +211,6 @@ public class FolderScreenActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -246,66 +239,39 @@ public class FolderScreenActivity extends AppCompatActivity {
         db.collection("photos").document(family + folderName + photoName).set(photo);
     }
 
-    private void setFamilyPhotos(){
-        db = FirebaseFirestore.getInstance();
-        DocumentReference docRef = db.collection("folders").document(family + folderName);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
-                        photos = (ArrayList<String>) document.get("photos");
-                    } else {
-                        Log.d("TAG", "No such document");
-                    }
-                } else {
-                    Log.d("TAG", "get failed with ", task.getException());
-                }
-            }
-        });
-    }
-
     private void addPictureToFolderDB() {
         photos.add(photoName);
         db.collection("folders").document(family+folderName).update("photos", photos);
     }
 
-    private void addFoto() {
-    }
-
     private void uploadImage() {
-
-        if(filePath != null)
-        {
-            final ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("Uploading...");
-            progressDialog.show();
-            StorageReference ref = storageReference.child(photoPath);
-            ref.putFile(filePath)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            progressDialog.dismiss();
-                            Toast.makeText(FolderScreenActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            progressDialog.dismiss();
-                            Toast.makeText(FolderScreenActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
-                                    .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
-                        }
-                    });
-        }
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Uploading...");
+        progressDialog.show();
+        StorageReference ref = storageReference.child(photoPath);
+        ref.putFile(filePath)
+            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    progressDialog.dismiss();
+                    Toast.makeText(FolderScreenActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                    photos.clear();
+                    getPhotos();
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    progressDialog.dismiss();
+                    Toast.makeText(FolderScreenActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            })
+            .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+                    progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                }
+            });
     }
 }
