@@ -2,11 +2,17 @@ package dhbw.familymanager.familymanager.photoGallery;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -23,10 +29,13 @@ public class CreateFolderActivity extends AppCompatActivity implements View.OnCl
 
     private String family;
     private ArrayList<String> folders;
+    private  FirebaseFirestore db;
+    private String newFolderName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        db = FirebaseFirestore.getInstance();
         family = MainActivity.getFamily();
         Intent i = getIntent();
         String[] folder = i.getStringArrayExtra("folders");
@@ -37,9 +46,7 @@ public class CreateFolderActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void createFolder() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        TextView nameField = (TextView) findViewById(R.id.newFolderName);
-        String newFolderName = nameField.getText().toString();
+
         folders.add(newFolderName);
         Map<String, Object> gallery = new HashMap<>();
         gallery.put("folderName", folders);
@@ -54,13 +61,44 @@ public class CreateFolderActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.createNewFolder:
-                createFolder();
-                PhotoGalleryActivity.updateFolders();
-                finish();
+                TextView nameField = (TextView) findViewById(R.id.newFolderName);
+                newFolderName = nameField.getText().toString();
+                validateIfFolderExist();
                 break;
             case R.id.cancleNewFolder:
                 finish();
                 break;
         }
+    }
+
+    private void validateIfFolderExist() {
+        DocumentReference docRef = db.collection("gallery").document(family);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                        ArrayList<String> foldersInDB = (ArrayList<String>) document.get("folderName");
+                        if (foldersInDB.contains(newFolderName))
+                        {
+                            TextView nameField = findViewById(R.id.newFolderName);
+                            nameField.setError("Ein Ordner mit diesem Namen gibt es bereits.");
+                        }
+                        else {
+                            createFolder();
+                            PhotoGalleryActivity.updateFolders();
+                            finish();
+                        }
+
+                    } else {
+                        Log.d("TAG", "No such document");
+                    }
+                } else {
+                    Log.d("TAG", "get failed with ", task.getException());
+                }
+            }
+        });
     }
 }

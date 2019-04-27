@@ -196,9 +196,11 @@ public class FolderScreenActivity extends AppCompatActivity {
             filePath = Uri.fromFile(file);
             final Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, filePath);
+
             Intent i = new Intent(Intent.ACTION_GET_CONTENT);
             i.addCategory(Intent.CATEGORY_OPENABLE);
             i.setType("image/*");
+            i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
 
             Intent chooserIntent = Intent.createChooser(i, "Wähle ein Bild zu hochladen aus");
 
