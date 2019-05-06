@@ -113,11 +113,12 @@ public class ChatMessagesActivity extends AppCompatActivity {
 
                     if(!task.getResult().isEmpty())
                     messages=task.getResult().toObjects(ChatMessage.class);
+                    if(messages!=null)
                     messages.sort((e1, e2) -> new Long(e1.getTimestamp()).compareTo(new Long(e2.getTimestamp())));
 
 
 
-
+if(messages!=null)
                     for(ChatMessage message:messages){
                         if(message.getTimestamp()>timestamp){
 
@@ -129,6 +130,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
                             addMessageBox(message.getMessageText(), 1);
                         }
                     }}
+                    if(messages!=null)
                     timestamp=messages.get(messages.size()-1).getTimestamp();
                 }
             });
