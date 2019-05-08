@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/lightBlue"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -68,14 +69,22 @@
                 style="@style/SmallButtonStyle"
                 android:layout_width="wrap_content"
                 android:onClick="datePicker"
-                android:text="Start" />
+                android:text="Start"
+                android:padding="10dp"
+                app:backgroundTint="@color/com_facebook_blue"
+                android:textColor="@color/lightBlue"
+
+                />
 
             <Button
                 android:id="@+id/end"
                 style="@style/SmallButtonStyle"
                 android:layout_width="wrap_content"
                 android:onClick="datePicker"
-                android:text="End" />
+                android:text="End"
+                android:padding="10dp"
+                app:backgroundTint="@color/com_facebook_blue"
+                android:textColor="@color/lightBlue"/>
 
         </TableRow>
 
@@ -98,14 +107,18 @@
                 style="@style/NormalButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_marginEnd="15dp"
-                android:text="@string/cancle_button" />
+                android:text="@string/cancle_button"
+                app:backgroundTint="@color/com_facebook_blue"
+                android:textColor="@color/lightBlue"/>
 
 
             <Button
                 android:id="@+id/saveEvent"
                 style="@style/NormalButtonStyle"
                 android:layout_width="wrap_content"
-                android:text="@string/create_button" />
+                android:text="@string/create_button"
+                app:backgroundTint="@color/com_facebook_blue"
+                android:textColor="@color/lightBlue"/>
         </TableRow>
 
     </TableLayout>
