@@ -62,6 +62,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     private Boolean loadFile = false;
     private Calendar cal;
     private final int REQUEST_WRITE_STORAGE = 1;
+    private final int REQUEST_CAMERA = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +105,12 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                     Toast.makeText(this, "Die App hat keine Erlaubnis auf deine Dateien zuzugreifen. Willst du dieses Recht erlauben? ", Toast.LENGTH_LONG).show();
                 }
             }
+            case REQUEST_CAMERA: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
+                    Toast.makeText(this, "Die App hat keine Erlaubnis auf deine Kamera zuzugreifen. Willst du dieses Recht erlauben? ", Toast.LENGTH_LONG).show();
+                }
+            }
         }
     }
 
@@ -123,12 +130,22 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             boolean hasPermission = (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
 
+            boolean hasCameraPermission = (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED);
+
             if (!hasPermission) {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         REQUEST_WRITE_STORAGE);
+                return;
             }
-
+            if (!hasCameraPermission) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.CAMERA},
+                        REQUEST_CAMERA);
+                return;
+            }
+            createFolder();
             File file = new File(
                      imageStorageDir + File.separator + "IMG_"
                             + String.valueOf(System.currentTimeMillis())

@@ -33,10 +33,14 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.vincent.filepicker.Constant;
+import com.vincent.filepicker.activity.ImagePickActivity;
+import com.vincent.filepicker.filter.entity.ImageFile;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import dhbw.familymanager.familymanager.MainActivity;
@@ -51,6 +55,8 @@ public class FolderScreenActivity extends AppCompatActivity {
     private ArrayList<String> photos;
     private static boolean refresh = false;
     private final int REQUEST_WRITE_STORAGE = 1;
+    private final int REQUEST_CAMERA = 2;
+    private List<Uri> filePaths = new ArrayList<Uri>();
     private Uri filePath;
     private final int PICK_IMAGE_REQUEST = 71;
     private String photoName;
@@ -163,6 +169,14 @@ public class FolderScreenActivity extends AppCompatActivity {
                     Toast.makeText(this, "Die App hat keine Erlaubnis auf deine Dateien zuzugreifen. Willst du dieses Recht erlauben? ", Toast.LENGTH_LONG).show();
                 }
             }
+            case REQUEST_CAMERA: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {}
+                else
+                {
+                    Toast.makeText(this, "Die App hat keine Erlaubnis auf deine Kamera zuzugreifen. Willst du dieses Recht erlauben? ", Toast.LENGTH_LONG).show();
+                }
+            }
         }
     }
 
@@ -182,12 +196,22 @@ public class FolderScreenActivity extends AppCompatActivity {
             boolean hasPermission = (ContextCompat.checkSelfPermission(this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
 
+            boolean hasCameraPermission = (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED);
+
             if (!hasPermission) {
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                         REQUEST_WRITE_STORAGE);
+                return;
             }
-
+            if (!hasCameraPermission) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.CAMERA},
+                        REQUEST_CAMERA);
+                return;
+            }
+            createFolder();
             File file = new File(
                     imageStorageDir + File.separator + "IMG_"
                             + String.valueOf(System.currentTimeMillis())
@@ -197,12 +221,12 @@ public class FolderScreenActivity extends AppCompatActivity {
             final Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, filePath);
 
-            Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-            i.addCategory(Intent.CATEGORY_OPENABLE);
-            i.setType("image/*");
-            i.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            Intent albumIntent = new Intent(this, ImagePickActivity.class);
+           // albumIntent.setType("images/*");
+            //albumIntent.putExtra(ImagePickActivity.IS_NEED_CAMERA, true);
+            albumIntent.putExtra(Constant.MAX_NUMBER, 9);
 
-            Intent chooserIntent = Intent.createChooser(i, "Wähle ein Bild zu hochladen aus");
+            Intent chooserIntent = Intent.createChooser(albumIntent, "Wähle ein Bild zum Hochladen aus");
 
             chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Parcelable[] { captureIntent });
             startActivityForResult(chooserIntent, PICK_IMAGE_REQUEST);
@@ -217,14 +241,32 @@ public class FolderScreenActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null )
+                && data != null)
         {
-            filePath = data.getData();
+            ArrayList<ImageFile> list = data.getParcelableArrayListExtra(Constant.RESULT_PICK_IMAGE);
+            if (list != null)
+            {
+                for (ImageFile file: list)
+                {
+                    filePaths.add(Uri.parse("file://" + file.getPath()));
+                }
+                addPhotos();
+            }
+           // filePath = data.getData();
         }
         if(filePath != null)
         {
             addPhoto();
         }
+    }
+
+    private void addPhotos() {
+        for (Uri fileUri: filePaths)
+        {
+            filePath = fileUri;
+            addPhoto();
+        }
+        filePath = null;
     }
 
     private void addPhoto() {

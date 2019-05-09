@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(user != null)
         {
             String mail = user.getEmail();
-            if(mail!= null) {
+            if(!mail.isEmpty()) {
                 Query query = db.collection("families").whereArrayContains("members", mail);
 
                 query.get()

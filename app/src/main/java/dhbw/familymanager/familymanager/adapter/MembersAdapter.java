@@ -22,14 +22,14 @@ public class MembersAdapter extends BaseAdapter {
 
         Context context;
         User users[];
-        LayoutInflater inflter;
+        LayoutInflater inflater;
         Activity activity;
 
         public MembersAdapter(Context applicationContext, User[] useres, Activity activity) {
             this.context = context;
             this.users = useres;
             this.activity = activity;
-            inflter = (LayoutInflater.from(applicationContext));
+            inflater = (LayoutInflater.from(applicationContext));
         }
 
         @Override
@@ -50,7 +50,7 @@ public class MembersAdapter extends BaseAdapter {
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             FirebaseStorage storage = FirebaseStorage.getInstance();
-            view = inflter.inflate(R.layout.list_item_memberlist, null);
+            view = inflater.inflate(R.layout.list_item_memberlist, null);
             TextView member = (TextView) view.findViewById(R.id.textViewMember);
             ImageView icon = (ImageView) view.findViewById(R.id.icon);
             if (users[i].getName() != null)

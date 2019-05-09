@@ -43,6 +43,7 @@ dependencies {
     implementation 'com.github.alamkanak:android-week-view:1.2.6'
     implementation 'com.firebaseui:firebase-ui:1.2.0'
     implementation 'com.android.support:design:27.1.1'
+    implementation 'com.vincent.filepicker:MultiTypeFilePicker:1.0.8'
 }
 
 apply plugin: 'com.google.gms.google-services'
