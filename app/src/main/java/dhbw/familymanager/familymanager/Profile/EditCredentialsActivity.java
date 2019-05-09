@@ -34,6 +34,7 @@ public class EditCredentialsActivity extends AppCompatActivity implements View.O
     private EditText newPasswordField;
     private String oldEmail;
     private FirebaseFirestore db;
+    private FirebaseUser user = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,36 +100,67 @@ public class EditCredentialsActivity extends AppCompatActivity implements View.O
             newPasswordField.setError("Bitte geben Sie ihr neues Passwort ein.");
             return false;
         }
-        //TODO validieren dass eingegeben E-Mail Adresse auch dem Format einer solchen entspricht
-
         return true;
     }
 
     private void saveChanges() {
-        final FirebaseUser user = auth.getCurrentUser();
+        user = auth.getCurrentUser();
         oldEmail = user.getEmail();
         AuthCredential credential = EmailAuthProvider.getCredential(oldEmail, oldPasswordField.getText().toString());
         user.reauthenticateAndRetrieveData(credential).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
-                if(!newPasswordField.getText().toString().isEmpty())
-                {
-                    user.updatePassword(newPasswordField.getText().toString());
-                }
                 if (!oldEmail.equals(emailField.getText().toString())) {
-                    user.updateEmail(emailField.getText().toString());
-                    changeEmailInDB();
-                    ProfileActivity.refreshValues();
+                    user.updateEmail(emailField.getText().toString()).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(EditCredentialsActivity.this, "Die Email-Adresse entspricht nicht dem erwateten Format.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    })
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            changePasswort();
+                            changeEmailInDB();
+                            ProfileActivity.refreshValues();
+                        }
+                    });
                 }
-                finish();
+                else{
+                    changePasswort();
+                }
             }
         })
         .addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(EditCredentialsActivity.this, "Die Anmeldedaten konnten nicht geändert werden.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditCredentialsActivity.this, "Das aktuelle Passwort ist nicht korrekt.", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void changePasswort()
+    {
+        if(!newPasswordField.getText().toString().isEmpty())
+        {
+            user.updatePassword(newPasswordField.getText().toString()).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(EditCredentialsActivity.this, "Das Passwort konnten nicht geändert werden.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            })
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            finish();
+                        }
+                    });
+        }
+        else{
+            finish();
+        }
     }
 
     private void changeEmailInDB() {
