@@ -10,16 +10,17 @@
         android:id="@+id/room_name"
         android:layout_width="144dp"
         android:layout_height="42dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="132dp"
+        android:theme="@style/AppTheme"
         android:hint="@string/hint_create_room"
-        app:layout_constraintStart_toStartOf="@+id/addChatroom"
-        tools:layout_editor_absoluteY="130dp" />
+        app:layout_constraintBottom_toTopOf="@+id/addChatroom"
+        app:layout_constraintStart_toStartOf="@+id/addChatroom" />
 
     <Button
         android:id="@+id/addChatroom"
         android:layout_width="124dp"
         android:layout_height="39dp"
-        android:text="Chat anlegen"
-        tools:layout_editor_absoluteX="130dp"
-        tools:layout_editor_absoluteY="245dp" />
+        android:text="Create"
+        app:layout_constraintBottom_toBottomOf="@+id/room_name"
+        app:layout_constraintStart_toStartOf="@+id/room_name" />
 </android.support.constraint.ConstraintLayout>
