@@ -1,11 +1,12 @@
-package dhbw.familymanager.familymanager;
+package dhbw.familymanager.familymanager.List;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-
+import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,39 +19,37 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import dhbw.familymanager.familymanager.List.ListAdapter;
+import dhbw.familymanager.familymanager.R;
 import dhbw.familymanager.familymanager.model.Task;
 
-public class Lists extends AppCompatActivity implements View.OnClickListener {
-
+public class TaskScreenActivity extends AppCompatActivity {
     Button button;
     EditText input;
     ListView task_list_view;
     List<Task> tasks;
-    ListAdapter adapter;
-
-    ActionBar actionBar;
+    ListTaskAdapter adapter;
+    private String family;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.list);
-        tasks = new ArrayList<Task>();
-
+        setContentView(R.layout.task_view);
 
         button = (Button) findViewById(R.id.add_task_button);
         input = (EditText) findViewById(R.id.input_task);
-        task_list_view = (ListView) findViewById(R.id.list_view);
-        registerForContextMenu(task_list_view);
-
-        adapter = new ListAdapter(tasks, this);
+        task_list_view = (ListView) findViewById(R.id.task_view);
+        tasks = new ArrayList<Task>();
+        adapter = new ListTaskAdapter(tasks, this);
         task_list_view.setAdapter(adapter);
-
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -58,20 +57,22 @@ public class Lists extends AppCompatActivity implements View.OnClickListener {
                 if (input.getText().length() > 0) {
                     tasks.add(new Task(input.getText().toString(), false));
                     adapter.notifyDataSetChanged();
-                    input.setText("");
                 }
-
             }
         });
 
     }
 
+    private void addTasksToDB(){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.actions, menu);
+        inflater.inflate(R.menu.task_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -79,7 +80,6 @@ public class Lists extends AppCompatActivity implements View.OnClickListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_delete_done_tasks:
-
                 deleteDoneTasks();
                 this.adapter.notifyDataSetChanged();
                 break;
@@ -103,24 +103,41 @@ public class Lists extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.context_menu_list, menu);
+    }
 
+    /*@Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int position = (int) info.id;
+
+        switch (item.getItemId()) {
+
+            case R.id.context_delete:
+                this.tasks.remove(position);
+                this.adapter.notifyDataSetChanged();
+                break;
+            case R.id.context_edit:
+
+                createEditDialog(tasks.get(position));
+                break;
+        }
+        return super.onContextItemSelected(item);
     }
 
     public void createEditDialog(final Task task) {
 
-        LayoutInflater li = LayoutInflater.from(Lists.this);
-        View dialogView = li.inflate(R.layout.edit_task, null);
+        LayoutInflater li = LayoutInflater.from(TaskScreenActivity.this);
+        View dialogView = li.inflate(R.layout.edit_dialog, null);
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Lists.this);
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(TaskScreenActivity.this);
 
         alertDialogBuilder.setView(dialogView);
 
-        final EditText inputText = (EditText) dialogView.findViewById(R.id.edit_task_input);
+        final EditText inputText = (EditText) dialogView.findViewById(R.id.edit_dialog_input);
         inputText.setText(task.getTaskContent());
-        final TextView dialogMessage = (TextView) dialogView.findViewById(R.id.edit_task_message);
+        final TextView dialogMessage = (TextView) dialogView.findViewById(R.id.edit_dialog_message);
 
         alertDialogBuilder
                 .setCancelable(true)
@@ -140,28 +157,6 @@ public class Lists extends AppCompatActivity implements View.OnClickListener {
 
         final AlertDialog alert = alertDialogBuilder.create();
         alert.show();
-    }
+    }*/
 
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        int position = (int) info.id;
-
-        switch (item.getItemId()) {
-
-            case R.id.context_delete:
-                this.tasks.remove(position);
-                this.adapter.notifyDataSetChanged();
-                break;
-            case R.id.context_edit:
-
-                createEditDialog(tasks.get(position));
-                break;
-        }
-        return super.onContextItemSelected(item);
-    }
-
-    public void onClick(View view){
-
-    }
 }

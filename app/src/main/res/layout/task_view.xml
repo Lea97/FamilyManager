@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        >
+
+        <EditText
+            android:id="@+id/input_task"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:hint="neue Aufgabe"
+
+            />
+
+        <Button
+            android:id="@+id/add_task_button"
+            android:layout_width="89dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:text="Aufgabe hinzufügen" />
+
+    </LinearLayout>
+    <ListView
+        android:id="@+id/task_view"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+
+        />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

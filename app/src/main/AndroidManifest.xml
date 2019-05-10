@@ -122,7 +122,7 @@
                 android:value="dhbw.familymanager.familymanager.MainActivity" />
         </activity>
         <activity
-            android:name=".Lists"
+            android:name=".List.ListActivity"
             android:label="Listen"
             android:parentActivityName=".MainActivity">
             <meta-data
@@ -193,6 +193,25 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="dhbw.familymanager.familymanager.MainActivity" />
         </activity>
+        <activity
+            android:name=".List.CreateNewListActivity"
+            android:label="Neue Liste"
+            android:parentActivityName=".List.ListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="dhbw.familymanager.familymanager.List.ListActivity" />
+        </activity>
+        <activity
+            android:name=".List.TaskScreenActivity"
+            android:label="Listen Einträge"
+            android:parentActivityName=".List.ListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="dhbw.familymanager.familymanager.List.ListActivity" />
+        </activity>
+
+
+
 
 
     </application>

@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import dhbw.familymanager.familymanager.List.ListActivity;
 import dhbw.familymanager.familymanager.Profile.ProfileActivity;
 import dhbw.familymanager.familymanager.calendar.CalendarActivity;
 import dhbw.familymanager.familymanager.chat.ChatActivity;
@@ -164,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(MainActivity.this, PhotoGalleryActivity.class));
             break;
         case R.id.listButton:
-            startActivity(new Intent(MainActivity.this, Lists.class));
+            startActivity(new Intent(MainActivity.this, ListActivity.class));
             break;
         case R.id.calendarButton:
             startActivity(new Intent(MainActivity.this, CalendarActivity.class));
