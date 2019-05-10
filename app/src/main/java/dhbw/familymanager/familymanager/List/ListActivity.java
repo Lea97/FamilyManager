@@ -83,7 +83,7 @@ public class ListActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ListActivity.this, TaskScreenActivity.class);
+                Intent intent = new Intent(ListActivity.this, TaskScreenActivity.class); // mit ShowTaskActivity ersetzen
                 intent.putExtra("todoName", lists.get(position));
                 startActivity(intent);
             }

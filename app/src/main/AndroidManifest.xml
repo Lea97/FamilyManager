@@ -209,6 +209,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="dhbw.familymanager.familymanager.List.ListActivity" />
         </activity>
+        <activity
+            android:name=".List.ShowTaskActivity"
+            android:label="Listen Einträge"
+            android:parentActivityName=".List.ListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="dhbw.familymanager.familymanager.List.ListActivity" />
+        </activity>
+        <activity
+            android:name=".List.AddTaskActivity"
+            android:label="Neue Einträge"
+            android:parentActivityName=".List.ShowTaskActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="dhbw.familymanager.familymanager.List.ShowTaskActivity" />
+        </activity>
 
 
 
