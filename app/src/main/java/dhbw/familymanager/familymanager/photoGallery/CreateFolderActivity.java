@@ -87,18 +87,24 @@ public class CreateFolderActivity extends AppCompatActivity implements View.OnCl
                             nameField.setError("Ein Ordner mit diesem Namen gibt es bereits.");
                         }
                         else {
-                            createFolder();
-                            PhotoGalleryActivity.updateFolders();
-                            finish();
+                            addNewFolder();
                         }
 
                     } else {
                         Log.d("TAG", "No such document");
+                        addNewFolder();
                     }
                 } else {
                     Log.d("TAG", "get failed with ", task.getException());
                 }
             }
         });
+    }
+
+    private void addNewFolder()
+    {
+        createFolder();
+        PhotoGalleryActivity.updateFolders();
+        finish();
     }
 }

@@ -222,14 +222,10 @@ public class FolderScreenActivity extends AppCompatActivity {
             captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, filePath);
 
             Intent albumIntent = new Intent(this, ImagePickActivity.class);
-           // albumIntent.setType("images/*");
-            //albumIntent.putExtra(ImagePickActivity.IS_NEED_CAMERA, true);
+            albumIntent.putExtra(ImagePickActivity.IS_NEED_CAMERA, true);
             albumIntent.putExtra(Constant.MAX_NUMBER, 9);
-
-            Intent chooserIntent = Intent.createChooser(albumIntent, "Wähle ein Bild zum Hochladen aus");
-
-            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Parcelable[] { captureIntent });
-            startActivityForResult(chooserIntent, PICK_IMAGE_REQUEST);
+            
+            startActivityForResult(albumIntent, PICK_IMAGE_REQUEST);
         }
         catch(Exception e){
             Toast.makeText(getBaseContext(), "Exception:"+e,
@@ -252,7 +248,6 @@ public class FolderScreenActivity extends AppCompatActivity {
                 }
                 addPhotos();
             }
-           // filePath = data.getData();
         }
         if(filePath != null)
         {
@@ -266,6 +261,7 @@ public class FolderScreenActivity extends AppCompatActivity {
             filePath = fileUri;
             addPhoto();
         }
+        filePaths.clear();
         filePath = null;
     }
 
