@@ -28,6 +28,7 @@ public class ShowTaskActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
     private String family;
+    private String listName;
     private ListView listView;
     private ArrayList<String> tasks;
     private static boolean update = false;
@@ -37,6 +38,8 @@ public class ShowTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         db = FirebaseFirestore.getInstance();
         family = MainActivity.getFamily();
+        Intent i = getIntent();
+        listName = i.getStringExtra("todoName");
         tasks = new ArrayList<String>();
         setContentView(R.layout.task_main);
         getTasks();
@@ -52,12 +55,13 @@ public class ShowTaskActivity extends AppCompatActivity {
         if (update)
         {
             update = false;
+            tasks.clear();
             getTasks();
         }
     }
 
     private void getTasks() {
-        DocumentReference docRef = db.collection("todos").document(family);
+        DocumentReference docRef = db.collection("lists").document(family+listName);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -80,7 +84,7 @@ public class ShowTaskActivity extends AppCompatActivity {
 
     private void addListAdapter(){
 
-        ListView listView = (ListView)findViewById(R.id.list_view);
+        ListView listView = (ListView)findViewById(R.id.task_view_main);
         String[] fileArray = new String[tasks.size()];
         TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), tasks.toArray(fileArray), this);
         listView.setAdapter(taskAdapter);
