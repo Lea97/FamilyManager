@@ -78,20 +78,20 @@
                 android:layout_weight="0.5">
 
                 <Button
-                    style="@style/Widget.AppCompat.Button"
                     android:id="@+id/galleryButton"
+                    style="@style/Widget.AppCompat.Button"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
+                    android:backgroundTint="@color/peach"
                     android:gravity="center"
                     android:paddingBottom="10dp"
                     android:singleLine="false"
                     android:text="Fotoalbum"
-                    android:backgroundTint="@color/peach"
-                    android:theme="@style/ThemeOverlay.AppCompat.Light"
                     android:textAlignment="center"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    android:theme="@style/ThemeOverlay.AppCompat.Light" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -107,6 +107,7 @@
 
                 <Button
                     android:id="@+id/calendarButton"
+                    style="@style/Widget.AppCompat.Button"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentStart="true"
@@ -140,7 +141,7 @@
 
                 <Button
                     android:id="@+id/map"
-
+                    style="@style/Widget.AppCompat.Button"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentStart="true"
@@ -167,6 +168,7 @@
 
                 <Button
                     android:id="@+id/chat"
+                    style="@style/Widget.AppCompat.Button"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentStart="true"
@@ -200,6 +202,7 @@
 
                 <Button
                     android:id="@+id/memberButton"
+                    style="@style/Widget.AppCompat.Button"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentStart="true"
@@ -227,6 +230,7 @@
 
                 <Button
                     android:id="@+id/listButton"
+                    style="@style/Widget.AppCompat.Button"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentStart="true"
@@ -242,9 +246,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/lists"
-                     />
+                    android:layout_centerInParent="true" />
             </RelativeLayout>
         </TableRow>
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimaryDark">#00574b</color>
     <color name="lightBlue">#def2f9</color>
     <color name="peach">#fde2a3</color>
     <color name="pink">#ffc7fd</color>
@@ -9,7 +9,7 @@
     <color name="blue">#59dbe0</color>
     <color name="red">#f57f68</color>
     <color name="darkgreen">#87d288</color>
-    <color name="orange">#f8b552</color>
+    <color name="orange">#f8f052</color>
 
 
 </resources>

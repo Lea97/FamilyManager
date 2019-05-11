@@ -3,32 +3,53 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/com_facebook_blue</item>
-        <item name="colorPrimaryDark">@color/green</item>
-        <item name="colorAccent">@color/pink</item>
+        <item name="colorPrimary">@color/red</item>
+        <item name="colorPrimaryDark">@color/browser_actions_bg_grey</item>
+        <item name="colorAccent">@color/orange</item>
+        <item name="android:buttonStyle">@style/NormalButtonStyle</item>
+        <item name="android:textColor">@color/com_facebook_blue</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">14dp</item>
+
+
     </style>
 
     <style name="HeadlineTextViewsStyle" parent="android:Widget.TextView">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">18dp</item>
+        <item name="android:textColor">@color/com_facebook_blue</item>
+        <item name="android:fontFamily">sans-serif</item>
     </style>
 
     <style name="NormalTextViewsStyle" parent="android:Widget.TextView">
         <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/com_facebook_blue</item>
+        <item name="android:fontFamily">Sans Serif</item>
     </style>
 
     <style name="NormalEditTextStyle" parent="android:Widget.EditText">
         <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/com_facebook_blue</item>
+        <item name="android:fontFamily">Sans Serif</item>
     </style>
 
-    <style name="NormalButtonStyle" parent="Base.TextAppearance.AppCompat.Button">
-        <item name="android:textSize">14dp</item>
-        <item name="android:layout_height">50dp</item>
+    <style name="NormalButtonStyle" parent="@style/Widget.AppCompat.Button.Colored">
+        <item name="android:background">@color/peach</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:radius">25dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">end</item>
+
     </style>
 
     <style name="SmallButtonStyle" parent="Base.TextAppearance.AppCompat.Button">
         <item name="android:textSize">12dp</item>
         <item name="android:layout_height">35dp</item>
+        <item name="android:background">@color/orange</item>
+
+
+
     </style>
 
 </resources>

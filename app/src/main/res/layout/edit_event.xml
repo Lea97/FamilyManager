@@ -5,13 +5,6 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:orientation="vertical" >
-    <EditText
-        android:id="@+id/header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Event details"/>
 
 
     <EditText
@@ -33,6 +26,14 @@
 
 
     <EditText
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Event details" />
+
+    <EditText
         android:id="@+id/eventStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,17 +52,16 @@
         />
 
     <Button
-        android:id="@+id/editEvent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Edit"
-        />
-
-    <Button
         android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Cancel"
          />
+
+    <Button
+        android:id="@+id/editEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Edit" />
 
 </LinearLayout>

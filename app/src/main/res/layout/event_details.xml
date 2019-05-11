@@ -10,7 +10,7 @@
     <TextView
         android:id="@+id/header"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="128dp"
         android:layout_marginTop="80dp"
         android:ems="10"
@@ -24,8 +24,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:drawableLeft="@android:drawable/btn_star_big_off"
+        android:drawableLeft="@android:drawable/btn_star_big_on"
         android:ems="10"
+        android:gravity="center_vertical"
         android:text="Event title"
         app:layout_constraintStart_toStartOf="@+id/header"
         app:layout_constraintTop_toBottomOf="@+id/header" />
@@ -37,6 +38,7 @@
         android:layout_marginTop="40dp"
         android:drawableLeft="@android:drawable/ic_dialog_map"
         android:ems="10"
+        android:gravity="center_vertical"
         android:text="Event location"
         app:layout_constraintStart_toStartOf="@+id/eventTitle1"
         app:layout_constraintTop_toTopOf="@+id/eventTitle1" />
@@ -47,9 +49,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:layout_marginBottom="8dp"
         android:drawableLeft="@android:drawable/ic_menu_my_calendar"
         android:ems="12"
+        android:gravity="center_vertical"
         android:text="Start"
         app:layout_constraintStart_toStartOf="@+id/eventLocation"
         app:layout_constraintTop_toBottomOf="@+id/eventLocation" />
@@ -60,6 +62,7 @@
         android:layout_height="wrap_content"
         android:drawableLeft="@android:drawable/ic_menu_my_calendar"
         android:ems="10"
+        android:gravity="center_vertical"
         android:text="End"
         app:layout_constraintStart_toStartOf="@+id/eventStart"
         app:layout_constraintTop_toBottomOf="@+id/eventStart" />
@@ -68,8 +71,8 @@
         android:id="@+id/editEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="60dp"
         android:text="Edit"
         app:layout_constraintStart_toStartOf="@+id/eventEnd"
         app:layout_constraintTop_toBottomOf="@+id/eventEnd" />
@@ -78,6 +81,7 @@
         android:id="@+id/deleteEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="Delete"
         app:layout_constraintStart_toStartOf="@+id/editEvent"
         app:layout_constraintTop_toBottomOf="@+id/editEvent" />

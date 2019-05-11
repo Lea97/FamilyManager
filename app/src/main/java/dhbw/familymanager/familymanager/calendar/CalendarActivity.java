@@ -104,6 +104,7 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
 public void onResume() {
 
     super.onResume();
+    mWeekView.notifyDatasetChanged();
     readEvents();
     mWeekView.notifyDatasetChanged();
     mWeekView.goToDate(new GregorianCalendar());

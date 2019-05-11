@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/lightBlue"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -35,14 +34,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TableLayout
-        android:layout_width="222dp"
-        android:layout_height="156dp"
+        android:layout_width="263dp"
+        android:layout_height="143dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.676">
+        app:layout_constraintVertical_bias="0.654">
 
         <TableRow>
 
@@ -66,25 +65,20 @@
 
             <Button
                 android:id="@+id/eventStart"
-                style="@style/SmallButtonStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="79dp"
+                android:layout_height="match_parent"
                 android:onClick="datePicker"
-                android:text="Start"
                 android:padding="10dp"
-                app:backgroundTint="@color/com_facebook_blue"
-                android:textColor="@color/lightBlue"
 
-                />
+                android:text="Start" />
 
             <Button
                 android:id="@+id/end"
-                style="@style/SmallButtonStyle"
-                android:layout_width="wrap_content"
+                android:layout_width="79dp"
+                android:layout_height="match_parent"
                 android:onClick="datePicker"
-                android:text="End"
-                android:padding="10dp"
-                app:backgroundTint="@color/com_facebook_blue"
-                android:textColor="@color/lightBlue"/>
+                android:padding="20dp"
+                android:text="End" />
 
         </TableRow>
 
@@ -104,21 +98,15 @@
 
             <Button
                 android:id="@+id/cancelEvent"
-                style="@style/NormalButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_marginEnd="15dp"
-                android:text="@string/cancle_button"
-                app:backgroundTint="@color/com_facebook_blue"
-                android:textColor="@color/lightBlue"/>
+                android:text="@string/cancle_button" />
 
 
             <Button
                 android:id="@+id/saveEvent"
-                style="@style/NormalButtonStyle"
                 android:layout_width="wrap_content"
-                android:text="@string/create_button"
-                app:backgroundTint="@color/com_facebook_blue"
-                android:textColor="@color/lightBlue"/>
+                android:text="@string/create_button" />
         </TableRow>
 
     </TableLayout>
