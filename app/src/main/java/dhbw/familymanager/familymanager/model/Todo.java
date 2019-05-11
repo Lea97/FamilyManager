@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Todo {
 
-    //private String listName;
+    private String listName;
     private List<String> tasks;
     private String owner;
     private Date created;
@@ -14,10 +14,10 @@ public class Todo {
 
     }
 
-    /*public Todo(String listName, List<String> tasks){
+    public Todo(String listName, List<String> tasks){
         this.listName=listName;
         this.tasks=tasks;
-    }*/
+    }
 
     public Todo(String owner, Date created, List<String> tasks){
         this.tasks=tasks;
