@@ -110,12 +110,14 @@ public class ShowTaskActivity extends AppCompatActivity {
                 break;
             case R.id.action_delete_done_tasks:
                 //deleteDoneTasks();
-
                 break;
             case R.id.action_delete_all:
                 this.tasks.clear();
 
                 break;
+            case android.R.id.home:
+                onBackPressed();
+                return true;
         }
         return true;
     }

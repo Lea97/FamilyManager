@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,10 +54,12 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
 
     private void addTask() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        TextView nameField = (TextView) findViewById(R.id.newTaskName);
-        String newTaskName = nameField.getText().toString();
+        EditText editText = findViewById(R.id.newTaskName);
+        String newTaskName = editText.getText().toString();
 
         tasks.add(newTaskName);
+        //db.collection("lists").document(family+listName).update("tasks", tasks);
+
         Map<String, Object> listen = new HashMap<>();
         listen.put("taskName", tasks);
         db.collection("lists").document(family).set(listen);
