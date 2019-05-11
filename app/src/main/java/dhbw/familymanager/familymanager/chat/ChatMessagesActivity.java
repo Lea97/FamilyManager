@@ -88,7 +88,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
                         message.setMessageText(messageText);
                         message.setSenderId(user);
                         message.setTimestamp(new Date().getTime());
-                        addMessageBox(messageText, 2);
+                        //addMessageBox(messageText, 2);
                         db.collection("chatrooms").document(chatroomId).collection("messages").add(message);
 
 
