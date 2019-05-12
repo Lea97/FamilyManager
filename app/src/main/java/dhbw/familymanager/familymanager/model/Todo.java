@@ -1,8 +1,10 @@
 package dhbw.familymanager.familymanager.model;
 
+import com.google.firebase.firestore.IgnoreExtraProperties;
+
 import java.util.Date;
 import java.util.List;
-
+@IgnoreExtraProperties
 public class Todo {
 
     private String listName;

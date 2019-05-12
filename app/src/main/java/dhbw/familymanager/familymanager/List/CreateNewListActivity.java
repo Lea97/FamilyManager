@@ -30,13 +30,13 @@ import dhbw.familymanager.familymanager.photoGallery.PhotoGalleryActivity;
 public class CreateNewListActivity extends AppCompatActivity implements View.OnClickListener{
     private String family;
     private ArrayList<String> lists;
-    //private FirebaseFirestore db;
+    private FirebaseFirestore db;
     private String newListName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //db = FirebaseFirestore.getInstance();
+        db = FirebaseFirestore.getInstance();
         family = MainActivity.getFamily();
         Intent i = getIntent();
         String[] list = i.getStringArrayExtra("lists");
@@ -47,9 +47,9 @@ public class CreateNewListActivity extends AppCompatActivity implements View.OnC
     }
 
     private void createList() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        /*FirebaseFirestore db = FirebaseFirestore.getInstance();
         TextView nameField = (TextView) findViewById(R.id.newListName);
-        String newListName = nameField.getText().toString();
+        String newListName = nameField.getText().toString();*/
 
         lists.add(newListName);
         Map<String, Object> listen = new HashMap<>();
@@ -65,11 +65,10 @@ public class CreateNewListActivity extends AppCompatActivity implements View.OnC
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.createNewList:
+                TextView nameField = (TextView) findViewById(R.id.newListName);
+                newListName = nameField.getText().toString();
                 createList();
                 ListActivity.updateFolders();
-                //TextView nameField = (TextView) findViewById(R.id.newListName);
-                //newListName = nameField.getText().toString();
-                //validateIfTodoExist();
                 finish();
                 break;
             case R.id.cancleNewList:
