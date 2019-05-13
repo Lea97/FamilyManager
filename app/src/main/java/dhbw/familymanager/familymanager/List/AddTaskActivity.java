@@ -20,6 +20,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import dhbw.familymanager.familymanager.MainActivity;
 import dhbw.familymanager.familymanager.R;
@@ -54,7 +56,7 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.add_task:
                 setTasks();
                 addTask();
-                //ShowTaskActivity.update();
+                ShowTaskActivity.update();
                 this.finish();
                 break;
         }
@@ -94,7 +96,9 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
 
     private void addTaskToListsDB(){
         tasks.add(taskName);
-        db.collection("lists").document(family+listName).update("tasks", tasks);
+        Map<String, Object> listen = new HashMap<>();
+        listen.put("tasks", tasks);
+        db.collection("lists").document(family+listName).set(listen);
     }
 
     private void addTaskToTasksDB(){
@@ -103,20 +107,5 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         Aufgabe aufgabe = new Aufgabe(auth.getCurrentUser().getUid(), new Date(), taskName);
         db.collection("tasks").document(family + listName + taskName).set(aufgabe);
     }
-    /*private void addTask() {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        EditText editText = findViewById(R.id.newTaskName);
-        String newTaskName = editText.getText().toString();
 
-        tasks.add(newTaskName);
-        //db.collection("lists").document(family+listName).update("tasks", tasks);
-
-        Map<String, Object> listen = new HashMap<>();
-        listen.put("taskName", tasks);
-        db.collection("lists").document(family).set(listen);
-
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        Task task = new Task(new String(), Boolean.valueOf(false));
-        db.collection("tasks").document(family + listName+ newTaskName).set(task);
-    }*/
 }
