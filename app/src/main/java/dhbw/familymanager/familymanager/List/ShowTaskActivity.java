@@ -42,7 +42,7 @@ public class ShowTaskActivity extends AppCompatActivity {
         listName = i.getStringExtra("todoName");
         tasks = new ArrayList<String>();
         setContentView(R.layout.task_main);
-        getTasks();
+        addTasks();
     }
 
     public static void update(){
@@ -56,11 +56,11 @@ public class ShowTaskActivity extends AppCompatActivity {
         {
             update = false;
             tasks.clear();
-            getTasks();
+            addTasks();
         }
     }
 
-    private void getTasks() {
+    private void addTasks() {
         DocumentReference docRef = db.collection("lists").document(family+listName);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
