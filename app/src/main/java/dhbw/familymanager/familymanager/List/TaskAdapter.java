@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 
@@ -51,7 +53,7 @@ public class TaskAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         view = inflter.inflate(R.layout.task_layout, null);
-        TextView member = (TextView) view.findViewById(R.id.list_task_view);
+        TextView member = (TextView) view.findViewById(R.id.task_name);
         member.setText(files[i]);
         return view;
     }

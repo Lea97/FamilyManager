@@ -29,9 +29,9 @@ public class ShowTaskActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private String family;
     private String listName;
-    private ListView listView;
     private ArrayList<String> tasks;
     private static boolean update = false;
+    private String task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +84,7 @@ public class ShowTaskActivity extends AppCompatActivity {
 
     private void addListAdapter(){
 
-        ListView listView = (ListView)findViewById(R.id.task_view_main);
+        ListView listView = (ListView) findViewById(R.id.task_view_main);
         String[] fileArray = new String[tasks.size()];
         TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), tasks.toArray(fileArray), this);
         listView.setAdapter(taskAdapter);
@@ -106,10 +106,11 @@ public class ShowTaskActivity extends AppCompatActivity {
                 Intent intent = new Intent(ShowTaskActivity.this, AddTaskActivity.class);
                 String[] fileArray = new String[tasks.size()];
                 intent.putExtra("tasks", tasks.toArray(fileArray));
+                intent.putExtra("todoName", listName);
                 startActivity(intent);
                 break;
             case R.id.action_delete_done_tasks:
-                //deleteDoneTasks();
+                deleteDoneTasks();
                 break;
             case R.id.action_delete_all:
                 this.tasks.clear();
@@ -120,6 +121,34 @@ public class ShowTaskActivity extends AppCompatActivity {
                 return true;
         }
         return true;
+    }
+
+    public void deleteDoneTasks(){
+        DocumentReference docRef = db.collection("lists").document(listName);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                        ArrayList<String> tasks =(ArrayList<String>) document.get("tasks");
+                        tasks.remove(task);
+                        db.collection("lists").document(listName).update("tasks", tasks);
+                        fishView();
+                    } else {
+                        Log.d("TAG", "No such document");
+                    }
+                } else {
+                    Log.d("TAG", "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+    private void fishView() {
+        ShowTaskActivity.update();
+        this.finish();
     }
 
 }

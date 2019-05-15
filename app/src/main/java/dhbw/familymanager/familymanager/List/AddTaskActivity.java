@@ -98,7 +98,7 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         tasks.add(taskName);
         //Map<String, Object> listen = new HashMap<>();
         //listen.put("tasks", tasks);
-        db.collection("lists").document(family+listName).update("tasks",tasks);
+        db.collection("lists").document(family+listName).update("tasks", tasks);
     }
 
     private void addTaskToTasksDB(){
