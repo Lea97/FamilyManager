@@ -25,8 +25,8 @@
             app:srcCompat="@drawable/profilepicture" />
 
         <Spinner
-            style="?android:attr/buttonBarButtonStyle"
             android:id="@+id/familySpinner"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="2"
@@ -140,7 +140,7 @@
                 android:layout_weight="0.5">
 
                 <Button
-                    android:id="@+id/map"
+                    android:id="@+id/impressum"
                     style="@style/Widget.AppCompat.Button"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -150,7 +150,7 @@
                     android:paddingBottom="10dp"
                     android:singleLine="false"
                     android:backgroundTint="@color/pink"
-                    android:text="Karte"
+                    android:text="Impressum"
                     android:textAlignment="center"
                     android:textSize="18sp"
                     />

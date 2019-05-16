@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.logoutButton).setOnClickListener(this);
         findViewById(R.id.memberButton).setOnClickListener(this);
         findViewById(R.id.chat).setOnClickListener(this);
-        findViewById(R.id.map).setOnClickListener(this);
+        findViewById(R.id.impressum).setOnClickListener(this);
     }
 
     @Override
@@ -170,6 +170,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         case R.id.calendarButton:
             startActivity(new Intent(MainActivity.this, CalendarActivity.class));
             break;
+            case R.id.impressum:
+                startActivity(new Intent(MainActivity.this, ImpressumActivity.class));
+                break;
         case R.id.addFamilyButton:
             startActivity(new Intent(MainActivity.this, AddFamilyActivity.class));
             break;
