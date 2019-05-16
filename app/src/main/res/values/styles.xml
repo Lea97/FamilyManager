@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/peach</item>
         <item name="colorPrimaryDark">@color/red</item>
-        <item name="colorAccent">@color/orange</item>
+        <item name="colorAccent">@color/peach</item>
         <item name="android:buttonStyle">@style/NormalButtonStyle</item>
         <item name="android:textColor">@color/com_facebook_blue</item>
         <item name="android:fontFamily">sans-serif</item>
@@ -46,10 +46,7 @@
     <style name="SmallButtonStyle" parent="Base.TextAppearance.AppCompat.Button">
         <item name="android:textSize">12dp</item>
         <item name="android:layout_height">35dp</item>
-        <item name="android:background">@color/orange</item>
-
-
-
+        <item name="android:background">@color/peach</item>
     </style>
 
 </resources>
