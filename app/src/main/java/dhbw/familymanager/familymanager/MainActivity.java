@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     AuthUI.getInstance()
                             .createSignInIntentBuilder()
                             .setAvailableProviders(providers)
-                            .setTheme(R.style.Theme_AppCompat_Light)
+                            .setTheme(R.style.AppTheme)
                             .build(),
                     RC_SIGN_IN);
         }

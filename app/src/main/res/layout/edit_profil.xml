@@ -106,7 +106,7 @@
                 android:id="@+id/picDate"
                 style="@style/SmallButtonStyle"
                 android:layout_width="wrap_content"
-                android:gravity="center"
+                android:gravity="start"
                 android:onClick="datePicker"
                 android:text="@string/choose_date" />
         </TableRow>

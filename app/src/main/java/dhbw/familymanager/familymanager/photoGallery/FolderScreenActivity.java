@@ -224,7 +224,7 @@ public class FolderScreenActivity extends AppCompatActivity {
             Intent albumIntent = new Intent(this, ImagePickActivity.class);
             albumIntent.putExtra(ImagePickActivity.IS_NEED_CAMERA, true);
             albumIntent.putExtra(Constant.MAX_NUMBER, 9);
-            
+
             startActivityForResult(albumIntent, PICK_IMAGE_REQUEST);
         }
         catch(Exception e){
