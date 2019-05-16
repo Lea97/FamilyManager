@@ -106,7 +106,7 @@ public void onResume() {
     super.onResume();
     mWeekView.notifyDatasetChanged();
    startEventReading();
-    mWeekView.notifyDatasetChanged();
+    //mWeekView.notifyDatasetChanged();
     mWeekView.goToDate(new GregorianCalendar());
 
 }

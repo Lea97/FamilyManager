@@ -77,8 +77,8 @@ public class EventDetailsActivity extends AppCompatActivity implements View.OnCl
 
         eventTitle.setText(event.getTitle());
         eventLocation.setText(event.getLocation());
-        eventStart.setText(event.getStart().toString());
-        eventEnd.setText(event.getEnd().toString());
+        eventStart.setText((event.getStart().toString().substring(0, event.getStart().toString().lastIndexOf("G"))));
+        eventEnd.setText(event.getEnd().toString().substring(0, event.getEnd().toString().lastIndexOf("G")));
        // eventId= String.valueOf(event.getId());
 
     }
