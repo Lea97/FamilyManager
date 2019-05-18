@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Event title" />
+        android:text="Event Title" />
 
     <EditText
         android:id="@+id/eventLocation"
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Event location"
+        android:text="Ort"
         />
 
 
@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Event details" />
+        android:text="Event Details" />
 
     <EditText
         android:id="@+id/eventStart"
@@ -48,20 +48,20 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="End"
+        android:text="Ende"
         />
 
     <Button
         android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cancel"
+        android:text="@string/cancle_button"
          />
 
     <Button
         android:id="@+id/editEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Edit" />
+        android:text="Bearbeiten" />
 
 </LinearLayout>
