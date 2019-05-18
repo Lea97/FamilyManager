@@ -30,7 +30,6 @@ import dhbw.familymanager.familymanager.R;
 public class AddTaskActivity extends AppCompatActivity implements View.OnClickListener{
     private String family;
     private FirebaseFirestore db;
-    private ArrayList<String> tasks;
     private String listName;
     private String taskName;
 
@@ -41,7 +40,6 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         family = MainActivity.getFamily();
         Intent i = getIntent();
         listName = i.getStringExtra("todoName");
-        tasks = new ArrayList<String>();
         setContentView(R.layout.add_task);
         findViewById(R.id.add_task).setOnClickListener(this);
         findViewById(R.id.cancle_add_task).setOnClickListener(this);
@@ -56,10 +54,13 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.add_task:
                 setTasks();
                 addTask();
-                ShowTaskActivity.update();
-                this.finish();
                 break;
         }
+    }
+
+    private void finishWithUpdate(){
+        ShowTaskActivity.update();
+        this.finish();
     }
 
     private void setTasks(){
@@ -72,7 +73,11 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d("TAG", "DocumentSnapshot data: " + document.getData());
-                        tasks = (ArrayList<String>) document.get("tasks");
+                        ArrayList<String> tasks = (ArrayList<String>) document.get("tasks");
+                        EditText nameText = findViewById(R.id.newTaskName);
+                        tasks.add(nameText.getText().toString());
+                        db.collection("lists").document(family+listName).update("tasks",tasks);
+                        finishWithUpdate();
                     } else {
                         Log.d("TAG", "No such document");
                     }
@@ -85,7 +90,6 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
 
     private void addTask(){
         setTaskName();
-        addTaskToListsDB();
         addTaskToTasksDB();
     }
 
@@ -94,16 +98,8 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
         taskName = nameText.getText().toString();
     }
 
-    private void addTaskToListsDB(){
-        tasks.add(taskName);
-        //Map<String, Object> listen = new HashMap<>();
-        //listen.put("tasks", tasks);
-        db.collection("lists").document(family+listName).update("tasks", tasks);
-    }
-
     private void addTaskToTasksDB(){
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        //dhbw.familymanager.familymanager.model.Task task = new dhbw.familymanager.familymanager.model.Task(new String(), Boolean.valueOf(false));
         Aufgabe aufgabe = new Aufgabe(auth.getCurrentUser().getUid(), new Date(), taskName);
         db.collection("tasks").document(family + listName + taskName).set(aufgabe);
     }

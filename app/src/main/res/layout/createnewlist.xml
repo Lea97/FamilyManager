@@ -51,7 +51,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="4dp"
         android:layout_marginTop="200dp"
-        android:text=""
+        android:inputType="text"
         android:textSize="14sp"
         tools:layout_editor_absoluteX="81dp"
         tools:layout_editor_absoluteY="353dp" />

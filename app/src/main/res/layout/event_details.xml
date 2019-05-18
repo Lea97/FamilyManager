@@ -11,10 +11,10 @@
         android:id="@+id/header"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginStart="128dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="84dp"
         android:ems="10"
-        android:text="Event details"
+        android:text="Event Details"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -27,7 +27,7 @@
         android:drawableLeft="@android:drawable/btn_star_big_on"
         android:ems="10"
         android:gravity="center_vertical"
-        android:text="Event title"
+        android:text="Event Title"
         app:layout_constraintStart_toStartOf="@+id/header"
         app:layout_constraintTop_toBottomOf="@+id/header" />
 
@@ -39,7 +39,7 @@
         android:drawableLeft="@android:drawable/ic_dialog_map"
         android:ems="10"
         android:gravity="center_vertical"
-        android:text="Event location"
+        android:text="Ort"
         app:layout_constraintStart_toStartOf="@+id/eventTitle1"
         app:layout_constraintTop_toTopOf="@+id/eventTitle1" />
 
@@ -63,7 +63,7 @@
         android:drawableLeft="@android:drawable/ic_menu_my_calendar"
         android:ems="10"
         android:gravity="center_vertical"
-        android:text="End"
+        android:text="Ende"
         app:layout_constraintStart_toStartOf="@+id/eventStart"
         app:layout_constraintTop_toBottomOf="@+id/eventStart" />
 
@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="60dp"
-        android:text="Edit"
+        android:text="Bearbeiten"
         app:layout_constraintStart_toStartOf="@+id/eventEnd"
         app:layout_constraintTop_toBottomOf="@+id/eventEnd" />
 
@@ -82,7 +82,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Delete"
+        android:text="@string/delete_button"
         app:layout_constraintStart_toStartOf="@+id/editEvent"
         app:layout_constraintTop_toBottomOf="@+id/editEvent" />
 
