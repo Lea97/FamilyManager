@@ -162,7 +162,6 @@ public class FolderScreenActivity extends AppCompatActivity {
             case REQUEST_WRITE_STORAGE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 {
-                    createFolder();
                 } else
                 {
                     Toast.makeText(this, "Die App hat keine Erlaubnis auf deine Dateien zuzugreifen. Willst du dieses Recht erlauben? ", Toast.LENGTH_LONG).show();
@@ -179,17 +178,7 @@ public class FolderScreenActivity extends AppCompatActivity {
         }
     }
 
-    public void createFolder() {
-        final File imageStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "FamilyManager");
-        if (!imageStorageDir.exists()) {
-            Toast.makeText(this, "Neuer Ordner wird erstellt...", Toast.LENGTH_SHORT).show();
-            boolean rv = imageStorageDir.mkdir();
-            Toast.makeText(this, "Ordner" + ( rv ? "wurde erstellt" : "konnte nicht erstellt werden"), Toast.LENGTH_SHORT).show();
-        }
-    }
-
     private void showFileChooser() {
-        final File imageStorageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "FamilyManager");
         try {
 
             boolean hasPermission = (ContextCompat.checkSelfPermission(this,
@@ -210,19 +199,12 @@ public class FolderScreenActivity extends AppCompatActivity {
                         REQUEST_CAMERA);
                 return;
             }
-            createFolder();
-            File file = new File(
-                    imageStorageDir + File.separator + "IMG_"
-                            + String.valueOf(System.currentTimeMillis())
-                            + ".jpg");
-
-            filePath = Uri.fromFile(file);
-            final Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-            captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, filePath);
 
             Intent albumIntent = new Intent(this, ImagePickActivity.class);
             albumIntent.putExtra(ImagePickActivity.IS_NEED_CAMERA, true);
-            albumIntent.putExtra(Constant.MAX_NUMBER, 9);
+            albumIntent.putExtra(Constant.MAX_NUMBER, 10);
+            albumIntent.putExtra(ImagePickActivity.IS_TAKEN_AUTO_SELECTED, false);
+            albumIntent.putExtra(ImagePickActivity.IS_NEED_IMAGE_PAGER, false);
 
             startActivityForResult(albumIntent, PICK_IMAGE_REQUEST);
         }
@@ -243,7 +225,10 @@ public class FolderScreenActivity extends AppCompatActivity {
             {
                 for (ImageFile file: list)
                 {
-                    filePaths.add(Uri.parse("file://" + file.getPath()));
+                    if(!filePaths.contains(Uri.parse("file://" + file.getPath())))
+                    {
+                        filePaths.add(Uri.parse("file://" + file.getPath()));
+                    }
                 }
                 addPhotos();
             }
