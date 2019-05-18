@@ -54,10 +54,13 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.add_task:
                 setTasks();
                 addTask();
-                ShowTaskActivity.update();
-                this.finish();
                 break;
         }
+    }
+
+    private void finishWithUpdate(){
+        ShowTaskActivity.update();
+        this.finish();
     }
 
     private void setTasks(){
@@ -74,6 +77,7 @@ public class AddTaskActivity extends AppCompatActivity implements View.OnClickLi
                         EditText nameText = findViewById(R.id.newTaskName);
                         tasks.add(nameText.getText().toString());
                         db.collection("lists").document(family+listName).update("tasks",tasks);
+                        finishWithUpdate();
                     } else {
                         Log.d("TAG", "No such document");
                     }
