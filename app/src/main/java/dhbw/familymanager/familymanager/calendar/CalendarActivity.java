@@ -45,7 +45,7 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
 
         final EventRepository repo = EventRepository.getInstance();
 
-        List<Event> userEvents=repo.readEventsForUser();
+        List<Event> userEvents=repo.readEventsForFamily();
         List<WeekViewEvent> result = new ArrayList<>();
         if(!userEvents.isEmpty()&&(userEvents!=null)){
 

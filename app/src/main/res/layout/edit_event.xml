@@ -1,67 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout2"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:orientation="vertical" >
+    android:layout_height="match_parent">
 
 
     <EditText
         android:id="@+id/eventTitle1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="217dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="132dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Event title" />
+        android:text="Event title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/eventLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="216dp"
+        android:layout_height="38dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Event location"
-        />
+        app:layout_constraintStart_toStartOf="@+id/eventTitle1"
+        app:layout_constraintTop_toBottomOf="@+id/eventTitle1" />
 
-
-    <EditText
-        android:id="@+id/header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Event details" />
 
     <EditText
         android:id="@+id/eventStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="215dp"
+        android:layout_height="41dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Start"
-         />
+        android:onClick="datePicker"
+        android:focusable="false"
+        app:layout_constraintStart_toStartOf="@+id/eventLocation"
+        app:layout_constraintTop_toBottomOf="@+id/eventLocation" />
 
     <EditText
         android:id="@+id/eventEnd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="215dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="44dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="End"
-        />
+        android:focusable="false"
+        android:onClick="datePicker"
+        app:layout_constraintStart_toStartOf="@+id/eventStart"
+        app:layout_constraintTop_toTopOf="@+id/eventStart" />
+
+    <Button
+        android:id="@+id/editEvent"
+        android:layout_width="92dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="28dp"
+        android:text="Edit"
+        app:layout_constraintStart_toStartOf="@+id/eventEnd"
+        app:layout_constraintTop_toBottomOf="@+id/eventEnd" />
 
     <Button
         android:id="@+id/cancelButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
         android:text="Cancel"
-         />
+        app:layout_constraintStart_toEndOf="@+id/editEvent"
+        app:layout_constraintTop_toTopOf="@+id/editEvent" />
 
-    <Button
-        android:id="@+id/editEvent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Edit" />
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

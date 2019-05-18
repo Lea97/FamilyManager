@@ -14,6 +14,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import dhbw.familymanager.familymanager.MainActivity;
 import dhbw.familymanager.familymanager.model.Event;
 
 public class EventRepository {
@@ -72,14 +73,16 @@ public class EventRepository {
         }
     }
 
-    public List<Event> readEventsForUser() {
+    public List<Event> readEventsForFamily() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        String current = auth.getCurrentUser().getUid();
+        //String current = auth.getCurrentUser().getUid();
+        String familyId=MainActivity.getFamily();
+        System.out.println(familyId);
 
 
         try {
-
-            Task<QuerySnapshot> task = db.collection(collectionPath).whereEqualTo("uid", current).get();
+            //Task<QuerySnapshot> task = db.collection(collectionPath).whereEqualTo("uid", current).get();
+           Task<QuerySnapshot> task = db.collection(collectionPath).whereEqualTo("familyId", familyId).get();
            // Task<QuerySnapshot> task = db.collection(collectionPath).get();
             task.addOnFailureListener(new OnFailureListener() {
                 @Override
@@ -96,8 +99,7 @@ public class EventRepository {
                 return querySnapshot.toObjects(Event.class);
         } catch (Exception e) {
             //throw new DatabaseCommunicationException("Event reading failed", e);
-            Log.d("TAG", "Event reading failed: ");
-
+            Log.d("TAG", "Event reading failed: ", e);
         }
 
 

@@ -17,6 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Random;
 
+import dhbw.familymanager.familymanager.MainActivity;
 import dhbw.familymanager.familymanager.R;
 import dhbw.familymanager.familymanager.calendar.AddEventActivity;
 import dhbw.familymanager.familymanager.calendar.CalendarActivity;
@@ -68,6 +69,7 @@ public class CreateChatroomActivity extends AppCompatActivity {
         chatroom.setChatId(String.valueOf(r.nextLong()));
         chatroom.setUserId(FirebaseAuth.getInstance().getCurrentUser().getUid());
         chatroom.setChatName(roomName.getText().toString());
+        chatroom.setFamilyId(MainActivity.getFamily());
         return  chatroom;
 
 

@@ -25,6 +25,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
+import dhbw.familymanager.familymanager.MainActivity;
 import dhbw.familymanager.familymanager.R;
 import dhbw.familymanager.familymanager.model.ChatMessage;
 
@@ -121,7 +122,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private void getUserChatrooms() {
 
-        final Task<QuerySnapshot> ref=db.collection("chatrooms").whereEqualTo("userId", user).get().
+        final Task<QuerySnapshot> ref=db.collection("chatrooms").whereEqualTo("familyId", MainActivity.getFamily()).get().
                 addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {

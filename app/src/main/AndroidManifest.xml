@@ -154,14 +154,6 @@
                 android:value="dhbw.familymanager.familymanager.MainActivity" />
         </activity>
         <activity
-            android:name="calendar.EditEventActivity"
-            android:label="EditEvent"
-            android:parentActivityName=".calendar.EventDetailsActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="dhbw.familymanager.familymanager.MainActivity" />
-        </activity>
-        <activity
             android:name=".chat.CreateChatroomActivity"
             android:label="Create Chatroom"
             android:parentActivityName=".chat.ChatActivity">
@@ -177,8 +169,17 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="dhbw.familymanager.familymanager.MainActivity" />
         </activity>
+
         <activity
             android:name=".calendar.EventDetailsActivity"
+            android:label="Event Details"
+            android:parentActivityName=".calendar.CalendarActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="dhbw.familymanager.familymanager.calendar.CalendarActivity" />
+        </activity>
+        <activity
+            android:name=".calendar.EditEventActivity"
             android:label="EditEvent"
             android:parentActivityName=".calendar.CalendarActivity">
             <meta-data

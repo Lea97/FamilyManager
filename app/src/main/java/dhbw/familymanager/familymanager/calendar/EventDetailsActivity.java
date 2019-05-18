@@ -96,7 +96,7 @@ public class EventDetailsActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void startEdit(String eventId) {
-        Intent intent=new Intent(EventDetailsActivity.this, AddEventActivity.class);
+        Intent intent=new Intent(EventDetailsActivity.this, EditEventActivity.class);
         intent.putExtra("eventId", eventId);
         startActivity(intent);
 
