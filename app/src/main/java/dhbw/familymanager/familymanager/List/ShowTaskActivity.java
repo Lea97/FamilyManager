@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -34,7 +35,8 @@ public class ShowTaskActivity extends AppCompatActivity {
     private String listName;
     private ArrayList<String> tasks;
     private static boolean update = false;
-    private String task;
+    private TextView tn;
+    private String taskName;
     private CheckBox checkBox;
 
     @Override
@@ -45,8 +47,9 @@ public class ShowTaskActivity extends AppCompatActivity {
         Intent i = getIntent();
         listName = i.getStringExtra("todoName");
         tasks = new ArrayList<String>();
+        checkBox = (CheckBox) findViewById(R.id.task_checkbox);
         setContentView(R.layout.task_main);
-        checkBox = findViewById(R.id.task_checkbox);
+
         addTasks();
     }
 
@@ -118,7 +121,6 @@ public class ShowTaskActivity extends AppCompatActivity {
                 break;
             case R.id.action_delete_all:
                 deleteAllTasks(tasks,listName);
-                //deleteTasksFromLists();
                 break;
             case android.R.id.home:
                 onBackPressed();
@@ -127,8 +129,8 @@ public class ShowTaskActivity extends AppCompatActivity {
         return true;
     }
 
+
     public void deleteDoneTasks(){
-        ArrayList<String> doneTasks = new ArrayList<>();
         DocumentReference docRef = db.collection("lists").document(listName);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -138,12 +140,7 @@ public class ShowTaskActivity extends AppCompatActivity {
                     if (document.exists()) {
                         Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                         ArrayList<String> tasks =(ArrayList<String>) document.get("tasks");
-                        for(String taskChecked : tasks){
-                            if(checkBox.isChecked()){
-                                //doneTasks.add(taskChecked);
-                                tasks.remove(task);
-                            }
-                        }
+                        tasks.remove(taskName);
                         db.collection("lists").document(listName).update("tasks", tasks);
                         fishView();
                     } else {
@@ -155,28 +152,6 @@ public class ShowTaskActivity extends AppCompatActivity {
             }
         });
     }
-    /*public void deleteDoneTasks(){
-        DocumentReference docRef = db.collection("lists").document(listName);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
-                        ArrayList<String> tasks =(ArrayList<String>) document.get("tasks");
-                        tasks.remove(task);
-                        db.collection("lists").document(listName).update("tasks", tasks);
-                        fishView();
-                    } else {
-                        Log.d("TAG", "No such document");
-                    }
-                } else {
-                    Log.d("TAG", "get failed with ", task.getException());
-                }
-            }
-        });
-    }*/
 
     private void fishView() {
         ShowTaskActivity.update();
