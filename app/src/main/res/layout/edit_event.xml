@@ -60,7 +60,7 @@
         android:layout_width="92dp"
         android:layout_height="50dp"
         android:layout_marginTop="28dp"
-        android:text="Bearbeiten"
+        android:text="Speichern"
         app:layout_constraintStart_toStartOf="@+id/eventEnd"
         app:layout_constraintTop_toBottomOf="@+id/eventEnd" />
 

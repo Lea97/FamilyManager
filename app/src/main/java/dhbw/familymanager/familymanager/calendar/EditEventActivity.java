@@ -72,6 +72,12 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
                 event = task.getResult().toObjects(Event.class).get(0);
                 eventTitle.setText(event.getTitle());
                 eventLocation.setText(event.getLocation());
+                start.setTime(event.getStart());
+                end.setTime(event.getEnd());
+
+                System.out.println("start: " + start);
+                System.out.println("end: " + end);
+
                 eventStart.setText(event.getStart().toString());
                 eventStart.setOnClickListener(new View.OnClickListener() {
                     @Override
