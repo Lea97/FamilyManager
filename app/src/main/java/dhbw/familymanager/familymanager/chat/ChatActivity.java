@@ -44,89 +44,57 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chatrooms);
 
-        user=FirebaseAuth.getInstance().getCurrentUser().getUid();
-        db=FirebaseFirestore.getInstance();
-        layout=findViewById(R.id.chatroomListView);
-        chatrooms=new ArrayList<>();
+        user = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        db = FirebaseFirestore.getInstance();
+        layout = findViewById(R.id.chatroomListView);
+        chatrooms = new ArrayList<>();
         arrayAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, chatrooms);
 
-        if(user!=null){
+        if (user != null) {
             getUserChatrooms();
         }
 
 
-        if(chatrooms.size()==0){
+        if (chatrooms.size() == 0) {
             chatrooms.add("Sie haben noch keine Chats!");
             arrayAdapter.notifyDataSetChanged();
         }
 
 
-
         layout.setAdapter(arrayAdapter);
 
-        addChatroomButton=(View)findViewById(R.id.addChatroomButton);
+        addChatroomButton = (View) findViewById(R.id.addChatroomButton);
         addChatroomButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ChatActivity.this, CreateChatroomActivity.class));
-                }
-                }
+                                                 @Override
+                                                 public void onClick(View v) {
+                                                     startActivity(new Intent(ChatActivity.this, CreateChatroomActivity.class));
+                                                 }
+                                             }
         );
 
 
+        layout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView textView = (TextView) view.findViewById(android.R.id.text1);
+                String chatName = textView.getText().toString();
+                startActivity(new Intent(ChatActivity.this, ChatMessagesActivity.class).putExtra("chatName", chatName));
 
+            }
+        });
 
-    layout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        TextView textView = (TextView) view.findViewById(android.R.id.text1);
-        String chatName = textView.getText().toString();
-        startActivity(new Intent(ChatActivity.this, ChatMessagesActivity.class).putExtra("chatName", chatName));
-
-    }
-});
-
-
-
-        //displayChatMessages();
-       // createRoom = findViewById(R.id.create_room);
-
-        //createRoom.setOnClickListener(new View.OnClickListener() {
-            //@Override
-            //public void onClick(View view) {
-             //   Log.d("MainActivity", "Launch create a room screen");
-             //   Intent intent=new Intent(ChatActivity.this, CreateChatroomActivity.class);
-
-              //  EditText input = (EditText)findViewById(R.id.input);
-              //  startActivity(intent);
-
-                // Read the input field and push a new instance
-                // of ChatMessage to the Firebase database
-               // FirebaseDatabase.getInstance()
-               //         .getReference()
-                //        .push()
-                //        .setValue(new ChatMessage(input.getText().toString(),
-                 //               FirebaseAuth.getInstance()
-                 //                       .getCurrentUser()
-                  //                      .getDisplayName())
-                  //      );
-
-                // Clear the input
-                //input.setText("");
-           // }
-       // });
 
     }
 
 
     private void getUserChatrooms() {
 
-        final Task<QuerySnapshot> ref=db.collection("chatrooms").whereEqualTo("familyId", MainActivity.getFamily()).get().
+        final Task<QuerySnapshot> ref = db.collection("chatrooms").whereEqualTo("familyId", MainActivity.getFamily()).get().
                 addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            chatrooms.clear();
+                        chatrooms.clear();
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d("TAG", document.getId() + " => " + document.getData());
@@ -136,8 +104,7 @@ public class ChatActivity extends AppCompatActivity {
                             Log.d("TAG", "Error getting documents: ", task.getException());
                         }
                         arrayAdapter.notifyDataSetChanged();
-                        //layout.refreshDrawableState();
-                        //layout.invalidate();
+
                     }
                 });
 
@@ -145,22 +112,17 @@ public class ChatActivity extends AppCompatActivity {
 
 
     private void displayChatMessages() {
-        ListView listOfMessages = (ListView)findViewById(R.id.message);
+        ListView listOfMessages = (ListView) findViewById(R.id.message);
 
         fListAdapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
                 R.layout.message, FirebaseDatabase.getInstance().getReference()) {
             @Override
             protected void populateView(View v, ChatMessage model, int position) {
-                // Get references to the views of message.xml
-                TextView messageText = (TextView)v.findViewById(R.id.message_text);
-                TextView messageUser = (TextView)v.findViewById(R.id.message_user);
-                TextView messageTime = (TextView)v.findViewById(R.id.message_time);
-
-                // Set their text
+                TextView messageText = (TextView) v.findViewById(R.id.message_text);
+                TextView messageUser = (TextView) v.findViewById(R.id.message_user);
+                TextView messageTime = (TextView) v.findViewById(R.id.message_time);
                 messageText.setText(model.getMessageText());
                 messageUser.setText(model.getSenderId());
-
-                // Format the date before showing it
                 messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
                         model.getTimestamp()));
             }

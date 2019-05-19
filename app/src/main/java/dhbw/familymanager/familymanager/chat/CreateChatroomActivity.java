@@ -28,19 +28,17 @@ public class CreateChatroomActivity extends AppCompatActivity {
     private Button createChat;
 
 
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_room);
         roomName = findViewById(R.id.room_name);
         setTitle(getString(R.string.create_room));
-        createChat=findViewById(R.id.addChatroom);
+        createChat = findViewById(R.id.addChatroom);
         createChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChatRoom createdChatroom=createChatroomObject();
+                ChatRoom createdChatroom = createChatroomObject();
                 persistChatroomObject(createdChatroom);
-
 
 
             }
@@ -49,29 +47,28 @@ public class CreateChatroomActivity extends AppCompatActivity {
     }
 
     private void persistChatroomObject(final ChatRoom createdChatroom) {
-        FirebaseFirestore db=FirebaseFirestore.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("chatrooms").add(createdChatroom).
                 addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentReference> task) {
-                System.out.println("Chatroom added to database");
-                startActivity(new Intent(CreateChatroomActivity.this, ChatActivity.class));
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        System.out.println("Chatroom added to database");
+                        startActivity(new Intent(CreateChatroomActivity.this, ChatActivity.class));
 
-            }
-        });
+                    }
+                });
 
 
     }
 
     private ChatRoom createChatroomObject() {
-        Random r=new Random();
-        ChatRoom chatroom=new ChatRoom();
+        Random r = new Random();
+        ChatRoom chatroom = new ChatRoom();
         chatroom.setChatId(String.valueOf(r.nextLong()));
         chatroom.setUserId(FirebaseAuth.getInstance().getCurrentUser().getUid());
         chatroom.setChatName(roomName.getText().toString());
         chatroom.setFamilyId(MainActivity.getFamily());
-        return  chatroom;
-
+        return chatroom;
 
 
     }

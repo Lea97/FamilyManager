@@ -32,10 +32,11 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
     private WeekView mWeekView;
     private FloatingActionButton addEventButton;
     private Random random = new Random();
-    private List<Integer> colors=new ArrayList();
+    private List<Integer> colors = new ArrayList();
     private List<WeekViewEvent> events = readEvents();
+
     private GregorianCalendar getCalendar(Date date) {
-        Calendar calendar=new GregorianCalendar();
+        Calendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         return null;
 
@@ -45,34 +46,31 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
 
         final EventRepository repo = EventRepository.getInstance();
 
-        List<Event> userEvents=repo.readEventsForFamily();
+        List<Event> userEvents = repo.readEventsForFamily();
         List<WeekViewEvent> result = new ArrayList<>();
-        if(!userEvents.isEmpty()&&(userEvents!=null)){
+        if (!userEvents.isEmpty() && (userEvents != null)) {
 
-       // for (Event e : events) {
-       for (Event e:userEvents){
-            WeekViewEvent weekViewEvent = new WeekViewEvent();
-            Calendar calStart = Calendar.getInstance();
-           Calendar calEnd = Calendar.getInstance();
-           calStart.setTime(e.getStart());
-           calEnd.setTime(e.getEnd());
+            for (Event e : userEvents) {
+                WeekViewEvent weekViewEvent = new WeekViewEvent();
+                Calendar calStart = Calendar.getInstance();
+                Calendar calEnd = Calendar.getInstance();
+                calStart.setTime(e.getStart());
+                calEnd.setTime(e.getEnd());
 
-            weekViewEvent.setId(e.getId());
-            weekViewEvent.setName(e.getTitle());
-            weekViewEvent.setStartTime(calStart);
-            weekViewEvent.setEndTime(calEnd);
-            weekViewEvent.setStartTime(calStart);
-            weekViewEvent.setLocation(e.getLocation());
-            weekViewEvent.setColor(colors.get(random.nextInt(colors.size())));
+                weekViewEvent.setId(e.getId());
+                weekViewEvent.setName(e.getTitle());
+                weekViewEvent.setStartTime(calStart);
+                weekViewEvent.setEndTime(calEnd);
+                weekViewEvent.setStartTime(calStart);
+                weekViewEvent.setLocation(e.getLocation());
+                weekViewEvent.setColor(colors.get(random.nextInt(colors.size())));
 
 
-            result.add(weekViewEvent);
-        }}
+                result.add(weekViewEvent);
+            }
+        }
         return result;
     }
-
-
-
 
 
     MonthLoader.MonthChangeListener mMonthChangeListener = new MonthLoader.MonthChangeListener() {
@@ -80,7 +78,7 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
         public List<WeekViewEvent> onMonthChange(int newYear, final int newMonth) {
             ArrayList<WeekViewEvent> result = new ArrayList<>();
 
-            for (WeekViewEvent e : events ) {
+            for (WeekViewEvent e : events) {
                 if (e.getStartTime().get(Calendar.MONTH) + 1 == newMonth && e.getStartTime().get(Calendar.YEAR) == newYear) {
                     result.add(e);
                 }
@@ -100,21 +98,20 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
     }
 
 
-@Override
-public void onResume() {
+    @Override
+    public void onResume() {
 
-    super.onResume();
-    mWeekView.notifyDatasetChanged();
-   startEventReading();
-    //mWeekView.notifyDatasetChanged();
-    mWeekView.goToDate(new GregorianCalendar());
+        super.onResume();
+        mWeekView.notifyDatasetChanged();
+        startEventReading();
+        mWeekView.goToDate(new GregorianCalendar());
 
-}
+    }
 
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.today:
                 mWeekView.setNumberOfVisibleDays(1);
                 break;
@@ -171,7 +168,6 @@ public void onResume() {
         mWeekView.setOnEventClickListener(this);
 
 
-
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -194,14 +190,14 @@ public void onResume() {
 
 
     }
-    private void updateEvent(WeekViewEvent event){
-        Intent intent=new Intent(this, AddEventActivity.class);
+
+    private void updateEvent(WeekViewEvent event) {
+        Intent intent = new Intent(this, AddEventActivity.class);
         intent.putExtra("eventId", event.getId());
         startActivity(intent);
 
 
     }
-
 
 
     private void startEventReading() {
@@ -214,13 +210,12 @@ public void onResume() {
                 System.out.println("Events read: " + events.size());
 
 
-
-               thisActivity.runOnUiThread(new Runnable() {
+                thisActivity.runOnUiThread(new Runnable() {
                     public void run() {
                         System.out.println("Refreshing calendar");
                         // because there is no method to refresh calendar
-                     // mWeekView.goToDate(new GregorianCalendar(2000, 5, 5));
-                     //  mWeekView.goToDate(new GregorianCalendar());
+                        // mWeekView.goToDate(new GregorianCalendar(2000, 5, 5));
+                        //  mWeekView.goToDate(new GregorianCalendar());
 
                         mWeekView.notifyDatasetChanged();
                         mWeekView.goToDate(new GregorianCalendar());
@@ -239,13 +234,13 @@ public void onResume() {
 
         startActivity(new Intent(CalendarActivity.this, EventDetailsActivity.class));
 
-        Intent intent=new Intent(CalendarActivity.this, EventDetailsActivity.class);
-       intent.putExtra("eventId", String.valueOf(event.getId()));
-       System.out.println(event.getId());
+        Intent intent = new Intent(CalendarActivity.this, EventDetailsActivity.class);
+        intent.putExtra("eventId", String.valueOf(event.getId()));
+        System.out.println(event.getId());
         CalendarActivity.this.startActivity(intent);
 
-       // deleteEvent(event);
-        }
+        // deleteEvent(event);
+    }
 
 
     //mWeekView.setOnEventClickListener(onEventClickListener);

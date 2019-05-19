@@ -49,8 +49,9 @@ public class ChatMessage {
         timestamp = new Date().getTime();
         timestamp = new Date().getTime();
 
-        }
-    public ChatMessage(){
+    }
+
+    public ChatMessage() {
 
     }
 

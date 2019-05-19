@@ -74,10 +74,6 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
                 eventLocation.setText(event.getLocation());
                 start.setTime(event.getStart());
                 end.setTime(event.getEnd());
-
-                System.out.println("start: " + start);
-                System.out.println("end: " + end);
-
                 eventStart.setText(event.getStart().toString());
                 eventStart.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -117,7 +113,6 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 System.out.println(eventId);
                 dbEntryId = task.getResult().getDocuments().get(0).getId();
-
                 System.out.println(dbEntryId);
                 final DocumentReference docRef = db.collection("events").document(dbEntryId);
                 Task<Void> task1 = docRef.update(
@@ -142,9 +137,7 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
             Calendar cal = new GregorianCalendar(year, month, dayOfMonth);
             final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
             if (!startEvent) {
-                //if(eventStart.compareTo(Calendar.getInstance())>0)
                 start.set(year, month, dayOfMonth);
-
                 TimePickerFragment timePickerFragment = new TimePickerFragment();
                 timePickerFragment.show(getFragmentManager(), "datePicker");
                 eventStart.setText(dateFormat.format(cal.getTime()));
@@ -157,9 +150,6 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
                 eventEnd.setText(dateFormat.format(cal.getTime()));
             }
 
-//        TimePicker mTimePicker = new TimePicker();
-            //datePickerDialog.show();
-            //((TextView) findViewById(R.id.showDate)).setText(dateFormat.format(cal.getTime()));
 
         }
     }
@@ -171,8 +161,6 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
             start.set(Calendar.HOUR_OF_DAY, hourOfDay);
             start.set(Calendar.MINUTE, minute);
             eventStart.append("; " + hourOfDay + ":" + minute + " Uhr");
-            //eventStart.set(hourOfDay, minute);
-
             startEvent = true;
         } else {
             end.set(Calendar.HOUR_OF_DAY, hourOfDay);

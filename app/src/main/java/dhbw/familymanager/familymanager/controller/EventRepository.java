@@ -20,7 +20,6 @@ import dhbw.familymanager.familymanager.model.Event;
 public class EventRepository {
 
 
-
     public enum RepositoryMode {
         PRODUCTIVE, TEST;
     }
@@ -62,9 +61,9 @@ public class EventRepository {
 
 
     public void storeEvent(Event event) {
-        FirebaseAuth auth=FirebaseAuth.getInstance();
-       String uid=auth.getCurrentUser().getUid();
-       Task<DocumentReference> task = db.collection(collectionPath).add(event);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        String uid = auth.getCurrentUser().getUid();
+        Task<DocumentReference> task = db.collection(collectionPath).add(event);
 
         try {
             Tasks.await(task);
@@ -76,14 +75,14 @@ public class EventRepository {
     public List<Event> readEventsForFamily() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         //String current = auth.getCurrentUser().getUid();
-        String familyId=MainActivity.getFamily();
+        String familyId = MainActivity.getFamily();
         System.out.println(familyId);
 
 
         try {
             //Task<QuerySnapshot> task = db.collection(collectionPath).whereEqualTo("uid", current).get();
-           Task<QuerySnapshot> task = db.collection(collectionPath).whereEqualTo("familyId", familyId).get();
-           // Task<QuerySnapshot> task = db.collection(collectionPath).get();
+            Task<QuerySnapshot> task = db.collection(collectionPath).whereEqualTo("familyId", familyId).get();
+            // Task<QuerySnapshot> task = db.collection(collectionPath).get();
             task.addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
@@ -96,7 +95,7 @@ public class EventRepository {
             QuerySnapshot querySnapshot = Tasks.await(task);
 
 
-                return querySnapshot.toObjects(Event.class);
+            return querySnapshot.toObjects(Event.class);
         } catch (Exception e) {
             //throw new DatabaseCommunicationException("Event reading failed", e);
             Log.d("TAG", "Event reading failed: ", e);
