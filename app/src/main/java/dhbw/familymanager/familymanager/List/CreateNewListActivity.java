@@ -47,9 +47,6 @@ public class CreateNewListActivity extends AppCompatActivity implements View.OnC
     }
 
     private void createList() {
-        /*FirebaseFirestore db = FirebaseFirestore.getInstance();
-        TextView nameField = (TextView) findViewById(R.id.newListName);
-        String newListName = nameField.getText().toString();*/
 
         lists.add(newListName);
         Map<String, Object> listen = new HashMap<>();

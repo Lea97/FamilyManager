@@ -10,13 +10,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.ListView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 
@@ -32,6 +35,7 @@ public class ShowTaskActivity extends AppCompatActivity {
     private ArrayList<String> tasks;
     private static boolean update = false;
     private String task;
+    private CheckBox checkBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +46,7 @@ public class ShowTaskActivity extends AppCompatActivity {
         listName = i.getStringExtra("todoName");
         tasks = new ArrayList<String>();
         setContentView(R.layout.task_main);
+        checkBox = findViewById(R.id.task_checkbox);
         addTasks();
     }
 
@@ -71,7 +76,6 @@ public class ShowTaskActivity extends AppCompatActivity {
                         Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                         tasks = (ArrayList<String>) document.get("tasks");
                         addListAdapter();
-
                     } else {
                         Log.d("TAG", "No such document");
                     }
@@ -113,8 +117,8 @@ public class ShowTaskActivity extends AppCompatActivity {
                 deleteDoneTasks();
                 break;
             case R.id.action_delete_all:
-                this.tasks.clear();
-
+                deleteAllTasks(tasks,listName);
+                //deleteTasksFromLists();
                 break;
             case android.R.id.home:
                 onBackPressed();
@@ -124,6 +128,34 @@ public class ShowTaskActivity extends AppCompatActivity {
     }
 
     public void deleteDoneTasks(){
+        ArrayList<String> doneTasks = new ArrayList<>();
+        DocumentReference docRef = db.collection("lists").document(listName);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                        ArrayList<String> tasks =(ArrayList<String>) document.get("tasks");
+                        for(String taskChecked : tasks){
+                            if(checkBox.isChecked()){
+                                //doneTasks.add(taskChecked);
+                                tasks.remove(task);
+                            }
+                        }
+                        db.collection("lists").document(listName).update("tasks", tasks);
+                        fishView();
+                    } else {
+                        Log.d("TAG", "No such document");
+                    }
+                } else {
+                    Log.d("TAG", "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+    /*public void deleteDoneTasks(){
         DocumentReference docRef = db.collection("lists").document(listName);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -144,11 +176,49 @@ public class ShowTaskActivity extends AppCompatActivity {
                 }
             }
         });
-    }
+    }*/
 
     private void fishView() {
         ShowTaskActivity.update();
         this.finish();
     }
+
+    public void deleteAllTasks(ArrayList<String> allTasks, final String listFolder){
+        for (final String taskname: allTasks)
+        {
+            DocumentReference docRef =  db.collection("tasks").document(family + listFolder + taskname);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                            db.collection("tasks").document(family + listFolder + taskname).delete();
+                            deleteTasksFromLists();
+                            //deleteList(document);
+                            fishView();
+                        } else {
+                            Log.d("TAG", "No such document");
+                        }
+                    } else {
+                        Log.d("TAG", "get failed with ", task.getException());
+                    }
+                }
+            });
+        }
+    }
+
+    public void deleteTasksFromLists(){
+        db.collection("lists").document(family+listName).delete();
+
+    }
+
+    /*public void deleteList(DocumentSnapshot document){
+
+        ArrayList<String> listInTodo = (ArrayList<String>) document.get("listName");
+        listInTodo.remove(listName);
+        db.collection("todolist").document(family).update("listName", listInTodo);
+    }*/
 
 }
