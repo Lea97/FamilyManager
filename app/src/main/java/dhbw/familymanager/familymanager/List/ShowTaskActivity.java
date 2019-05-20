@@ -38,6 +38,7 @@ public class ShowTaskActivity extends AppCompatActivity {
     private TextView tn;
     private String taskName;
     private CheckBox checkBox;
+    private ArrayList<String> doneTasks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,6 @@ public class ShowTaskActivity extends AppCompatActivity {
         tasks = new ArrayList<String>();
         checkBox = (CheckBox) findViewById(R.id.task_checkbox);
         setContentView(R.layout.task_main);
-
         addTasks();
     }
 
@@ -129,7 +129,6 @@ public class ShowTaskActivity extends AppCompatActivity {
         return true;
     }
 
-
     public void deleteDoneTasks(){
         DocumentReference docRef = db.collection("lists").document(listName);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -140,9 +139,11 @@ public class ShowTaskActivity extends AppCompatActivity {
                     if (document.exists()) {
                         Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                         ArrayList<String> tasks =(ArrayList<String>) document.get("tasks");
-                        tasks.remove(taskName);
-                        db.collection("lists").document(listName).update("tasks", tasks);
-                        fishView();
+                        if(checkBox.isChecked()){
+                            tasks.remove(taskName);
+                            db.collection("lists").document(listName).update("tasks", tasks);
+                            fishView();
+                        }
                     } else {
                         Log.d("TAG", "No such document");
                     }
