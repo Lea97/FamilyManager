@@ -37,13 +37,17 @@ import dhbw.familymanager.familymanager.model.User;
 
 public class ShowMemberActivity extends AppCompatActivity {
 
+    private static boolean update = false;
     private FirebaseFirestore db;
     private String family;
     private ListView listView;
     private List<User> users;
-    private static boolean update = false;
     private ArrayList<String> members;
     private FirebaseAuth auth;
+
+    public static void update() {
+        update = true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,26 +55,19 @@ public class ShowMemberActivity extends AppCompatActivity {
         users = new ArrayList<User>();
         db = FirebaseFirestore.getInstance();
         family = MainActivity.getFamily();
-        if(family != null)
-        {
+        if (family != null) {
             setContentView(R.layout.members_list_layout);
             getFamilyMembers();
-        }
-        else {
+        } else {
             setContentView(R.layout.empty_page);
             Toast.makeText(ShowMemberActivity.this, "Wählen Sie eine Familie um die Funktionalitäten zu nutzen.", Toast.LENGTH_LONG).show();
         }
     }
 
-    public static void update(){
-        update = true;
-    }
-
     @Override
-    protected void onPostResume(){
+    protected void onPostResume() {
         super.onPostResume();
-        if (update)
-        {
+        if (update) {
             update = false;
             users.clear();
             getFamilyMembers();
@@ -78,8 +75,8 @@ public class ShowMemberActivity extends AppCompatActivity {
     }
 
     private void addListAdapter() {
-        listView = (ListView)findViewById(R.id.simpleListView);
-        User[]usersArray = new User[users.size()];
+        listView = (ListView) findViewById(R.id.simpleListView);
+        User[] usersArray = new User[users.size()];
         MembersAdapter membersAdapter = new MembersAdapter(getApplicationContext(), users.toArray(usersArray), this);
         listView.setAdapter(membersAdapter);
 
@@ -104,7 +101,6 @@ public class ShowMemberActivity extends AppCompatActivity {
                     if (document.exists()) {
                         Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                         setMembers(document);
-
                     } else {
                         Log.d("TAG", "No such document");
                     }
@@ -132,7 +128,7 @@ public class ShowMemberActivity extends AppCompatActivity {
                                 members.remove(userMail);
                                 User user = new User();
                                 user.setEmail(userMail);
-                                Timestamp birth = (Timestamp)document.get("birthday");
+                                Timestamp birth = (Timestamp) document.get("birthday");
                                 user.setBirthday(birth.toDate());
                                 user.setName((String) document.get("name"));
                                 user.setPhonenumber((String) document.get("phonenumber"));
@@ -170,7 +166,6 @@ public class ShowMemberActivity extends AppCompatActivity {
                             } else {
                                 getMenuInflater().inflate(R.menu.family_menu, menu);
                             }
-
                         } else {
                             Log.d("TAG", "No such document");
                         }
@@ -184,8 +179,8 @@ public class ShowMemberActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.add_member:
                 Intent intent = new Intent(ShowMemberActivity.this, AddMemberActivity.class);
                 startActivity(intent);
@@ -231,7 +226,7 @@ public class ShowMemberActivity extends AppCompatActivity {
 
     private void deleteFamily() {
         db.collection("families").document(family).delete();
-        DocumentReference docRef =  db.collection("gallery").document(family);
+        DocumentReference docRef = db.collection("gallery").document(family);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -255,9 +250,8 @@ public class ShowMemberActivity extends AppCompatActivity {
     }
 
     private void deleteFolders(ArrayList<String> folders) {
-        for (final String folder: folders)
-        {
-            DocumentReference docRef =  db.collection("folders").document(family + folder);
+        for (final String folder : folders) {
+            DocumentReference docRef = db.collection("folders").document(family + folder);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -268,7 +262,6 @@ public class ShowMemberActivity extends AppCompatActivity {
                             ArrayList<String> pictures = (ArrayList<String>) document.get("photos");
                             deletePhotos(pictures, folder);
                             db.collection("folders").document(family + folder).delete();
-
                         } else {
                             Log.d("TAG", "No such document");
                         }
@@ -281,9 +274,8 @@ public class ShowMemberActivity extends AppCompatActivity {
     }
 
     private void deletePhotos(ArrayList<String> pictures, final String folder) {
-        for (final String photo: pictures)
-        {
-            DocumentReference docRef =  db.collection("photos").document(family + folder + photo);
+        for (final String photo : pictures) {
+            DocumentReference docRef = db.collection("photos").document(family + folder + photo);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -305,7 +297,7 @@ public class ShowMemberActivity extends AppCompatActivity {
         }
     }
 
-    private void showAlertDialog(){
+    private void showAlertDialog() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("Wollen Sie wirklich die Familie verlassen?");
         alertDialogBuilder.setCancelable(true);
@@ -343,7 +335,6 @@ public class ShowMemberActivity extends AppCompatActivity {
                         Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                         deleteMember(document);
                         finishActivityPage();
-
                     } else {
                         Log.d("TAG", "No such document");
                     }

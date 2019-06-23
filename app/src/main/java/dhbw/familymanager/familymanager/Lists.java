@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -18,10 +17,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
-
 import java.util.ArrayList;
 import java.util.List;
-
 
 import dhbw.familymanager.familymanager.List.ListAdapter;
 import dhbw.familymanager.familymanager.model.Task;
@@ -42,7 +39,6 @@ public class Lists extends AppCompatActivity implements View.OnClickListener {
         setContentView(R.layout.list);
         tasks = new ArrayList<Task>();
 
-
         button = (Button) findViewById(R.id.add_task_button);
         input = (EditText) findViewById(R.id.input_task);
         task_list_view = (ListView) findViewById(R.id.list_view);
@@ -50,7 +46,6 @@ public class Lists extends AppCompatActivity implements View.OnClickListener {
 
         adapter = new ListAdapter(tasks, this);
         task_list_view.setAdapter(adapter);
-
 
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -60,12 +55,9 @@ public class Lists extends AppCompatActivity implements View.OnClickListener {
                     adapter.notifyDataSetChanged();
                     input.setText("");
                 }
-
             }
         });
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -106,7 +98,6 @@ public class Lists extends AppCompatActivity implements View.OnClickListener {
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.context_menu_list, menu);
-
     }
 
     public void createEditDialog(final Task task) {
@@ -161,7 +152,7 @@ public class Lists extends AppCompatActivity implements View.OnClickListener {
         return super.onContextItemSelected(item);
     }
 
-    public void onClick(View view){
+    public void onClick(View view) {
 
     }
 }

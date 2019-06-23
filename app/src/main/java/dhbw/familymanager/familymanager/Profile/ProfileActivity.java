@@ -47,24 +47,26 @@ import dhbw.familymanager.familymanager.MainActivity;
 import dhbw.familymanager.familymanager.R;
 import dhbw.familymanager.familymanager.model.User;
 
-
 public class ProfileActivity extends AppCompatActivity {
 
-    private Uri filePath;
+    private static final String TAG = null;
+    private static Boolean refresh = false;
     private final int PICK_IMAGE_REQUEST = 71;
-
+    private Uri filePath;
     private User user;
     private ImageView mImageView;
-    private static final String TAG = null;
     private FirebaseStorage storage;
     private StorageReference storageReference;
-    private static Boolean refresh = false;
     private FirebaseFirestore db;
     private FirebaseUser firebaseUser;
     private FirebaseAuth auth;
     private Boolean deleted = false;
     private AlertDialog alertDialog;
     private EditText passwordField;
+
+    static void refreshValues() {
+        refresh = true;
+    }
 
     @Override
     protected void onPostResume() {
@@ -82,7 +84,6 @@ public class ProfileActivity extends AppCompatActivity {
                             Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                             createUserFromDocument(document);
                             fillFormular();
-
                         } else {
                             Log.d("TAG", "No such document");
                         }
@@ -104,12 +105,6 @@ public class ProfileActivity extends AppCompatActivity {
         user.setPicturePath((String) document.get("picturePath"));
     }
 
-    static void refreshValues()
-    {
-       refresh = true;
-    }
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -127,16 +122,13 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null )
-        {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
             filePath = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 mImageView.setImageBitmap(bitmap);
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -150,9 +142,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (user != null)
-        {
-            if(!(user.getEmail().equals(firebaseUser.getEmail()))){
+        if (user != null) {
+            if (!(user.getEmail().equals(firebaseUser.getEmail()))) {
                 return false;
             }
         }
@@ -161,17 +152,17 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.edit_profile:
                 Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
                 intent.putExtra("userObject", user);
                 startActivity(intent);
                 setValues();
                 break;
-           case R.id.delete_profile:
-               showAlertDialog();
-               break;
+            case R.id.delete_profile:
+                showAlertDialog();
+                break;
             case android.R.id.home:
                 onBackPressed();
                 return true;
@@ -179,7 +170,7 @@ public class ProfileActivity extends AppCompatActivity {
         return true;
     }
 
-    private void showAlertDialog(){
+    private void showAlertDialog() {
         final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setMessage("Wollen Sie wirklich Ihr Profil löschen? Dies kann nicht rückgängig gemacht werden.");
         alertDialogBuilder.setCancelable(true);
@@ -191,7 +182,7 @@ public class ProfileActivity extends AppCompatActivity {
 
                 .setNegativeButton(R.string.cancle_button, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                       dialog.cancel();
+                        dialog.cancel();
                     }
                 });
 
@@ -224,23 +215,23 @@ public class ProfileActivity extends AppCompatActivity {
         AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), password);
         user.reauthenticateAndRetrieveData(credential)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-            @Override
-            public void onSuccess(AuthResult authResult) {
-                auth.getCurrentUser().delete();
-                deleted = true;
-                deleteFromFamily();
-                db.collection("users").document(auth.getCurrentUser().getUid()).delete();
-                alertDialog.cancel();
-                finish();
-                MainActivity.logoutUser();
-            }
-        })
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        auth.getCurrentUser().delete();
+                        deleted = true;
+                        deleteFromFamily();
+                        db.collection("users").document(auth.getCurrentUser().getUid()).delete();
+                        alertDialog.cancel();
+                        finish();
+                        MainActivity.logoutUser();
+                    }
+                })
                 .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                passwordField.setError("Passwort ist falsch");
-            }
-        });
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        passwordField.setError("Passwort ist falsch");
+                    }
+                });
     }
 
     private void deleteFromFamily() {
@@ -257,17 +248,16 @@ public class ProfileActivity extends AppCompatActivity {
                         }
                     }
                 });
-
     }
 
     private void deleteMember(DocumentSnapshot document, String emailAdress) {
         ArrayList<String> members = (ArrayList<String>) document.get("members");
         members.remove(emailAdress);
-        db.collection("families").document(document.getId()).update("members",members);
+        db.collection("families").document(document.getId()).update("members", members);
     }
 
     private void setValues() {
-        if (user == null){
+        if (user == null) {
             String userId = firebaseUser.getUid();
             DocumentReference docRef = db.collection("users").document(userId);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -279,7 +269,6 @@ public class ProfileActivity extends AppCompatActivity {
                             Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                             createUserFromDocument(document);
                             fillFormular();
-
                         } else {
                             Log.d("TAG", "No such document");
                         }
@@ -288,14 +277,12 @@ public class ProfileActivity extends AppCompatActivity {
                     }
                 }
             });
-        }
-        else{
+        } else {
             fillFormular();
         }
     }
 
-    private void fillFormular()
-    {
+    private void fillFormular() {
         final TextView nameTextfield = (TextView) findViewById(R.id.nameTextfield);
         nameTextfield.setText(user.getName());
 
@@ -303,8 +290,7 @@ public class ProfileActivity extends AppCompatActivity {
         mailTextfield.setText(user.getEmail());
 
         final TextView birthTextView = (TextView) findViewById(R.id.showDate);
-        if (user.getBirthday() != null)
-        {
+        if (user.getBirthday() != null) {
             final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
             ((TextView) findViewById(R.id.birthTextfield)).setText(dateFormat.format(user.getBirthday()));
         }

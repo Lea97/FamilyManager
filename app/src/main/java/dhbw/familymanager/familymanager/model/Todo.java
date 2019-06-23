@@ -4,6 +4,7 @@ import com.google.firebase.firestore.IgnoreExtraProperties;
 
 import java.util.Date;
 import java.util.List;
+
 @IgnoreExtraProperties
 public class Todo {
 
@@ -12,19 +13,19 @@ public class Todo {
     private String owner;
     private Date created;
 
-    public Todo(){
+    public Todo() {
 
     }
 
-    public Todo(String listName, List<String> tasks){
-        this.listName=listName;
-        this.tasks=tasks;
+    public Todo(String listName, List<String> tasks) {
+        this.listName = listName;
+        this.tasks = tasks;
     }
 
-    public Todo(String owner, Date created, List<String> tasks){
-        this.tasks=tasks;
-        this.owner=owner;
-        this.created=created;
+    public Todo(String owner, Date created, List<String> tasks) {
+        this.tasks = tasks;
+        this.owner = owner;
+        this.created = created;
     }
 
     /*public String getListName() {

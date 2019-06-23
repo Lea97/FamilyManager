@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -36,7 +34,6 @@ import com.vincent.filepicker.Constant;
 import com.vincent.filepicker.activity.ImagePickActivity;
 import com.vincent.filepicker.filter.entity.ImageFile;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -49,20 +46,24 @@ import dhbw.familymanager.familymanager.model.Photo;
 
 public class FolderScreenActivity extends AppCompatActivity {
 
-    private String family;
-    private String folderName;
-    private ArrayList<String> photos;
     private static boolean refresh = false;
     private final int REQUEST_WRITE_STORAGE = 1;
     private final int REQUEST_CAMERA = 2;
+    private final int PICK_IMAGE_REQUEST = 71;
+    private String family;
+    private String folderName;
+    private ArrayList<String> photos;
     private List<Uri> filePaths = new ArrayList<Uri>();
     private Uri filePath;
-    private final int PICK_IMAGE_REQUEST = 71;
     private String photoName;
     private FirebaseFirestore db;
     private String photoPath;
     private FirebaseStorage storage;
     private StorageReference storageReference;
+
+    public static void update() {
+        refresh = true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,15 +78,10 @@ public class FolderScreenActivity extends AppCompatActivity {
         getPhotos();
     }
 
-    public static void update(){
-        refresh = true;
-    }
-
     @Override
-    protected void onPostResume(){
+    protected void onPostResume() {
         super.onPostResume();
-        if (refresh)
-        {
+        if (refresh) {
             refresh = false;
             photos.clear();
             getPhotos();
@@ -114,11 +110,10 @@ public class FolderScreenActivity extends AppCompatActivity {
     }
 
     private void setAdapter() {
-        GridView gridView = (GridView)findViewById(R.id.gridview);
+        GridView gridView = (GridView) findViewById(R.id.gridview);
         ArrayList<String> photosPath = new ArrayList<>();
-        for(String photo: photos)
-        {
-            photosPath.add("albumPhotos/"+family + "/" + folderName+ "/" +photo);
+        for (String photo : photos) {
+            photosPath.add("albumPhotos/" + family + "/" + folderName + "/" + photo);
         }
         String[] photoArray = new String[photosPath.size()];
         GalleryViewAdapter adapter = new GalleryViewAdapter(getApplicationContext(), photosPath.toArray(photoArray), this);
@@ -129,7 +124,7 @@ public class FolderScreenActivity extends AppCompatActivity {
                 String photo = photos.get(position);
                 Intent intent = new Intent(FolderScreenActivity.this, ShowPictureActivity.class);
                 intent.putExtra("photoObject", photo);
-                intent.putExtra("albumName", family+folderName);
+                intent.putExtra("albumName", family + folderName);
                 startActivity(intent);
             }
         });
@@ -142,8 +137,8 @@ public class FolderScreenActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.add_photo:
                 showFileChooser();
                 return true;
@@ -157,21 +152,16 @@ public class FolderScreenActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode)
-        {
+        switch (requestCode) {
             case REQUEST_WRITE_STORAGE: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
-                } else
-                {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
                     Toast.makeText(this, "Die App hat keine Erlaubnis auf deine Dateien zuzugreifen. Willst du dieses Recht erlauben? ", Toast.LENGTH_LONG).show();
                 }
             }
             case REQUEST_CAMERA: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {}
-                else
-                {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
                     Toast.makeText(this, "Die App hat keine Erlaubnis auf deine Kamera zuzugreifen. Willst du dieses Recht erlauben? ", Toast.LENGTH_LONG).show();
                 }
             }
@@ -207,9 +197,8 @@ public class FolderScreenActivity extends AppCompatActivity {
             albumIntent.putExtra(ImagePickActivity.IS_NEED_IMAGE_PAGER, false);
 
             startActivityForResult(albumIntent, PICK_IMAGE_REQUEST);
-        }
-        catch(Exception e){
-            Toast.makeText(getBaseContext(), "Exception:"+e,
+        } catch (Exception e) {
+            Toast.makeText(getBaseContext(), "Exception:" + e,
                     Toast.LENGTH_LONG).show();
         }
     }
@@ -217,31 +206,25 @@ public class FolderScreenActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null)
-        {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null) {
             ArrayList<ImageFile> list = data.getParcelableArrayListExtra(Constant.RESULT_PICK_IMAGE);
-            if (list != null)
-            {
-                for (ImageFile file: list)
-                {
-                    if(!filePaths.contains(Uri.parse("file://" + file.getPath())))
-                    {
+            if (list != null) {
+                for (ImageFile file : list) {
+                    if (!filePaths.contains(Uri.parse("file://" + file.getPath()))) {
                         filePaths.add(Uri.parse("file://" + file.getPath()));
                     }
                 }
                 addPhotos();
             }
         }
-        if(filePath != null)
-        {
+        if (filePath != null) {
             addPhoto();
         }
     }
 
     private void addPhotos() {
-        for (Uri fileUri: filePaths)
-        {
+        for (Uri fileUri : filePaths) {
             filePath = fileUri;
             addPhoto();
         }
@@ -252,7 +235,7 @@ public class FolderScreenActivity extends AppCompatActivity {
     private void addPhoto() {
         photoName = UUID.randomUUID().toString();
         addPictureToFolderDB();
-        photoPath = "albumPhotos/"+family + "/" + folderName+ "/" + photoName;
+        photoPath = "albumPhotos/" + family + "/" + folderName + "/" + photoName;
         uploadImage();
         addPictureToPhotosDB();
     }
@@ -265,7 +248,7 @@ public class FolderScreenActivity extends AppCompatActivity {
 
     private void addPictureToFolderDB() {
         photos.add(photoName);
-        db.collection("folders").document(family+folderName).update("photos", photos);
+        db.collection("folders").document(family + folderName).update("photos", photos);
     }
 
     private void uploadImage() {
@@ -274,28 +257,28 @@ public class FolderScreenActivity extends AppCompatActivity {
         progressDialog.show();
         StorageReference ref = storageReference.child(photoPath);
         ref.putFile(filePath)
-            .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    progressDialog.dismiss();
-                    Toast.makeText(FolderScreenActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
-                    photos.clear();
-                    getPhotos();
-                }
-            })
-            .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    progressDialog.dismiss();
-                    Toast.makeText(FolderScreenActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            })
-            .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                    double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
-                    progressDialog.setMessage("Uploaded "+(int)progress+"%");
-                }
-            });
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        progressDialog.dismiss();
+                        Toast.makeText(FolderScreenActivity.this, "Uploaded", Toast.LENGTH_SHORT).show();
+                        photos.clear();
+                        getPhotos();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        progressDialog.dismiss();
+                        Toast.makeText(FolderScreenActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                        progressDialog.setMessage("Uploaded " + (int) progress + "%");
+                    }
+                });
     }
 }

@@ -29,7 +29,7 @@ public class CreateFolderActivity extends AppCompatActivity implements View.OnCl
 
     private String family;
     private ArrayList<String> folders;
-    private  FirebaseFirestore db;
+    private FirebaseFirestore db;
     private String newFolderName;
 
     @Override
@@ -81,15 +81,12 @@ public class CreateFolderActivity extends AppCompatActivity implements View.OnCl
                     if (document.exists()) {
                         Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                         ArrayList<String> foldersInDB = (ArrayList<String>) document.get("folderName");
-                        if (foldersInDB.contains(newFolderName))
-                        {
+                        if (foldersInDB.contains(newFolderName)) {
                             TextView nameField = findViewById(R.id.newFolderName);
                             nameField.setError("Ein Ordner mit diesem Namen gibt es bereits.");
-                        }
-                        else {
+                        } else {
                             addNewFolder();
                         }
-
                     } else {
                         Log.d("TAG", "No such document");
                         addNewFolder();
@@ -101,8 +98,7 @@ public class CreateFolderActivity extends AppCompatActivity implements View.OnCl
         });
     }
 
-    private void addNewFolder()
-    {
+    private void addNewFolder() {
         createFolder();
         PhotoGalleryActivity.updateFolders();
         finish();

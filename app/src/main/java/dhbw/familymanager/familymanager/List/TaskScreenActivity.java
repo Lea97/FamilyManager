@@ -1,30 +1,18 @@
 package dhbw.familymanager.familymanager.List;
 
-import android.app.ActionBar;
-import android.app.AlertDialog;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.ContextMenu;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,12 +48,10 @@ public class TaskScreenActivity extends AppCompatActivity {
                 }
             }
         });
-
     }
 
-    private void addTasksToDB(){
+    private void addTasksToDB() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-
     }
 
     @Override
@@ -158,5 +144,4 @@ public class TaskScreenActivity extends AppCompatActivity {
         final AlertDialog alert = alertDialogBuilder.create();
         alert.show();
     }*/
-
 }

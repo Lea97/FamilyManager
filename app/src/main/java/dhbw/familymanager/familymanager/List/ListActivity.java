@@ -24,30 +24,31 @@ import java.util.List;
 import dhbw.familymanager.familymanager.MainActivity;
 import dhbw.familymanager.familymanager.R;
 
-
 public class ListActivity extends AppCompatActivity {
 
+    private static Boolean update = false;
     private String family;
     private List<String> lists;
-    private static Boolean update = false;
+
+    public static void updateFolders() {
+        update = true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         family = MainActivity.getFamily();
         lists = new ArrayList<String>();
-        if (family != null)
-        {
+        if (family != null) {
             setContentView(R.layout.list_main);
             addLists();
-        }
-        else {
+        } else {
             setContentView(R.layout.empty_page);
             Toast.makeText(ListActivity.this, "Wählen Sie eine Familie um die Funktionalitäten zu nutzen.", Toast.LENGTH_LONG).show();
         }
     }
 
-    private void addLists(){
+    private void addLists() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("todolist").document(family);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -69,13 +70,8 @@ public class ListActivity extends AppCompatActivity {
         });
     }
 
-    public static void updateFolders()
-    {
-        update = true;
-    }
-
-    private void addListAdapter(){
-        ListView listView = (ListView)findViewById(R.id.list_view);
+    private void addListAdapter() {
+        ListView listView = (ListView) findViewById(R.id.list_view);
         String[] fileArray = new String[lists.size()];
         ListAdapter listAdapter = new ListAdapter(getApplicationContext(), lists.toArray(fileArray), this);
         listView.setAdapter(listAdapter);
@@ -91,10 +87,9 @@ public class ListActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPostResume(){
+    protected void onPostResume() {
         super.onPostResume();
-        if(update)
-        {
+        if (update) {
             update = false;
             addLists();
         }
@@ -102,16 +97,15 @@ public class ListActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (family != null)
-        {
+        if (family != null) {
             getMenuInflater().inflate(R.menu.list_menu, menu);
         }
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.add_list:
                 Intent createList = new Intent(ListActivity.this, CreateNewListActivity.class);
                 String[] fileArray = new String[lists.size()];
@@ -124,5 +118,4 @@ public class ListActivity extends AppCompatActivity {
         }
         return true;
     }
-
 }

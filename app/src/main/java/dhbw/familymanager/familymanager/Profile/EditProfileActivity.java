@@ -50,19 +50,19 @@ import dhbw.familymanager.familymanager.model.User;
 
 public class EditProfileActivity extends AppCompatActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener {
 
-    private Uri filePath;
-    private final int PICK_IMAGE_REQUEST = 71;
-    private User user;
-    private ImageView mImageView;
     private static final int FILE_SELECT_CODE = 0;
     private static final String TAG = null;
+    private final int PICK_IMAGE_REQUEST = 71;
+    private final int REQUEST_WRITE_STORAGE = 1;
+    private final int REQUEST_CAMERA = 2;
+    private Uri filePath;
+    private User user;
+    private ImageView mImageView;
     private FirebaseStorage storage;
     private StorageReference storageReference;
     private String picturePath;
     private Boolean loadFile = false;
     private Calendar cal;
-    private final int REQUEST_WRITE_STORAGE = 1;
-    private final int REQUEST_CAMERA = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +85,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         ((TextView) findViewById(R.id.showDate)).setText(dateFormat.format(cal.getTime()));
     }
 
-    public void datePicker(View view){
+    public void datePicker(View view) {
         DatePickerFragment fragment = new DatePickerFragment();
         fragment.setMaxDay();
         fragment.show(getFragmentManager(), "datePicker");
@@ -94,14 +94,11 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode)
-        {
+        switch (requestCode) {
             case REQUEST_WRITE_STORAGE: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     createFolder();
-                } else
-                {
+                } else {
                     Toast.makeText(this, "Die App hat keine Erlaubnis auf deine Dateien zuzugreifen. Willst du dieses Recht erlauben? ", Toast.LENGTH_LONG).show();
                 }
             }
@@ -119,7 +116,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         if (!imageStorageDir.exists()) {
             Toast.makeText(this, "Neuer Ordner wird erstellt...", Toast.LENGTH_SHORT).show();
             boolean rv = imageStorageDir.mkdir();
-            Toast.makeText(this, "Ordner" + ( rv ? "wurde erstellt" : "konnte nicht erstellt werden"), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Ordner" + (rv ? "wurde erstellt" : "konnte nicht erstellt werden"), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -147,7 +144,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             }
             createFolder();
             File file = new File(
-                     imageStorageDir + File.separator + "IMG_"
+                    imageStorageDir + File.separator + "IMG_"
                             + String.valueOf(System.currentTimeMillis())
                             + ".jpg");
 
@@ -160,31 +157,26 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
             Intent chooserIntent = Intent.createChooser(i, "Wähle ein Bild zu hochladen aus");
 
-            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Parcelable[] { captureIntent });
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Parcelable[]{captureIntent});
             startActivityForResult(chooserIntent, PICK_IMAGE_REQUEST);
-        }
-        catch(Exception e){
-                Toast.makeText(getBaseContext(), "Exception:"+e,
-                        Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(getBaseContext(), "Exception:" + e,
+                    Toast.LENGTH_LONG).show();
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null )
-        {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
             filePath = data.getData();
         }
-        if(filePath != null)
-        {
+        if (filePath != null) {
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 mImageView.setImageBitmap(bitmap);
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -195,8 +187,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         nameTextfield.setText(user.getName());
 
         final TextView birthTextView = (TextView) findViewById(R.id.showDate);
-        if (user.getBirthday() != null)
-        {
+        if (user.getBirthday() != null) {
             final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
             ((TextView) findViewById(R.id.showDate)).setText(dateFormat.format(user.getBirthday()));
 
@@ -224,13 +215,12 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
     private void uploadImage() {
 
-        if(filePath != null)
-        {
+        if (filePath != null) {
             loadFile = true;
             final ProgressDialog progressDialog = new ProgressDialog(this);
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
-            picturePath = "ProfilPictures/"+ UUID.randomUUID().toString();
+            picturePath = "ProfilPictures/" + UUID.randomUUID().toString();
             StorageReference ref = storageReference.child(picturePath);
             ref.putFile(filePath)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -245,15 +235,15 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
-                            Toast.makeText(EditProfileActivity.this, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(EditProfileActivity.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
                                     .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
                         }
                     });
         }
@@ -272,41 +262,37 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.saveButton:
                 saveProfileChanges();
-                if (!loadFile)
-                {
+                if (!loadFile) {
                     finishActivity();
                 }
                 break;
         }
     }
 
-        private void saveProfileChanges() {
-            uploadImage();
-            final EditText nameTextView = findViewById(R.id.nameTextfield);
-            final EditText numberTextView = findViewById(R.id.numberTextfield);
+    private void saveProfileChanges() {
+        uploadImage();
+        final EditText nameTextView = findViewById(R.id.nameTextfield);
+        final EditText numberTextView = findViewById(R.id.numberTextfield);
 
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = auth.getCurrentUser();
 
-            FirebaseAuth auth = FirebaseAuth.getInstance();
-            FirebaseUser currentUser = auth.getCurrentUser();
-
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            if(currentUser != null) {
-                if (filePath != null) {
-                    db.collection("users").document(currentUser.getUid()).update("picturePath", picturePath, "name", nameTextView.getText().toString(), "phonenumber", numberTextView.getText().toString());
-                } else {
-                    db.collection("users").document(currentUser.getUid()).update("name", nameTextView.getText().toString(), "phonenumber", numberTextView.getText().toString());
-                }
-
-                if (cal != null)
-                {
-                    Timestamp birthday = new Timestamp(cal.getTime());
-                    db.collection("users").document(currentUser.getUid()).update("birthday", birthday);
-                }
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        if (currentUser != null) {
+            if (filePath != null) {
+                db.collection("users").document(currentUser.getUid()).update("picturePath", picturePath, "name", nameTextView.getText().toString(), "phonenumber", numberTextView.getText().toString());
+            } else {
+                db.collection("users").document(currentUser.getUid()).update("name", nameTextView.getText().toString(), "phonenumber", numberTextView.getText().toString());
             }
-            else {
-                Toast.makeText(EditProfileActivity.this, "Die Nutzerdaten konnten aufgrund eines Fehlers nicht geändert werden.", Toast.LENGTH_LONG).show();
+
+            if (cal != null) {
+                Timestamp birthday = new Timestamp(cal.getTime());
+                db.collection("users").document(currentUser.getUid()).update("birthday", birthday);
             }
+        } else {
+            Toast.makeText(EditProfileActivity.this, "Die Nutzerdaten konnten aufgrund eines Fehlers nicht geändert werden.", Toast.LENGTH_LONG).show();
         }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -316,8 +302,8 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.edit_credentials:
                 Intent intent = new Intent(EditProfileActivity.this, EditCredentialsActivity.class);
                 startActivity(intent);

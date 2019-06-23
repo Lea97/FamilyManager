@@ -1,9 +1,7 @@
 package dhbw.familymanager.familymanager.controller;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,26 +17,19 @@ import dhbw.familymanager.familymanager.model.Event;
 
 public class EventRepository {
 
-
-    public enum RepositoryMode {
-        PRODUCTIVE, TEST;
-    }
-
     static private String COLLECTION_PATH_PRODUCTIVE_EVENTS = "events";
-
     static private String COLLECTION_PATH_TEST_EVENTS = "test_events";
-
-
     private static EventRepository instance = null;
-
     FirebaseFirestore db;
     String collectionPath;
-
+    private EventRepository(String collectionPath) {
+        this.collectionPath = collectionPath;
+        db = FirebaseFirestore.getInstance();
+    }
 
     public static EventRepository getInstance() {
         return getInstance(RepositoryMode.PRODUCTIVE);
     }
-
 
     public static EventRepository getInstance(RepositoryMode mode) {
         if (instance == null) {
@@ -52,13 +43,6 @@ public class EventRepository {
         }
         return instance;
     }
-
-
-    private EventRepository(String collectionPath) {
-        this.collectionPath = collectionPath;
-        db = FirebaseFirestore.getInstance();
-    }
-
 
     public void storeEvent(Event event) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -77,7 +61,6 @@ public class EventRepository {
         String familyId = MainActivity.getFamily();
         System.out.println(familyId);
 
-
         try {
 
             Task<QuerySnapshot> task = db.collection(collectionPath).whereEqualTo("familyId", familyId).get();
@@ -89,12 +72,8 @@ public class EventRepository {
             Log.d("TAG", "Event reading failed: ", e);
         }
 
-
         return new ArrayList<Event>();
     }
-
-//}
-
 
     public List<Event> readAllEvents() {
 
@@ -106,9 +85,13 @@ public class EventRepository {
         } catch (Exception e) {
             throw new DatabaseCommunicationException("Event reading failed", e);
         }
-
     }
 
+
+
+    public enum RepositoryMode {
+        PRODUCTIVE, TEST;
+    }
 }
 
 class DatabaseCommunicationException extends RuntimeException {

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,14 +18,11 @@ import java.util.Random;
 
 import dhbw.familymanager.familymanager.MainActivity;
 import dhbw.familymanager.familymanager.R;
-import dhbw.familymanager.familymanager.calendar.AddEventActivity;
-import dhbw.familymanager.familymanager.calendar.CalendarActivity;
 import dhbw.familymanager.familymanager.model.ChatRoom;
 
 public class CreateChatroomActivity extends AppCompatActivity {
     private EditText roomName;
     private Button createChat;
-
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,11 +35,8 @@ public class CreateChatroomActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ChatRoom createdChatroom = createChatroomObject();
                 persistChatroomObject(createdChatroom);
-
-
             }
         });
-
     }
 
     private void persistChatroomObject(final ChatRoom createdChatroom) {
@@ -54,11 +47,8 @@ public class CreateChatroomActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<DocumentReference> task) {
                         System.out.println("Chatroom added to database");
                         startActivity(new Intent(CreateChatroomActivity.this, ChatActivity.class));
-
                     }
                 });
-
-
     }
 
     private ChatRoom createChatroomObject() {
@@ -69,8 +59,5 @@ public class CreateChatroomActivity extends AppCompatActivity {
         chatroom.setChatName(roomName.getText().toString());
         chatroom.setFamilyId(MainActivity.getFamily());
         return chatroom;
-
-
     }
-
 }

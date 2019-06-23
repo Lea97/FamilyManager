@@ -1,7 +1,5 @@
 package dhbw.familymanager.familymanager.model;
 
-import com.google.firebase.firestore.IgnoreExtraProperties;
-
 import java.util.List;
 
 //@IgnoreExtraProperties
@@ -10,7 +8,6 @@ public class Family {
     private String familyName;
     private List<String> members;
     private String owner;
-
 
     public Family() {
     }
@@ -37,7 +34,11 @@ public class Family {
         this.members = members;
     }
 
-    public String getOwner() {return owner;}
+    public String getOwner() {
+        return owner;
+    }
 
-    public void setOwner(String owner) {this.owner = owner;}
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
 }

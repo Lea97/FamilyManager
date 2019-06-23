@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,50 +16,31 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.lang.ref.Reference;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import dhbw.familymanager.familymanager.R;
 import dhbw.familymanager.familymanager.model.ChatMessage;
-import dhbw.familymanager.familymanager.model.ChatRoom;
 
 public class ChatMessagesActivity extends AppCompatActivity {
     LinearLayout layout;
     RelativeLayout layout_2;
+    List<ChatMessage> messages;
     private ImageView sendButton;
     private EditText messageArea;
     private ScrollView scrollView;
-
     private String user = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private String chatroomId, chatName;
     private long timestamp = 0;
-    List<ChatMessage> messages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +71,6 @@ public class ChatMessagesActivity extends AppCompatActivity {
                 }
             }
         });
-
-
     }
 
     private void readChatMessages() {
@@ -107,15 +84,12 @@ public class ChatMessagesActivity extends AppCompatActivity {
                 if (messages != null)
                     messages.sort((e1, e2) -> new Long(e1.getTimestamp()).compareTo(new Long(e2.getTimestamp())));
 
-
                 if (messages != null)
                     for (ChatMessage message : messages) {
                         if (message.getTimestamp() > timestamp) {
 
-
                             if (message.getSenderId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
                                 addMessageBox(message.getMessageText(), 2);
-
                             } else {
                                 addMessageBox(message.getMessageText(), 1);
                             }
@@ -125,9 +99,7 @@ public class ChatMessagesActivity extends AppCompatActivity {
                     timestamp = messages.get(messages.size() - 1).getTimestamp();
             }
         });
-
     }
-
 
     private void setUp() {
         System.out.println(chatName);
@@ -140,11 +112,9 @@ public class ChatMessagesActivity extends AppCompatActivity {
                     chatroomId = task.getResult().getDocuments().get(0).getId();
                 }
                 getChatroomId();
-
             }
         });
         System.out.println(chatroomId);
-
     }
 
     private void getChatroomId() {
@@ -158,7 +128,6 @@ public class ChatMessagesActivity extends AppCompatActivity {
         });
         readChatMessages();
     }
-
 
     public void addMessageBox(String message, int type) {
         TextView textView = new TextView(ChatMessagesActivity.this);

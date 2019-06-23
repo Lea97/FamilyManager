@@ -12,7 +12,8 @@ public class Photo {
     private Date added;
     private String name;
 
-    public Photo() {}
+    public Photo() {
+    }
 
     public Photo(String path, String owner, Date added, String name) {
         this.path = path;

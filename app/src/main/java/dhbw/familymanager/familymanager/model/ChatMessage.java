@@ -11,6 +11,17 @@ public class ChatMessage {
     private String messageType;
     private boolean isNew;
 
+    public ChatMessage(String messageText, String messageUser) {
+        this.messageText = messageText;
+        this.senderId = messageUser;
+        timestamp = new Date().getTime();
+        timestamp = new Date().getTime();
+    }
+
+    public ChatMessage() {
+
+    }
+
     public boolean isNew() {
         return isNew;
     }
@@ -41,18 +52,6 @@ public class ChatMessage {
 
     public void setMessageType(String messageType) {
         this.messageType = messageType;
-    }
-
-    public ChatMessage(String messageText, String messageUser) {
-        this.messageText = messageText;
-        this.senderId = messageUser;
-        timestamp = new Date().getTime();
-        timestamp = new Date().getTime();
-
-    }
-
-    public ChatMessage() {
-
     }
 
     public String getMessageText() {

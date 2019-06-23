@@ -44,7 +44,7 @@ public class ShowPictureActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        DocumentReference docRef = db.collection("photos").document(albumName+photo);
+        DocumentReference docRef = db.collection("photos").document(albumName + photo);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -53,7 +53,6 @@ public class ShowPictureActivity extends AppCompatActivity {
                     if (document.exists()) {
                         Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                         fillSite(document);
-
                     } else {
                         Log.d("TAG", "No such document");
                     }
@@ -81,8 +80,8 @@ public class ShowPictureActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.delete_photo:
                 deletePhoto();
                 return true;
@@ -102,7 +101,7 @@ public class ShowPictureActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d("TAG", "DocumentSnapshot data: " + document.getData());
-                        ArrayList<String> photos =(ArrayList<String>) document.get("photos");
+                        ArrayList<String> photos = (ArrayList<String>) document.get("photos");
                         photos.remove(photo);
                         db.collection("folders").document(albumName).update("photos", photos);
                         fishView();
@@ -115,7 +114,7 @@ public class ShowPictureActivity extends AppCompatActivity {
             }
         });
 
-        db.collection("photos").document(albumName+photo).delete();
+        db.collection("photos").document(albumName + photo).delete();
         storage.getReference(path).delete();
     }
 

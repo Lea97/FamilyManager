@@ -13,9 +13,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-public class SignUpActivity extends AppCompatActivity implements View.OnClickListener{
+public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText textFieldEmail;
     private EditText textFieldPassword;
@@ -23,8 +22,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private FirebaseAuth mAuth;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup_page);
 
@@ -36,7 +34,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         findViewById(R.id.loginButton).setOnClickListener(this);
 
         mAuth = FirebaseAuth.getInstance();
-        if(mAuth==null){
+        if (mAuth == null) {
             System.out.println("FIREBASE NOT WORKING");
         }
     }
@@ -46,60 +44,55 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         String password = textFieldPassword.getText().toString().trim();
         String repeatPassword = textFieldRepeatPassword.getText().toString().trim();
 
-
-
-        if(email.isEmpty()){
+        if (email.isEmpty()) {
             textFieldEmail.setError("Email is required");
             textFieldEmail.requestFocus();
             return;
         }
 
-        if(!(Patterns.EMAIL_ADDRESS.matcher(email).matches())){
+        if (!(Patterns.EMAIL_ADDRESS.matcher(email).matches())) {
             textFieldEmail.setError("Enter a valid email");
             textFieldEmail.requestFocus();
             return;
         }
 
-        if(password.length()<6){
+        if (password.length() < 6) {
             textFieldPassword.setError("Minimum length of password should be 6");
             textFieldPassword.requestFocus();
             return;
         }
 
-        if(password.isEmpty()){
+        if (password.isEmpty()) {
             textFieldPassword.setError("Password is required");
             textFieldRepeatPassword.setError("Password is required");
             textFieldPassword.requestFocus();
             return;
         }
 
-        if(!(password.equals(repeatPassword))){
+        if (!(password.equals(repeatPassword))) {
             textFieldPassword.setError("Password is required");
             textFieldRepeatPassword.setError("Password is required");
             textFieldPassword.requestFocus();
             return;
         }
 
-        mAuth.createUserWithEmailAndPassword(email,password)
+        mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            startActivity(new Intent(getApplicationContext(),MainActivity.class));
-                           // mAuth.getCurrentUser().sendEmailVerification();
+                        if (task.isSuccessful()) {
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            // mAuth.getCurrentUser().sendEmailVerification();
                             finish();
-                        }
-                        else{
-                            Toast.makeText(getApplicationContext(),"E-mail or password is wrong",Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(), "E-mail or password is wrong", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
 
-
-
         //mAuth.createUserWithEmailAndPassword(email, password)
-          //      .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            //        @Override
+        //      .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        //        @Override
         //public void onComplete(@NonNull Task<AuthResult> task) {
         //              if (task.isSuccessful()) {
         //                  System.out.println("Success tralala");
@@ -107,7 +100,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         //                          Toast.makeText(getApplicationContext(), "User Registered Successful", Toast.LENGTH_SHORT).show();
         //                  FirebaseUser user=mAuth.getCurrentUser();
         //                  user.sendEmailVerification();
-
 
         //              }
         //              if(task.isCanceled()){
@@ -118,10 +110,10 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     @Override
-    public void onClick(View view){
-        switch (view.getId()){
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.toLoginButton:
-               startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                 break;
             case R.id.loginButton:
                 registerUser();

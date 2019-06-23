@@ -46,7 +46,6 @@ public class ListTaskAdapter extends BaseAdapter {
             holder.task_view = (TextView) convertView.findViewById(R.id.list_task_view);
             holder.done_box = (CheckBox) convertView.findViewById(R.id.list_checkbox);
             convertView.setTag(holder);
-
         } else {
             holder = (ListTaskAdapter.ViewHolder) convertView.getTag();
         }
@@ -57,7 +56,7 @@ public class ListTaskAdapter extends BaseAdapter {
 
                 if (isChecked) {
                     holder.task_view.setPaintFlags(holder.task_view.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                }else{
+                } else {
                     holder.task_view.setPaintFlags(0);
                 }
             }
@@ -74,5 +73,4 @@ public class ListTaskAdapter extends BaseAdapter {
         TextView task_view;
         CheckBox done_box;
     }
-
 }

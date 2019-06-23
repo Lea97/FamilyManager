@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,13 +21,11 @@ import dhbw.familymanager.familymanager.R;
 import dhbw.familymanager.familymanager.model.Event;
 
 public class EventDetailsActivity extends AppCompatActivity implements View.OnClickListener {
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
     private TextView eventTitle, eventLocation, eventStart, eventEnd;
     private Button edit, delete;
     private Event event;
     private String eventId, dbEntryId;
-
-
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +41,6 @@ public class EventDetailsActivity extends AppCompatActivity implements View.OnCl
         eventId = intent.getStringExtra("eventId");
         System.out.println(eventId);
 
-
         db.collection("events").whereEqualTo("id", Long.parseLong(eventId)).get().
                 addOnCompleteListener((new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -54,19 +50,15 @@ public class EventDetailsActivity extends AppCompatActivity implements View.OnCl
                             event = task.getResult().toObjects(Event.class).get(0);
                             setEventData();
                             dbEntryId = task.getResult().getDocuments().get(0).getId();
-
-
                         } else {
                             Log.d("TAG", "Error getting documents: ", task.getException());
                         }
                     }
-
                 }));
         delete = findViewById(R.id.deleteEvent);
         delete.setOnClickListener(this);
         edit = findViewById(R.id.editEvent);
         edit.setOnClickListener(this);
-
     }
 
     private void setEventData() {
@@ -75,7 +67,6 @@ public class EventDetailsActivity extends AppCompatActivity implements View.OnCl
         eventLocation.setText(event.getLocation());
         eventStart.setText((event.getStart().toString().substring(0, event.getStart().toString().lastIndexOf("G"))));
         eventEnd.setText(event.getEnd().toString().substring(0, event.getEnd().toString().lastIndexOf("G")));
-
     }
 
     @Override
@@ -94,17 +85,14 @@ public class EventDetailsActivity extends AppCompatActivity implements View.OnCl
         Intent intent = new Intent(EventDetailsActivity.this, EditEventActivity.class);
         intent.putExtra("eventId", eventId);
         startActivity(intent);
-
     }
 
     private void deleteEvent(String eventId) {
-
 
         db.collection("events").document(dbEntryId).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d("TAG", "DocumentSnapshot successfully deleted!");
-                System.out.println("Event mit id " + " deleted");
                 Toast.makeText(getApplicationContext(), " Event successfully deleted", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(EventDetailsActivity.this, CalendarActivity.class));
             }
@@ -115,8 +103,6 @@ public class EventDetailsActivity extends AppCompatActivity implements View.OnCl
                         Log.w("TAG", "Error deleting document", e);
                     }
                 });
-
-
     }
 
     @Override

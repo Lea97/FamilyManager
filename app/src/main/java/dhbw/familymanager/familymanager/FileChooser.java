@@ -16,15 +16,13 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-
-public class FileChooser extends AppCompatActivity{
+public class FileChooser extends AppCompatActivity {
 
     private final int PICK_IMAGE_REQUEST = 71;
     private StorageReference storageReference;
     private FirebaseStorage storage;
     private Context context;
     private Activity activity;
-
 
     public FileChooser(Context context, Activity activity) {
         this.context = context;
@@ -52,8 +50,7 @@ public class FileChooser extends AppCompatActivity{
 
     public void uploadImage(String picturePath, Uri filePath) {
 
-        if(filePath != null)
-        {
+        if (filePath != null) {
             final ProgressDialog progressDialog = new ProgressDialog(context);
             progressDialog.setTitle("Uploading...");
             //progressDialog.show();
@@ -70,19 +67,17 @@ public class FileChooser extends AppCompatActivity{
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             progressDialog.dismiss();
-                            Toast.makeText(context, "Failed "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
                                     .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded "+(int)progress+"%");
+                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
                         }
                     });
         }
     }
-
-
 }

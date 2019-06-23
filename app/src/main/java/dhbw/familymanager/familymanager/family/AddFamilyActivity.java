@@ -24,22 +24,19 @@ public class AddFamilyActivity extends AppCompatActivity implements View.OnClick
 
         findViewById(R.id.createFamilyButton).setOnClickListener(this);
         findViewById(R.id.cancleAddFamilyButton).setOnClickListener(this);
-
     }
 
-    private void createFamily()
-    {
+    private void createFamily() {
         List<String> members = new ArrayList<>();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         members.add(mAuth.getCurrentUser().getEmail());
 
-        final TextView familyNameTextfield =  findViewById(R.id.familyNameTextfield);
-        final TextView familyMembers =  findViewById(R.id.familyMemberTextfield);
+        final TextView familyNameTextfield = findViewById(R.id.familyNameTextfield);
+        final TextView familyMembers = findViewById(R.id.familyMemberTextfield);
 
-        if(!familyMembers.getText().toString().isEmpty())
-        {
+        if (!familyMembers.getText().toString().isEmpty()) {
             String[] allMembers = familyMembers.getText().toString().split(",");
-            for (String member: allMembers) {
+            for (String member : allMembers) {
                 members.add(member.trim());
             }
         }

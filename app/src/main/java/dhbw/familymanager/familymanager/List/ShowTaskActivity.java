@@ -8,37 +8,36 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 
 import dhbw.familymanager.familymanager.MainActivity;
 import dhbw.familymanager.familymanager.R;
-import dhbw.familymanager.familymanager.model.User;
 
 public class ShowTaskActivity extends AppCompatActivity {
 
+    private static boolean update = false;
     private FirebaseFirestore db;
     private String family;
     private String listName;
     private ArrayList<String> tasks;
-    private static boolean update = false;
     private TextView tn;
     private String taskName;
     private CheckBox checkBox;
     private ArrayList<String> doneTasks;
+
+    public static void update() {
+        update = true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,15 +52,10 @@ public class ShowTaskActivity extends AppCompatActivity {
         addTasks();
     }
 
-    public static void update(){
-        update = true;
-    }
-
     @Override
-    protected void onPostResume(){
+    protected void onPostResume() {
         super.onPostResume();
-        if (update)
-        {
+        if (update) {
             update = false;
             tasks.clear();
             addTasks();
@@ -69,7 +63,7 @@ public class ShowTaskActivity extends AppCompatActivity {
     }
 
     private void addTasks() {
-        DocumentReference docRef = db.collection("lists").document(family+listName);
+        DocumentReference docRef = db.collection("lists").document(family + listName);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -89,13 +83,12 @@ public class ShowTaskActivity extends AppCompatActivity {
         });
     }
 
-    private void addListAdapter(){
+    private void addListAdapter() {
 
         ListView listView = (ListView) findViewById(R.id.task_view_main);
         String[] fileArray = new String[tasks.size()];
         TaskAdapter taskAdapter = new TaskAdapter(getApplicationContext(), tasks.toArray(fileArray), this);
         listView.setAdapter(taskAdapter);
-
     }
 
     @Override
@@ -120,7 +113,7 @@ public class ShowTaskActivity extends AppCompatActivity {
                 deleteDoneTasks();
                 break;
             case R.id.action_delete_all:
-                deleteAllTasks(tasks,listName);
+                deleteAllTasks(tasks, listName);
                 break;
             case android.R.id.home:
                 onBackPressed();
@@ -129,7 +122,7 @@ public class ShowTaskActivity extends AppCompatActivity {
         return true;
     }
 
-    public void deleteDoneTasks(){
+    public void deleteDoneTasks() {
         DocumentReference docRef = db.collection("lists").document(listName);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -138,8 +131,8 @@ public class ShowTaskActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d("TAG", "DocumentSnapshot data: " + document.getData());
-                        ArrayList<String> tasks =(ArrayList<String>) document.get("tasks");
-                        if(checkBox.isChecked()){
+                        ArrayList<String> tasks = (ArrayList<String>) document.get("tasks");
+                        if (checkBox.isChecked()) {
                             tasks.remove(taskName);
                             db.collection("lists").document(listName).update("tasks", tasks);
                             fishView();
@@ -159,10 +152,9 @@ public class ShowTaskActivity extends AppCompatActivity {
         this.finish();
     }
 
-    public void deleteAllTasks(ArrayList<String> allTasks, final String listFolder){
-        for (final String taskname: allTasks)
-        {
-            DocumentReference docRef =  db.collection("tasks").document(family + listFolder + taskname);
+    public void deleteAllTasks(ArrayList<String> allTasks, final String listFolder) {
+        for (final String taskname : allTasks) {
+            DocumentReference docRef = db.collection("tasks").document(family + listFolder + taskname);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -185,9 +177,8 @@ public class ShowTaskActivity extends AppCompatActivity {
         }
     }
 
-    public void deleteTasksFromLists(){
-        db.collection("lists").document(family+listName).delete();
-
+    public void deleteTasksFromLists() {
+        db.collection("lists").document(family + listName).delete();
     }
 
     /*public void deleteList(DocumentSnapshot document){
@@ -196,5 +187,4 @@ public class ShowTaskActivity extends AppCompatActivity {
         listInTodo.remove(listName);
         db.collection("todolist").document(family).update("listName", listInTodo);
     }*/
-
 }

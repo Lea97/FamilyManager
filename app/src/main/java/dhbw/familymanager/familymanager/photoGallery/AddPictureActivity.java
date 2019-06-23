@@ -31,16 +31,15 @@ import dhbw.familymanager.familymanager.model.Photo;
 
 public class AddPictureActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private final int PICK_IMAGE_REQUEST = 71;
     private String family;
     private String folderName;
-    private final int PICK_IMAGE_REQUEST = 71;
     private FileChooser fileChooser;
     private String photoName;
     private FirebaseFirestore db;
     private String photoPath;
     private Uri filePath;
     private ArrayList<String> photos;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,11 +57,10 @@ public class AddPictureActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.addPhoto:
                 setFamilyPhotos();
-                if (validate())
-                {
+                if (validate()) {
                     addPhoto();
                     this.finish();
                 }
@@ -77,23 +75,21 @@ public class AddPictureActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void startFileChooser() {
-        fileChooser  = new FileChooser(getApplicationContext(), this);
+        fileChooser = new FileChooser(getApplicationContext(), this);
     }
 
     private Boolean validate() {
         EditText editText = findViewById(R.id.newPhotoName);
         String photoName = editText.getText().toString();
-        if(filePath == null)
-        {
+        if (filePath == null) {
             Toast.makeText(AddPictureActivity.this, "Es wurde kein Bild zum Hochladen ausgewählt.", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(photoName.isEmpty())
-        {
+        if (photoName.isEmpty()) {
             editText.setError("Name des Bildes muss gesetzt werden.");
             return false;
         }
-        if (photos.contains(photoName)){
+        if (photos.contains(photoName)) {
             editText.setError("Ein Foto mit diesem Namen existiert bereits im Album");
             return false;
         }
@@ -119,11 +115,11 @@ public class AddPictureActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void addPictureToStorage() {
-        photoPath = "albumPhotos/"+family + "/" + folderName+ "/" + photoName;
+        photoPath = "albumPhotos/" + family + "/" + folderName + "/" + photoName;
         fileChooser.uploadImage(photoPath, filePath);
     }
 
-    private void setFamilyPhotos(){
+    private void setFamilyPhotos() {
         db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("folders").document(family + folderName);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -146,26 +142,22 @@ public class AddPictureActivity extends AppCompatActivity implements View.OnClic
 
     private void addPictureToFolderDB() {
         photos.add(photoName);
-        db.collection("folders").document(family+folderName).update("photos", photos);
+        db.collection("folders").document(family + folderName).update("photos", photos);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
-                && data != null && data.getData() != null )
-        {
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
             filePath = data.getData();
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
                 ImageView imageView = findViewById(R.id.choosedPicture);
                 imageView.setImageBitmap(bitmap);
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     }
-
 }

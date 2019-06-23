@@ -10,7 +10,8 @@ public class Aufgabe {
     private Date added;
     private String name;
 
-    public Aufgabe() {}
+    public Aufgabe() {
+    }
 
     public Aufgabe(String owner, Date added, String name) {
 
@@ -18,7 +19,6 @@ public class Aufgabe {
         this.added = added;
         this.name = name;
     }
-
 
     public String getName() {
         return name;

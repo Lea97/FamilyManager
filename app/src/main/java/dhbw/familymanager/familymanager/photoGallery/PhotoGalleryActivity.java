@@ -27,21 +27,23 @@ import dhbw.familymanager.familymanager.adapter.FolderAdapter;
 
 public class PhotoGalleryActivity extends AppCompatActivity {
 
+    private static Boolean update = false;
     private String family;
     private List<String> folders;
-    private static Boolean update = false;
+
+    public static void updateFolders() {
+        update = true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         family = MainActivity.getFamily();
         folders = new ArrayList<String>();
-        if (family != null)
-        {
+        if (family != null) {
             setContentView(R.layout.photo_gallery);
             addFolders();
-        }
-        else {
+        } else {
             setContentView(R.layout.empty_page);
             Toast.makeText(PhotoGalleryActivity.this, "Wählen Sie eine Familie um die Funktionalitäten zu nutzen.", Toast.LENGTH_LONG).show();
         }
@@ -69,13 +71,8 @@ public class PhotoGalleryActivity extends AppCompatActivity {
         });
     }
 
-    public static void updateFolders()
-    {
-        update = true;
-    }
-
     private void addListAdapter() {
-        ListView listView = (ListView)findViewById(R.id.galleryListView);
+        ListView listView = (ListView) findViewById(R.id.galleryListView);
         String[] fileArray = new String[folders.size()];
         FolderAdapter folderAdapter = new FolderAdapter(getApplicationContext(), folders.toArray(fileArray), this);
         listView.setAdapter(folderAdapter);
@@ -91,10 +88,9 @@ public class PhotoGalleryActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPostResume(){
+    protected void onPostResume() {
         super.onPostResume();
-        if(update)
-        {
+        if (update) {
             update = false;
             addFolders();
         }
@@ -102,16 +98,15 @@ public class PhotoGalleryActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (family != null)
-        {
+        if (family != null) {
             getMenuInflater().inflate(R.menu.folderoverview_menu, menu);
         }
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.add_folder:
                 Intent createFolder = new Intent(PhotoGalleryActivity.this, CreateFolderActivity.class);
                 String[] fileArray = new String[folders.size()];

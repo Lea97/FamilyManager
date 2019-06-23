@@ -14,7 +14,6 @@ public class User implements Serializable {
     private String phonenumber;
     private String picturePath;
 
-
     public User() {
     }
 
@@ -65,5 +64,4 @@ public class User implements Serializable {
     public void setPicturePath(String picturePath) {
         this.picturePath = picturePath;
     }
-
 }

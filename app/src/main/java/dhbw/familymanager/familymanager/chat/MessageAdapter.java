@@ -10,8 +10,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import dhbw.familymanager.familymanager.R;
-import dhbw.familymanager.familymanager.chat.ChatBubble;
-
 
 public class MessageAdapter extends ArrayAdapter<ChatBubble> {
 

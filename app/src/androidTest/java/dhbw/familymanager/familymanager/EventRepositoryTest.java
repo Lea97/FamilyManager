@@ -17,8 +17,6 @@ import dhbw.familymanager.familymanager.controller.EventRepository;
 import dhbw.familymanager.familymanager.model.Event;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -35,7 +33,6 @@ public class EventRepositoryTest {
         //FirebaseFirestore.getInstance().
         FirebaseApp.initializeApp(InstrumentationRegistry.getTargetContext());
         codeUnderTest = EventRepository.getInstance(EventRepository.RepositoryMode.TEST);
-
     }
 
     Event getExampleEvent() {
@@ -47,7 +44,6 @@ public class EventRepositoryTest {
         event.setEnd(new Date(2018, 1, 1, 14, 55, 0));
         return event;
     }
-
 
     @Test
     public void useAppContext() {
@@ -62,35 +58,25 @@ public class EventRepositoryTest {
         // expect no exception
     }
 
-    public void storeTestEvents(){
+    public void storeTestEvents() {
 
     }
-
 
     @Test
     public void storeAndReadEvent() {
         codeUnderTest.storeEvent(getExampleEvent());
         //List<Event> events = codeUnderTest.readAllEvents();
-        List<Event>events=codeUnderTest.readEventsForUser();
+        List<Event> events = codeUnderTest.readEventsForUser();
 
         //assertNotNull (events);
         //assertTrue (events.size()>0);
 
-
-        Event lastEventInCollection = events.get(events.size()-1);
+        Event lastEventInCollection = events.get(events.size() - 1);
 
         assertEquals(lastEventInCollection.getTitle(), getExampleEvent().getTitle());
         assertEquals(lastEventInCollection.getStart(), getExampleEvent().getStart());
         assertEquals(lastEventInCollection.getEnd(), getExampleEvent().getEnd());
         assertEquals(lastEventInCollection.getId(), getExampleEvent().getId());
         assertEquals(lastEventInCollection.getFamilyId(), getExampleEvent().getFamilyId());
-
-
     }
-
-
-
-
-
-
 }

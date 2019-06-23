@@ -1,9 +1,9 @@
 package dhbw.familymanager.familymanager;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -39,20 +39,33 @@ import dhbw.familymanager.familymanager.family.ShowMemberActivity;
 import dhbw.familymanager.familymanager.model.User;
 import dhbw.familymanager.familymanager.photoGallery.PhotoGalleryActivity;
 
-
-public class MainActivity extends AppCompatActivity implements View.OnClickListener
-{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int RC_SIGN_IN = 4711;
+    private static String currentFamily;
+    private static Boolean updateFamilies = false;
+    private static Boolean logoutUser = false;
     private FirebaseAuth mAuth;
     private ArrayList<String> items;
     private ArrayList<String> familieIds;
     private ArrayAdapter<String> adapter;
-    private static String currentFamily;
-    private static Boolean updateFamilies = false;
     private FirebaseFirestore db;
     private FirebaseUser user;
-    private static Boolean logoutUser = false;
 
+    public static void logoutUser() {
+        logoutUser = true;
+    }
+
+    public static void updateFamiles() {
+        updateFamilies = true;
+    }
+
+    public static String getFamily() {
+        return currentFamily;
+    }
+
+    private void setFamily(String family) {
+        currentFamily = family;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         db = FirebaseFirestore.getInstance();
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder().setTimestampsInSnapshotsEnabled(true).build();
         db.setFirestoreSettings(settings);
-        mAuth=FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
         setContentView(R.layout.activity_main);
         setFamilies();
@@ -82,10 +95,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         showLoginDialog();
     }
 
-    public static void logoutUser(){
-        logoutUser = true;
-    }
-
     private void showLoginDialog() {
         if (user == null) {
             List<AuthUI.IdpConfig> providers = Arrays.asList(
@@ -102,19 +111,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public static void updateFamiles(){
-        updateFamilies = true;
-    }
-
     @Override
-    protected void onPostResume(){
+    protected void onPostResume() {
         super.onPostResume();
-        if (logoutUser){
+        if (logoutUser) {
             logoutUser = false;
             user = null;
             showLoginDialog();
         }
-        if (updateFamilies){
+        if (updateFamilies) {
             updateFamilies = false;
             setFamilies();
         }
@@ -139,11 +144,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 Log.d("TAG", "DocumentSnapshot data: " + document.getData());
-
                             } else {
                                 Log.d("TAG", "No such document");
-                                String email= user.getEmail();
-                                User userModel = new User(user.getDisplayName(), new Date(01,00,01), email, "", "ProfilPictures/profile_picture.png");
+                                String email = user.getEmail();
+                                User userModel = new User(user.getDisplayName(), new Date(01, 00, 01), email, "", "ProfilPictures/profile_picture.png");
                                 db.collection("users").document(user.getUid()).set(userModel);
                             }
                         } else {
@@ -158,53 +162,52 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void onClick(View view) {
         switch (view.getId()) {
-        case R.id.profilButton:
-            startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-            break;
-        case R.id.galleryButton:
-            startActivity(new Intent(MainActivity.this, PhotoGalleryActivity.class));
-            break;
-        case R.id.listButton:
-            startActivity(new Intent(MainActivity.this, ListActivity.class));
-            break;
-        case R.id.calendarButton:
-            startActivity(new Intent(MainActivity.this, CalendarActivity.class));
-            break;
+            case R.id.profilButton:
+                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                break;
+            case R.id.galleryButton:
+                startActivity(new Intent(MainActivity.this, PhotoGalleryActivity.class));
+                break;
+            case R.id.listButton:
+                startActivity(new Intent(MainActivity.this, ListActivity.class));
+                break;
+            case R.id.calendarButton:
+                startActivity(new Intent(MainActivity.this, CalendarActivity.class));
+                break;
             case R.id.impressum:
                 startActivity(new Intent(MainActivity.this, ImpressumActivity.class));
                 break;
-        case R.id.addFamilyButton:
-            startActivity(new Intent(MainActivity.this, AddFamilyActivity.class));
-            break;
-        case R.id.logoutButton:
-            user = null;
-            AuthUI.getInstance().signOut(this).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    showLoginDialog();
-                    Toast.makeText(MainActivity.this, R.string.logout_successful, Toast.LENGTH_LONG).show();
-                }
-            });
-            break;
-        case R.id.memberButton:
-            startActivity(new Intent(MainActivity.this, ShowMemberActivity.class));
-            break;
-        case R.id.chat:
-            startActivity(new Intent(MainActivity.this, ChatActivity.class));
-            break;
+            case R.id.addFamilyButton:
+                startActivity(new Intent(MainActivity.this, AddFamilyActivity.class));
+                break;
+            case R.id.logoutButton:
+                user = null;
+                AuthUI.getInstance().signOut(this).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        showLoginDialog();
+                        Toast.makeText(MainActivity.this, R.string.logout_successful, Toast.LENGTH_LONG).show();
+                    }
+                });
+                break;
+            case R.id.memberButton:
+                startActivity(new Intent(MainActivity.this, ShowMemberActivity.class));
+                break;
+            case R.id.chat:
+                startActivity(new Intent(MainActivity.this, ChatActivity.class));
+                break;
         }
     }
 
-    public void setFamilies(){
+    public void setFamilies() {
         final Spinner dropdown = findViewById(R.id.familySpinner);
         items = new ArrayList<String>();
         familieIds = new ArrayList<String>();
 
         user = mAuth.getCurrentUser();
-        if(user != null)
-        {
+        if (user != null) {
             String mail = user.getEmail();
-            if(!mail.isEmpty()) {
+            if (!mail.isEmpty()) {
                 Query query = db.collection("families").whereArrayContains("members", mail);
 
                 query.get()
@@ -218,13 +221,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                                     familieIds.add(document.getId());
                                     adapter.add(document.get("familyName").toString());
-                                    if(document.getId().equals(currentFamily))
-                                    {
+                                    if (document.getId().equals(currentFamily)) {
                                         dropdown.setSelection(number);
                                     }
-                                    number ++;
+                                    number++;
                                 }
-                                if (items.isEmpty()){
+                                if (items.isEmpty()) {
                                     currentFamily = null;
                                     adapter.add("No Family exist");
                                 }
@@ -238,24 +240,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     String family = dropdown.getSelectedItem().toString();
                     int pos = dropdown.getSelectedItemPosition();
-                    if(familieIds.size() != 0)
-                    {
+                    if (familieIds.size() != 0) {
                         setFamily(familieIds.get(pos));
                     }
                 }
 
                 @Override
-                public void onNothingSelected(AdapterView<?> adapterView) {}
+                public void onNothingSelected(AdapterView<?> adapterView) {
+                }
             });
         }
-    }
-
-    private void setFamily(String family)
-    {
-        currentFamily = family;
-    }
-
-    public static String getFamily(){
-        return currentFamily;
     }
 }

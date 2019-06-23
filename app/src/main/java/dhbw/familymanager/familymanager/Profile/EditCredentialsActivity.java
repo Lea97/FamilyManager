@@ -66,8 +66,8 @@ public class EditCredentialsActivity extends AppCompatActivity implements View.O
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
                 return true;
@@ -77,26 +77,23 @@ public class EditCredentialsActivity extends AppCompatActivity implements View.O
 
     private boolean validate() {
         oldPasswordField = findViewById(R.id.oldPasswordTextfield);
-        if(oldPasswordField.getText().toString().isEmpty())
-        {
+        if (oldPasswordField.getText().toString().isEmpty()) {
             oldPasswordField.setError("Bitte geben Sie ihr aktuelles Passwort ein.");
             return false;
         }
         newPasswordField = findViewById(R.id.newPasswordTextfield);
         EditText repeatNewPasswordField = findViewById(R.id.repeatPasswordTextfield);
-        if(!(newPasswordField.getText().toString().isEmpty())& !(repeatNewPasswordField.getText().toString().isEmpty()))
-        {
-            if(!newPasswordField.getText().toString().equals(repeatNewPasswordField.getText().toString()))
-            {
+        if (!(newPasswordField.getText().toString().isEmpty()) & !(repeatNewPasswordField.getText().toString().isEmpty())) {
+            if (!newPasswordField.getText().toString().equals(repeatNewPasswordField.getText().toString())) {
                 repeatNewPasswordField.setError("Die Wiederholung des Passwort stimmt nicht mit dem eingegeben überein.");
                 return false;
             }
         }
-        if (!(newPasswordField.getText().toString().isEmpty())& (repeatNewPasswordField.getText().toString().isEmpty())){
+        if (!(newPasswordField.getText().toString().isEmpty()) & (repeatNewPasswordField.getText().toString().isEmpty())) {
             repeatNewPasswordField.setError("Bitte wiederholen Sie ihr neues Passwort.");
             return false;
         }
-        if ((newPasswordField.getText().toString().isEmpty())& !(repeatNewPasswordField.getText().toString().isEmpty())){
+        if ((newPasswordField.getText().toString().isEmpty()) & !(repeatNewPasswordField.getText().toString().isEmpty())) {
             newPasswordField.setError("Bitte geben Sie ihr neues Passwort ein.");
             return false;
         }
@@ -118,32 +115,29 @@ public class EditCredentialsActivity extends AppCompatActivity implements View.O
                             return;
                         }
                     })
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            changePasswort();
-                            changeEmailInDB();
-                            ProfileActivity.refreshValues();
-                        }
-                    });
-                }
-                else{
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    changePasswort();
+                                    changeEmailInDB();
+                                    ProfileActivity.refreshValues();
+                                }
+                            });
+                } else {
                     changePasswort();
                 }
             }
         })
-        .addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(EditCredentialsActivity.this, "Das aktuelle Passwort ist nicht korrekt.", Toast.LENGTH_SHORT).show();
-            }
-        });
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(EditCredentialsActivity.this, "Das aktuelle Passwort ist nicht korrekt.", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
-    private void changePasswort()
-    {
-        if(!newPasswordField.getText().toString().isEmpty())
-        {
+    private void changePasswort() {
+        if (!newPasswordField.getText().toString().isEmpty()) {
             user.updatePassword(newPasswordField.getText().toString()).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
@@ -157,8 +151,7 @@ public class EditCredentialsActivity extends AppCompatActivity implements View.O
                             finish();
                         }
                     });
-        }
-        else{
+        } else {
             finish();
         }
     }

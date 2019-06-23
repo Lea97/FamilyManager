@@ -6,19 +6,24 @@ public class ChatRoom {
     private String userId;
     private String familyId;
 
+    public ChatRoom() {
+
+    }
+
     public String getUserId() {
         return userId;
-    }
-    public String getFamilyId() {
-        return familyId;
     }
 
     public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    public ChatRoom() {
+    public String getFamilyId() {
+        return familyId;
+    }
 
+    public void setFamilyId(String familyId) {
+        this.familyId = familyId;
     }
 
     public String getChatId() {
@@ -27,9 +32,6 @@ public class ChatRoom {
 
     public void setChatId(String chatId) {
         this.chatId = chatId;
-    }
-    public void setFamilyId(String familyId) {
-        this.familyId = familyId;
     }
 
     public String getChatName() {

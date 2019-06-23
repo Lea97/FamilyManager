@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -14,12 +13,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -48,7 +43,6 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
     private Event event;
     private String dbEntryId;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +60,6 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
             public void onClick(View v) {
                 DatePickerFragment fragment = new DatePickerFragment();
                 fragment.show(getFragmentManager(), "datePicker");
-
             }
         });
 
@@ -75,7 +68,6 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
             public void onClick(View v) {
                 DatePickerFragment fragment = new DatePickerFragment();
                 fragment.show(getFragmentManager(), "datePicker");
-
             }
         });
 
@@ -90,16 +82,12 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         eventStart = new GregorianCalendar();
         eventEnd = new GregorianCalendar();
 
-
         saveEventBtn = findViewById(R.id.saveEvent);
         saveEventBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 createNewEvent();
                 finish();
-
-
-
             }
         });
     }
@@ -115,7 +103,6 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         e.setId(r.nextLong());
         e.setLocation(location.getText().toString());
 
-
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -127,29 +114,24 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
         t.start();
     }
 
-
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        {
-            Calendar cal = new GregorianCalendar(year, month, dayOfMonth);
-            final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
-            if (!startEvent) {
-                eventStart.set(year, month, dayOfMonth);
 
-                TimePickerFragment timePickerFragment = new TimePickerFragment();
-                timePickerFragment.show(getFragmentManager(), "datePicker");
-                ((TextView) findViewById(R.id.showStartDate)).setText(dateFormat.format(cal.getTime()));
+        Calendar cal = new GregorianCalendar(year, month, dayOfMonth);
+        final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
+        if (!startEvent) {
+            eventStart.set(year, month, dayOfMonth);
 
-            } else {
+            TimePickerFragment timePickerFragment = new TimePickerFragment();
+            timePickerFragment.show(getFragmentManager(), "datePicker");
+            ((TextView) findViewById(R.id.showStartDate)).setText(dateFormat.format(cal.getTime()));
+        } else {
 
-                eventEnd.set(year, month, dayOfMonth);
-                TimePickerFragment timePickerFragment = new TimePickerFragment();
-                timePickerFragment.show(getFragmentManager(), "datePicker");
-                ((TextView) findViewById(R.id.showEndDate)).setText(dateFormat.format(cal.getTime()));
-            }
-
+            eventEnd.set(year, month, dayOfMonth);
+            TimePickerFragment timePickerFragment = new TimePickerFragment();
+            timePickerFragment.show(getFragmentManager(), "datePicker");
+            ((TextView) findViewById(R.id.showEndDate)).setText(dateFormat.format(cal.getTime()));
         }
-
     }
 
     @Override
@@ -167,8 +149,6 @@ public class AddEventActivity extends AppCompatActivity implements DatePickerDia
             TextView endTime = (TextView) findViewById(R.id.showEndDate);
             endTime.setText((String) endTime.getText() + "; " + hourOfDay + ":" + minute + " Uhr");
         }
-
-
     }
 }
 

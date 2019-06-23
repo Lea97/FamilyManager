@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,7 +37,6 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
     private boolean startEvent = false;
     private Calendar start, end;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +56,6 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
         cancel = findViewById(R.id.cancelButton);
         cancel.setOnClickListener(this);
         setEventDetails();
-
-
     }
 
     private void setEventDetails() {
@@ -125,15 +121,13 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
                         startActivity(new Intent(EditEventActivity.this, CalendarActivity.class));
                     }
                 });
-
             }
         });
-
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        {
+
             Calendar cal = new GregorianCalendar(year, month, dayOfMonth);
             final DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
             if (!startEvent) {
@@ -141,7 +135,6 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
                 TimePickerFragment timePickerFragment = new TimePickerFragment();
                 timePickerFragment.show(getFragmentManager(), "datePicker");
                 eventStart.setText(dateFormat.format(cal.getTime()));
-
             } else {
 
                 end.set(year, month, dayOfMonth);
@@ -150,14 +143,11 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
                 eventEnd.setText(dateFormat.format(cal.getTime()));
             }
 
-
-        }
     }
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         if (!startEvent) {
-
             start.set(Calendar.HOUR_OF_DAY, hourOfDay);
             start.set(Calendar.MINUTE, minute);
             eventStart.append("; " + hourOfDay + ":" + minute + " Uhr");
@@ -167,8 +157,6 @@ public class EditEventActivity extends AppCompatActivity implements View.OnClick
             end.set(Calendar.MINUTE, minute);
             eventEnd.append("; " + hourOfDay + ":" + minute + " Uhr");
         }
-
-
     }
 }
 

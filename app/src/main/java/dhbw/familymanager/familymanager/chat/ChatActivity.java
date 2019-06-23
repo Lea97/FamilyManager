@@ -1,6 +1,5 @@
 package dhbw.familymanager.familymanager.chat;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -55,12 +54,10 @@ public class ChatActivity extends AppCompatActivity {
             getUserChatrooms();
         }
 
-
         if (chatrooms.size() == 0) {
             chatrooms.add("Sie haben noch keine Chats!");
             arrayAdapter.notifyDataSetChanged();
         }
-
 
         layout.setAdapter(arrayAdapter);
 
@@ -73,20 +70,15 @@ public class ChatActivity extends AppCompatActivity {
                                              }
         );
 
-
         layout.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView textView = (TextView) view.findViewById(android.R.id.text1);
                 String chatName = textView.getText().toString();
                 startActivity(new Intent(ChatActivity.this, ChatMessagesActivity.class).putExtra("chatName", chatName));
-
             }
         });
-
-
     }
-
 
     private void getUserChatrooms() {
 
@@ -104,12 +96,9 @@ public class ChatActivity extends AppCompatActivity {
                             Log.d("TAG", "Error getting documents: ", task.getException());
                         }
                         arrayAdapter.notifyDataSetChanged();
-
                     }
                 });
-
     }
-
 
     private void displayChatMessages() {
         ListView listOfMessages = (ListView) findViewById(R.id.message);
@@ -130,6 +119,4 @@ public class ChatActivity extends AppCompatActivity {
 
         listOfMessages.setAdapter(fListAdapter);
     }
-
-
 }

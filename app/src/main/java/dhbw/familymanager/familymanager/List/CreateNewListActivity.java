@@ -2,17 +2,11 @@ package dhbw.familymanager.familymanager.List;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -23,11 +17,9 @@ import java.util.Map;
 
 import dhbw.familymanager.familymanager.MainActivity;
 import dhbw.familymanager.familymanager.R;
-import dhbw.familymanager.familymanager.model.Folder;
 import dhbw.familymanager.familymanager.model.Todo;
-import dhbw.familymanager.familymanager.photoGallery.PhotoGalleryActivity;
 
-public class CreateNewListActivity extends AppCompatActivity implements View.OnClickListener{
+public class CreateNewListActivity extends AppCompatActivity implements View.OnClickListener {
     private String family;
     private ArrayList<String> lists;
     private FirebaseFirestore db;

@@ -12,12 +12,13 @@ public class Folder {
     private Date created;
     private ArrayList<String> photos;
 
-    public void Folder(){}
-
     public Folder(String owner, Date created, ArrayList<String> photos) {
         this.owner = owner;
         this.created = created;
         this.photos = photos;
+    }
+
+    public void Folder() {
     }
 
     public String getOwner() {

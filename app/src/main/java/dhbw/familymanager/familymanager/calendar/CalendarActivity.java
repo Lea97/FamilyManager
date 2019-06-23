@@ -34,13 +34,21 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
     private Random random = new Random();
     private List<Integer> colors = new ArrayList();
     private List<WeekViewEvent> events = readEvents();
+    MonthLoader.MonthChangeListener mMonthChangeListener = new MonthLoader.MonthChangeListener() {
+        @Override
+        public List<WeekViewEvent> onMonthChange(int newYear, final int newMonth) {
+            ArrayList<WeekViewEvent> result = new ArrayList<>();
 
-    private GregorianCalendar getCalendar(Date date) {
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(date);
-        return null;
+            for (WeekViewEvent e : events) {
+                if (e.getStartTime().get(Calendar.MONTH) + 1 == newMonth && e.getStartTime().get(Calendar.YEAR) == newYear) {
+                    result.add(e);
+                }
+            }
+            System.out.println("Delivering " + result.size() + "events for " + newYear + " month " + newMonth + " out of " + events.size());
+            return result;
+        }
+    };
 
-    }
 
     private List<WeekViewEvent> readEvents() {
 
@@ -65,38 +73,18 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
                 weekViewEvent.setLocation(e.getLocation());
                 weekViewEvent.setColor(colors.get(random.nextInt(colors.size())));
 
-
                 result.add(weekViewEvent);
             }
         }
         return result;
     }
 
-
-    MonthLoader.MonthChangeListener mMonthChangeListener = new MonthLoader.MonthChangeListener() {
-        @Override
-        public List<WeekViewEvent> onMonthChange(int newYear, final int newMonth) {
-            ArrayList<WeekViewEvent> result = new ArrayList<>();
-
-            for (WeekViewEvent e : events) {
-                if (e.getStartTime().get(Calendar.MONTH) + 1 == newMonth && e.getStartTime().get(Calendar.YEAR) == newYear) {
-                    result.add(e);
-                }
-            }
-            System.out.println("Delivering " + result.size() + "events for " + newYear + " month " + newMonth + " out of " + events.size());
-            return result;
-        }
-    };
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.calendar_menu, menu);
 
-
         return true;
     }
-
 
     @Override
     public void onResume() {
@@ -105,9 +93,7 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
         mWeekView.notifyDatasetChanged();
         startEventReading();
         mWeekView.goToDate(new GregorianCalendar());
-
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -128,9 +114,7 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
         mWeekView.notifyDatasetChanged();
         mWeekView.goToDate(new GregorianCalendar());
         return true;
-
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,10 +122,8 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
         setColors();
         setContentView(R.layout.calendar);
 
-
         startEventReading();
 
-        // Get a reference for the week view in the layout.
         mWeekView = findViewById(R.id.weekView);
         mWeekView.goToDate(new GregorianCalendar());
         mWeekView.setNumberOfVisibleDays(3);
@@ -158,25 +140,15 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
         });
         mWeekView.showContextMenu();
 
-
         addEventButton = findViewById(R.id.addEventButton);
-
-// The week view has infinite scrolling horizontally. We have to provide the events of a
-// month every time the month changes on the week view.
         mWeekView.setMonthChangeListener(mMonthChangeListener);
-
         mWeekView.setOnEventClickListener(this);
-
-
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(CalendarActivity.this, AddEventActivity.class));
-
             }
         });
-
-
     }
 
     private void setColors() {
@@ -187,16 +159,6 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
         colors.add(getResources().getColor(R.color.green));
         colors.add(getResources().getColor(R.color.darkgreen));
         colors.add(getResources().getColor(R.color.orange));
-
-
-    }
-
-    private void updateEvent(WeekViewEvent event) {
-        Intent intent = new Intent(this, AddEventActivity.class);
-        intent.putExtra("eventId", event.getId());
-        startActivity(intent);
-
-
     }
 
 
@@ -205,28 +167,15 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
 
         new Thread(new Runnable() {
             public void run() {
-                System.out.println("Reading events");
                 events = readEvents();
-                System.out.println("Events read: " + events.size());
-
-
                 thisActivity.runOnUiThread(new Runnable() {
                     public void run() {
-                        System.out.println("Refreshing calendar");
-                        // because there is no method to refresh calendar
-                        // mWeekView.goToDate(new GregorianCalendar(2000, 5, 5));
-                        //  mWeekView.goToDate(new GregorianCalendar());
-
                         mWeekView.notifyDatasetChanged();
                         mWeekView.goToDate(new GregorianCalendar());
-
                     }
                 });
-
             }
         }).start();
-
-
     }
 
     @Override
@@ -239,12 +188,7 @@ public class CalendarActivity extends AppCompatActivity implements WeekView.Even
         System.out.println(event.getId());
         CalendarActivity.this.startActivity(intent);
 
-        // deleteEvent(event);
     }
-
-
-    //mWeekView.setOnEventClickListener(onEventClickListener);
-
 
 }
 

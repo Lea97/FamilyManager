@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import dhbw.familymanager.familymanager.MainActivity;
 import dhbw.familymanager.familymanager.R;
 
-
 public class AddMemberActivity extends AppCompatActivity implements View.OnClickListener {
 
     private String currentFamily;
